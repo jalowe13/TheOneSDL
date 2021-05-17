@@ -25,20 +25,49 @@ bool initializeWindow()
 			std::cout << "The Window could not be created! \n";
 			return false; // Return in error
 		}
+		else
+		{
+			app->surface = SDL_GetWindowSurface(app->window); // Set surface
+		}
 	}
 	return true;
+}
+
+bool loadMedia()
+{
+	//Loading success flag
+	bool success = true;
+
+	//Load splash image
+	app->sf_background = SDL_LoadBMP("woods.bmp");
+	if (app->sf_background == NULL)
+	{
+		std::cout << "Unable to load image\n";
+		success = false;
+	}
+	else
+	{
+		std::cout << "Loaded!\n";
+		SDL_BlitSurface(app->sf_background, NULL, app->surface, NULL);
+	}
+
+	return success;
 }
 
 int main(int argc, char* args[])
 {
 	SDL_SetMainReady(); //Ready SDL
 	initializeWindow(); //Create new window
+	//Create Renderer
+	app->renderer = SDL_CreateRenderer(app->window, -1, 0);
+	//Create Surface
+	loadMedia(); //Add image
+	SDL_UpdateWindowSurface(app->window);
 
-	app->surface = SDL_GetWindowSurface(app->window); // Set surface
-	SDL_FillRect(app->surface, NULL, SDL_MapRGB(app->surface->format, 0xFF, 0xFF, 0xFF));
-	SDL_UpdateWindowSurface(app->window); //update
+	//SDL_ShowWindow(app->window);
+
 	char c;
-	std::cout << "Hello World! \n";
+	std::cout << "Application running, enter anything to exit \n";
 	std::cin >> c;
 	SDL_DestroyWindow(app->window); //destroy the window
 	SDL_Quit(); //quit and delete all SDL

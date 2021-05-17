@@ -1,0 +1,8 @@
+
+//Initial Commit Project Ingnores
+.vs/
+Debug
+TheOneSDL.sln
+TheOneSDL/TheOneSDL.vcxproj
+TheOneSDL/TheOneSDL.vcxproj.filters
+TheOneSDL/TheOneSDL.vcxproj.user

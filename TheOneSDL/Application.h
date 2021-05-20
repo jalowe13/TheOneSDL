@@ -21,8 +21,16 @@ public:
 	void setSurface(SDL_Surface* new_surface);
 	void setRenderer(SDL_Renderer* new_renderer);
 
-	const char* windowTitle = "The One SDL v.0.3.0";
-	const char* versionNumber = "v.0.1.0";
+	//Events
+	void init();
+	void handleEvents();
+	void update();
+	void render();
+	void clean();
+	bool running();
+
+	//Constants for reference
+	const char* windowTitle = "The One SDL v.0.4.0";
 	const int SCREEN_WIDTH = 800;
 	const int SCREEN_HEIGHT = 600;
 private:
@@ -33,7 +41,19 @@ private:
 	SDL_Surface* surface = NULL; //Pointer to Surface in Window
 	SDL_Surface* sf_background = NULL; //Background pointer
 
+	SDL_Surface* surface_temp = NULL;
+	SDL_Texture* player = NULL;
+
+	SDL_Rect srcR, destR;
+	
+
 	//Game Variables
+	bool gameRunning;
+	int frameCount;
+	int startTime;
+	int endTime;
+	int timeDifference;
+	float frameAverage;
 
 };
 

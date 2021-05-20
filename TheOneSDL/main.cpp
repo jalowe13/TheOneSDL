@@ -14,9 +14,6 @@ Application* app = NULL; //Pointer to the app
 
 int main(int argc, char* args[])
 {
-	char c;
-	std::cout << "Application running, enter anything to exit \n";
-
 	app = new Application();
 	app->init();
 	

@@ -29,8 +29,10 @@ public:
 	void clean();
 	bool running();
 
+	bool boundsCheck(int x, int y);
+
 	//Constants for reference
-	const char* windowTitle = "The One SDL v.0.4.0";
+	const char* windowTitle = "The One SDL v.0.5.0";
 	const int SCREEN_WIDTH = 800;
 	const int SCREEN_HEIGHT = 600;
 private:
@@ -45,6 +47,8 @@ private:
 	SDL_Texture* player = NULL;
 
 	SDL_Rect srcR, destR;
+	enum MovementDirection {Up, Down, Left, Right, None};
+
 	
 
 	//Game Variables
@@ -54,6 +58,8 @@ private:
 	int endTime;
 	int timeDifference;
 	float frameAverage;
+	MovementDirection currentDirectionX;
+	MovementDirection currentDirectionY;
 
 };
 

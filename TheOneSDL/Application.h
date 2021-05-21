@@ -35,7 +35,7 @@ public:
 
 
 	//Constants for reference
-	const char* windowTitle = "The One SDL v.0.5.1 FPS:";
+	const char* windowTitle = "The One SDL v.0.6.0 FPS:";
 
 	const int fps = 144;
 private:
@@ -47,6 +47,7 @@ private:
 	SDL_Surface* sf_background = NULL; //Background pointer
 
 	SDL_Surface* surface_temp = NULL;
+	SDL_Texture* titleTexture = NULL;
 	SDL_Texture* player_texture = NULL;
 
 

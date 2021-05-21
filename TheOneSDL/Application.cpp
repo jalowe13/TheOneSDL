@@ -1,8 +1,8 @@
 #include "Application.h"
 #include <iostream>
 #include <windows.h>
-#include "SDL_image.h"
-
+#include <SDL_image.h>
+#include "SDL_ttf.h"
 
 
 Application::Application()
@@ -86,8 +86,28 @@ void Application::init()
 			std::cout << "Renderer created\n";
 		}
 
+		if (TTF_Init() == 0)
+		{
+			std::cout << "TTF Init Done \n";
+		}
+
 		//Create Player
 		player = new Player();
+		player_texture = IMG_LoadTexture(renderer, "player.bmp");
+
+		//Create Text
+		//Create Font
+		TTF_Font* font = TTF_OpenFont("arial.ttf", 25);
+		//Create Color
+		SDL_Color color = { 255, 255, 255 };
+		//Surface for Text
+		SDL_Surface* surface = TTF_RenderText_Solid(font,
+			"The One SDL", color);
+		//Render Surface to Texture
+		titleTexture = SDL_CreateTextureFromSurface(renderer, surface);
+
+		//Free Font
+		TTF_CloseFont(font);
 
 		gameRunning = true;
 
@@ -96,8 +116,6 @@ void Application::init()
 	{
 		gameRunning = false;
 	}
-
-	player_texture = IMG_LoadTexture(renderer,"player.bmp");
 }
 
 void Application::handleEvents()
@@ -173,13 +191,16 @@ void Application::render()
 {
 	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, player_texture, NULL, player->getRect());
+	SDL_RenderCopy(renderer, titleTexture, NULL, NULL);
 	SDL_RenderPresent(renderer);
 }
 
 void Application::clean()
 {
+	delete player; // Destroy player memory
 	SDL_DestroyWindow(window); //destroy the window
 	SDL_Quit(); //quit and delete all SDL
+	TTF_Quit(); //Deletee all TTF text
 }
 
 bool Application::running()

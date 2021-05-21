@@ -15,18 +15,10 @@ Application::Application()
 	timeDifference = 0;
 	frameAverage = 0;
 
-	currentDirectionX = None;
-	currentDirectionY = None;
 
-	destR.h = 16;
-	destR.w = 16;
-	destR.x = 1;
-	destR.y = 1;
 
-	srcR.h = 32;
-	srcR.w = 32;
-	srcR.x = 100;
-	srcR.y = 100;
+
+
 }
 
 Application::~Application()
@@ -94,6 +86,8 @@ void Application::init()
 			std::cout << "Renderer created\n";
 		}
 
+		//Create Player
+		
 
 		gameRunning = true;
 
@@ -103,7 +97,7 @@ void Application::init()
 		gameRunning = false;
 	}
 
-	player = IMG_LoadTexture(renderer,"player.bmp");
+	player_texture = IMG_LoadTexture(renderer,"player.bmp");
 }
 
 void Application::handleEvents()
@@ -120,26 +114,22 @@ void Application::handleEvents()
 		{
 		case SDLK_w:
 		{
-			std::cout << "Up\n";
-			currentDirectionY = Up;
+			player.yPathEdit(Up);
 			break;
 		}
 		case SDLK_a:
 		{
-			std::cout << "Left\n";
-			currentDirectionX = Left;
+			player.xPathEdit(Left);
 			break;
 		}
 		case SDLK_s:
 		{
-			std::cout << "Down\n";
-			currentDirectionY = Down;
+			player.yPathEdit(Down);
 			break;
 		}
 		case SDLK_d:
 		{
-			std::cout << "Right\n";
-			currentDirectionX = Right;
+			player.xPathEdit(Right);
 			break;
 		}
 		}
@@ -149,26 +139,22 @@ void Application::handleEvents()
 		{
 		case SDLK_w:
 		{
-			std::cout << "Up Release\n";
-			currentDirectionY = None;
+			player.yPathEdit(None);
 			break;
 		}
 		case SDLK_a:
 		{
-			std::cout << "Left Release\n";
-			currentDirectionX = None;
+			player.xPathEdit(None);
 			break;
 		}
 		case SDLK_s:
 		{
-			std::cout << "Down Release\n";
-			currentDirectionY = None;
+			player.yPathEdit(None);
 			break;
 		}
 		case SDLK_d:
 		{
-			std::cout << "Right Release\n";
-			currentDirectionX = None;
+			player.xPathEdit(None);
 			break;
 		}
 		}
@@ -180,97 +166,13 @@ void Application::handleEvents()
 
 void Application::update()
 {
-	startTime = SDL_GetTicks();
-	endTime = GetTickCount();
-	//frameCount = startTime - endTime;
-	//endTime = GetTickCount();
-	//timeDifference = endTime - startTime;
-	//frameCount++;
-	//frameAverage = frameCount / timeDifference;
-	//std::cout << frameCount << ":" << timeDifference << std::endl;
-	//std::cout << "[" << destR.x << "," << destR.y << "]\n";
-	
-	if (boundsCheck(destR.x, destR.y))
-	{
-		switch (currentDirectionX)
-		{
-			case Left:
-			{
-				destR.x--;
-				break;
-			}
-			case Right:
-			{
-				destR.x++;
-				break;
-			}
-			}
-		switch (currentDirectionY)
-		{
-			case Up:
-			{
-				destR.y--;
-				break;
-			}
-			case Down:
-			{
-				destR.y++;
-				break;
-			}
-		}
-	}
-	else if (!boundsCheck(destR.x, destR.y))
-	{
-		std::cout << destR.x << "," << destR.y << std::endl;
-		switch (currentDirectionX)
-		{
-		case Right:
-		{
-			destR.x--;; //Fix violation in direction
-			break;
-		}
-		case Left:
-		{
-			destR.x++; //Fix violation in direction
-			break;
-		}
-		}
-		switch (currentDirectionY)
-		{
-		case Down:
-		{
-			destR.y--; //Fix violation in direction
-			break;
-		}
-		case Up:
-		{
-			destR.y = destR.y++;//Fix violation in direction
-			break;
-		}
-		}
-		if (destR.x >= SCREEN_WIDTH)
-		{
-			destR.x = destR.x - 5;
-		}
-		if (destR.y >= SCREEN_HEIGHT)
-		{
-			destR.y = destR.y - 5;
-		}
-		if (destR.x <= 0)
-		{
-			destR.x = destR.x + 5;
-		}
-		if (destR.y <= 0)
-		{
-			destR.y = destR.y + 5;
-		}
-	}
+	player.handleMovement();
 }
 
 void Application::render()
 {
 	SDL_RenderClear(renderer);
-	SDL_RenderCopy(renderer, player, NULL, &destR);
+	SDL_RenderCopy(renderer, player_texture, NULL, player.getRect());
 	SDL_RenderPresent(renderer);
 }
 
@@ -285,16 +187,7 @@ bool Application::running()
 	return gameRunning;
 }
 
-bool Application::boundsCheck(int x, int y)
-{
-	if (x > 0 && y > 0)
-	{
-		if ((x < SCREEN_WIDTH) && (y < SCREEN_HEIGHT))
-		{
-			return true;
-		}
-	}
-	return false;
-}
+
+
 
 

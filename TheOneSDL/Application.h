@@ -1,5 +1,9 @@
 #define SDL_MAIN_HANDLED
 #include "SDL.h"
+#include "Player.h"
+
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
 
 #ifndef APPLICATION_HPP
 #define APPLICATION_HPP
@@ -29,12 +33,10 @@ public:
 	void clean();
 	bool running();
 
-	bool boundsCheck(int x, int y);
 
 	//Constants for reference
 	const char* windowTitle = "The One SDL v.0.5.1 FPS:";
-	const int SCREEN_WIDTH = 800;
-	const int SCREEN_HEIGHT = 600;
+
 	const int fps = 144;
 private:
 
@@ -45,10 +47,11 @@ private:
 	SDL_Surface* sf_background = NULL; //Background pointer
 
 	SDL_Surface* surface_temp = NULL;
-	SDL_Texture* player = NULL;
+	SDL_Texture* player_texture = NULL;
 
-	SDL_Rect srcR, destR;
-	enum MovementDirection {Up, Down, Left, Right, None};
+
+	Player player;
+
 
 	
 
@@ -59,8 +62,7 @@ private:
 	int endTime;
 	int timeDifference;
 	float frameAverage;
-	MovementDirection currentDirectionX;
-	MovementDirection currentDirectionY;
+	
 
 };
 

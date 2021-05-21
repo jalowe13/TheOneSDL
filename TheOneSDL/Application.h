@@ -50,7 +50,7 @@ private:
 	SDL_Texture* player_texture = NULL;
 
 
-	Player player;
+	Player* player = NULL;
 
 
 	

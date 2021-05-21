@@ -8,10 +8,13 @@ Player::Player()
 	playerR.w = 32;
 	playerR.x = 100;
 	playerR.y = 100;
+	editMS(5);
+	std::cout << "Player Created!\n";
 }
 
 Player::~Player()
 {
+	std::cout << "Player Destroyed!\n";
 }
 
 const int Player::getSpeed()
@@ -39,6 +42,11 @@ int Player::getY()
 	return playerR.y;
 }
 
+int Player::getMS()
+{
+	return movementModifier;
+}
+
 SDL_Rect* Player::getRect()
 {
 	return &playerR;
@@ -62,6 +70,11 @@ void Player::xEdit(int x)
 void Player::yEdit(int y)
 {
 	playerR.y = y;
+}
+
+void Player::editMS(int speed)
+{
+	movementModifier = speed;
 }
 
 void Player::handleMovement()

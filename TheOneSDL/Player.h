@@ -23,6 +23,7 @@ public:
 	MovementDirection yPath();
 	int getX();
 	int getY();
+	int getMS();
 	SDL_Rect* getRect();
 	
 	//Setters
@@ -30,6 +31,7 @@ public:
 	void yPathEdit(MovementDirection path);
 	void xEdit(int x);
 	void yEdit(int y);
+	void editMS(int speed);
 
 	void handleMovement();
 	bool boundsCheck(int x, int y);
@@ -40,7 +42,7 @@ private:
 
 	MovementDirection currentDirectionX = None;
 	MovementDirection currentDirectionY = None;
-	const int movementModifier = 5;
+	int movementModifier;
 
 
 };

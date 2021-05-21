@@ -87,7 +87,7 @@ void Application::init()
 		}
 
 		//Create Player
-		
+		player = new Player();
 
 		gameRunning = true;
 
@@ -114,22 +114,22 @@ void Application::handleEvents()
 		{
 		case SDLK_w:
 		{
-			player.yPathEdit(Up);
+			player->yPathEdit(Up);
 			break;
 		}
 		case SDLK_a:
 		{
-			player.xPathEdit(Left);
+			player->xPathEdit(Left);
 			break;
 		}
 		case SDLK_s:
 		{
-			player.yPathEdit(Down);
+			player->yPathEdit(Down);
 			break;
 		}
 		case SDLK_d:
 		{
-			player.xPathEdit(Right);
+			player->xPathEdit(Right);
 			break;
 		}
 		}
@@ -139,22 +139,22 @@ void Application::handleEvents()
 		{
 		case SDLK_w:
 		{
-			player.yPathEdit(None);
+			player->yPathEdit(None);
 			break;
 		}
 		case SDLK_a:
 		{
-			player.xPathEdit(None);
+			player->xPathEdit(None);
 			break;
 		}
 		case SDLK_s:
 		{
-			player.yPathEdit(None);
+			player->yPathEdit(None);
 			break;
 		}
 		case SDLK_d:
 		{
-			player.xPathEdit(None);
+			player->xPathEdit(None);
 			break;
 		}
 		}
@@ -166,13 +166,13 @@ void Application::handleEvents()
 
 void Application::update()
 {
-	player.handleMovement();
+	player->handleMovement();
 }
 
 void Application::render()
 {
 	SDL_RenderClear(renderer);
-	SDL_RenderCopy(renderer, player_texture, NULL, player.getRect());
+	SDL_RenderCopy(renderer, player_texture, NULL, player->getRect());
 	SDL_RenderPresent(renderer);
 }
 

@@ -87,12 +87,14 @@ void Application::init()
 			std::cout << "Window created\n";
 		}
 
-		renderer = SDL_CreateRenderer(window, -1, 0);
+		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 
 		if (renderer)
 		{
 			std::cout << "Renderer created\n";
 		}
+
+
 		gameRunning = true;
 
 	}
@@ -178,8 +180,8 @@ void Application::handleEvents()
 
 void Application::update()
 {
-	//startTime = GetTickCount();
-	//endTime = GetTickCount();
+	startTime = SDL_GetTicks();
+	endTime = GetTickCount();
 	//frameCount = startTime - endTime;
 	//endTime = GetTickCount();
 	//timeDifference = endTime - startTime;

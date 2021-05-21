@@ -32,9 +32,10 @@ public:
 	bool boundsCheck(int x, int y);
 
 	//Constants for reference
-	const char* windowTitle = "The One SDL v.0.5.0";
+	const char* windowTitle = "The One SDL v.0.5.1 FPS:";
 	const int SCREEN_WIDTH = 800;
 	const int SCREEN_HEIGHT = 600;
+	const int fps = 144;
 private:
 
 	//Pointers

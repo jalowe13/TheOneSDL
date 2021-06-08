@@ -1,6 +1,11 @@
 #define SDL_MAIN_HANDLED
+#include <iostream>
+#include <windows.h>
+#include <SDL_image.h>
+#include "SDL_ttf.h"
 #include "SDL.h"
 #include "Player.h"
+#include "terrain.h"
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -33,11 +38,15 @@ public:
 	void clean();
 	bool running();
 
+	//Text Events
+	void createText(const char* text, float x, float y);
+	void createTexture(const char* filename, float x, float y);
+
 
 	//Constants for reference
-	const char* windowTitle = "The One SDL v.0.6.0 FPS:";
+	const char* windowTitle = "C23 Engine: The One SDL v.0.6.0 FPS:";
 
-	const int fps = 144;
+	const int fps = 60;
 private:
 
 	//Pointers
@@ -45,8 +54,12 @@ private:
 	SDL_Renderer* renderer = NULL; //Render graphics
 	SDL_Surface* surface = NULL; //Pointer to Surface in Window
 	SDL_Surface* sf_background = NULL; //Background pointer
-
 	SDL_Surface* surface_temp = NULL;
+
+	//Rectangles
+	SDL_Rect* titleRect; //Title Location rectangle
+
+	//Textures
 	SDL_Texture* titleTexture = NULL;
 	SDL_Texture* player_texture = NULL;
 

@@ -1,8 +1,5 @@
 #include "Application.h"
-#include <iostream>
-#include <windows.h>
-#include <SDL_image.h>
-#include "SDL_ttf.h"
+
 
 
 Application::Application()
@@ -79,7 +76,8 @@ void Application::init()
 			std::cout << "Window created\n";
 		}
 
-		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
+		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED); //Create renderer
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); //Set clear color to white
 
 		if (renderer)
 		{
@@ -95,19 +93,8 @@ void Application::init()
 		player = new Player();
 		player_texture = IMG_LoadTexture(renderer, "player.bmp");
 
-		//Create Text
-		//Create Font
-		TTF_Font* font = TTF_OpenFont("arial.ttf", 25);
-		//Create Color
-		SDL_Color color = { 255, 255, 255 };
-		//Surface for Text
-		SDL_Surface* surface = TTF_RenderText_Solid(font,
-			"The One SDL", color);
-		//Render Surface to Texture
-		titleTexture = SDL_CreateTextureFromSurface(renderer, surface);
-
-		//Free Font
-		TTF_CloseFont(font);
+		createText("X", 0, 0);
+		//createTexture("X",0, 0);
 
 		gameRunning = true;
 
@@ -191,7 +178,7 @@ void Application::render()
 {
 	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, player_texture, NULL, player->getRect());
-	SDL_RenderCopy(renderer, titleTexture, NULL, NULL);
+	SDL_RenderCopy(renderer, titleTexture, NULL, titleRect);
 	SDL_RenderPresent(renderer);
 }
 
@@ -207,6 +194,58 @@ bool Application::running()
 {
 	return gameRunning;
 }
+
+void Application::createText(const char* text, float x, float y)
+{
+	//Create Text
+//Create Font
+	TTF_Font* font = TTF_OpenFont("arial.ttf", 25);
+	//Create Color
+	SDL_Color color = { 255, 0, 0 };
+	//Surface for Text
+	SDL_Surface* surface = TTF_RenderText_Solid(font,
+		text, color);
+	//Render Surface to Texture
+	titleTexture = SDL_CreateTextureFromSurface(renderer, surface);
+
+	//Create rectangle location
+	titleRect = new SDL_Rect();
+	titleRect->x = x;
+	titleRect->y = y;
+	titleRect->w = 32;
+	titleRect->h = 32;
+
+
+	//Free Font
+	TTF_CloseFont(font);
+}
+
+void Application::createTexture(const char* filename, float x, float y)
+{
+	//Create Text
+//Create Font
+	TTF_Font* font = TTF_OpenFont("arial.ttf", 25);
+	//Create Color
+	SDL_Color color = { 255, 255, 255 };
+	//Surface for Text
+	SDL_Surface* surface = TTF_RenderText_Solid(font,
+		filename, color);
+	//Render Surface to Texture
+	titleTexture = SDL_CreateTextureFromSurface(renderer, surface);
+
+	//Create rectangle location
+	titleRect = new SDL_Rect();
+	titleRect->x = 32;
+	titleRect->y = 32;
+	titleRect->w = 100;
+	titleRect->h = 100;
+
+
+	//Free Font
+	TTF_CloseFont(font);
+}
+
+
 
 
 

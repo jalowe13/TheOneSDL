@@ -46,7 +46,13 @@ public:
 	//Constants for reference
 	const char* windowTitle = "C23 Engine: The One SDL v.0.6.0 FPS:";
 
+	int textureWidth = 1920;
+	int textureHeight = 32;
+	int frameWidth, frameHeight;
+
 	const int fps = 60;
+	int current_fps= 0;
+	int frame_time = 0;
 private:
 
 	//Pointers

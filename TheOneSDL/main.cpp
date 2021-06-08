@@ -44,6 +44,8 @@ int main(int argc, char* args[])
 		float elapsed_time = (end_timer - start_timer) / (float)SDL_GetPerformanceFrequency();
 		std::string currentFPS = app->windowTitle + std::to_string(1.0f / elapsed_time);
 		SDL_SetWindowTitle(app->getWindow(),currentFPS.c_str());
+
+		app->current_fps = 1.0f / elapsed_time; // pass to application current fps
 	
 	}
 	app->clean();

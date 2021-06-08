@@ -6,8 +6,8 @@ Player::Player()
 {
 	playerR.h = 32;
 	playerR.w = 32;
-	playerR.x = 100;
-	playerR.y = 100;
+	playerR.x = 0;
+	playerR.y = 0;
 	editMS(5);
 	std::cout << "Player Created!\n";
 }
@@ -37,6 +37,11 @@ int Player::getX()
 	return playerR.x;
 }
 
+int Player::getTexX()
+{
+	return textureR.x;
+}
+
 int Player::getY()
 {
 	return playerR.y;
@@ -50,6 +55,11 @@ int Player::getMS()
 SDL_Rect* Player::getRect()
 {
 	return &playerR;
+}
+
+SDL_Rect* Player::getRectTex()
+{
+	return &textureR;
 }
 
 void Player::xPathEdit(MovementDirection path)
@@ -70,6 +80,36 @@ void Player::xEdit(int x)
 void Player::yEdit(int y)
 {
 	playerR.y = y;
+}
+
+void Player::wEdit(int w)
+{
+	playerR.w = w;
+}
+
+void Player::hEdit(int h)
+{
+	playerR.h = h;
+}
+
+void Player::xTexEdit(int x)
+{
+	textureR.x = x;
+}
+
+void Player::yTexEdit(int y)
+{
+	textureR.y = y;
+}
+
+void Player::wTexEdit(int w)
+{
+	textureR.w = w;
+}
+
+void Player::hTexEdit(int h)
+{
+	textureR.h = h;
 }
 
 void Player::editMS(int speed)

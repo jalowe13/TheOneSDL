@@ -91,9 +91,17 @@ void Application::init()
 
 		//Create Player
 		player = new Player();
-		player_texture = IMG_LoadTexture(renderer, "player.bmp");
 
-		createText("X", 0, 0);
+		player_texture = IMG_LoadTexture(renderer, "VGB_Idle.png");
+		SDL_QueryTexture(player_texture, NULL, NULL, &textureWidth, &textureHeight);
+		frameWidth = textureWidth / 60;
+		frameHeight = textureHeight;
+		player->xTexEdit(0);
+		player->yTexEdit(0);
+		player->wTexEdit(frameWidth);
+		player->hTexEdit(frameHeight);
+
+		createText("Testing", 0, 0);
 		//createTexture("X",0, 0);
 
 		gameRunning = true;
@@ -171,13 +179,28 @@ void Application::handleEvents()
 
 void Application::update()
 {
+	std::cout << "[F,TEX_X]" << frame_time << "," << player->getTexX() << std::endl;
+	player->xTexEdit(player->getTexX() + frameWidth);
+	//player->xTexEdit(1920);
+	if (frame_time == 59)
+	{
+		frame_time = 0;
+		if (player->getTexX() >= textureWidth)
+		{
+			player->xTexEdit(0);
+		}
+	}
+	else
+	{
+		frame_time++;
+	}
 	player->handleMovement();
 }
 
 void Application::render()
 {
 	SDL_RenderClear(renderer);
-	SDL_RenderCopy(renderer, player_texture, NULL, player->getRect());
+	SDL_RenderCopy(renderer, player_texture, player->getRectTex(), player->getRect());
 	SDL_RenderCopy(renderer, titleTexture, NULL, titleRect);
 	SDL_RenderPresent(renderer);
 }
@@ -212,8 +235,8 @@ void Application::createText(const char* text, float x, float y)
 	titleRect = new SDL_Rect();
 	titleRect->x = x;
 	titleRect->y = y;
-	titleRect->w = 32;
-	titleRect->h = 32;
+	titleRect->w = 200;
+	titleRect->h = 200;
 
 
 	//Free Font

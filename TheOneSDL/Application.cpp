@@ -1,3 +1,4 @@
+#pragma once
 #include "Application.h"
 
 
@@ -11,11 +12,6 @@ Application::Application()
 	endTime = GetTickCount();
 	timeDifference = 0;
 	frameAverage = 0;
-
-
-
-
-
 }
 
 Application::~Application()
@@ -89,17 +85,19 @@ void Application::init()
 			std::cout << "TTF Init Done \n";
 		}
 
-		//Create Player
-		player = new Player();
+		//Loading texture memory
+		SDL_Texture* temp_tex = NULL;
 
-		player_texture = IMG_LoadTexture(renderer, "VGB_Idle.png");
-		SDL_QueryTexture(player_texture, NULL, NULL, &textureWidth, &textureHeight);
-		frameWidth = textureWidth / 60;
-		frameHeight = textureHeight;
-		player->xTexEdit(0);
-		player->yTexEdit(0);
-		player->wTexEdit(frameWidth);
-		player->hTexEdit(frameHeight);
+		//Create Player
+		temp_tex = IMG_LoadTexture(renderer, "VGB_Idle.png");
+		player = new Player(temp_tex);
+
+		//Create Texture loader
+		texLoader = new TextureLoader();
+		if (texLoader != NULL)
+		{
+			std::cout << "Texture Loader created\n";
+		}
 
 		createText("Testing", 0, 0);
 		//createTexture("X",0, 0);
@@ -179,28 +177,14 @@ void Application::handleEvents()
 
 void Application::update()
 {
-	std::cout << "[F,TEX_X]" << frame_time << "," << player->getTexX() << std::endl;
-	player->xTexEdit(player->getTexX() + frameWidth);
-	//player->xTexEdit(1920);
-	if (frame_time == 59)
-	{
-		frame_time = 0;
-		if (player->getTexX() >= textureWidth)
-		{
-			player->xTexEdit(0);
-		}
-	}
-	else
-	{
-		frame_time++;
-	}
+	player->updateTexture();
 	player->handleMovement();
 }
 
 void Application::render()
 {
 	SDL_RenderClear(renderer);
-	SDL_RenderCopy(renderer, player_texture, player->getRectTex(), player->getRect());
+	SDL_RenderCopy(renderer, player->getTexture(), player->getRectTex(), player->getRect());
 	SDL_RenderCopy(renderer, titleTexture, NULL, titleRect);
 	SDL_RenderPresent(renderer);
 }

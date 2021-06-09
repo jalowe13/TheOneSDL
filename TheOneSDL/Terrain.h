@@ -1,4 +1,4 @@
-
+#pragma once
 #include "Ground.h"
 #include <deque>
 #include <tuple>

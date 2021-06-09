@@ -1,15 +1,20 @@
 #include "Player.h"
-#include "Application.h"
-#include <iostream>
 
-Player::Player()
+Player::Player(SDL_Texture* default_texture)
 {
 	playerR.h = 32;
 	playerR.w = 32;
 	playerR.x = 0;
 	playerR.y = 0;
+	textureWidth = 1920;
+	textureHeight = 32;
+	frameWidth = textureWidth / 60;
+	frameHeight = textureHeight;
+	frame_time = 0;
 	editMS(5);
+	setTexture(default_texture);
 	std::cout << "Player Created!\n";
+
 }
 
 Player::~Player()
@@ -40,6 +45,33 @@ int Player::getX()
 int Player::getTexX()
 {
 	return textureR.x;
+}
+
+SDL_Texture* Player::getTexture()
+{
+	return player_texture;
+}
+
+void Player::updateTexture()
+{
+	std::cout << "[F,TEX_X,X,Y]" << frame_time << "," << getTexX()
+		<< "," << getX() << "," << getY() << std::endl;
+
+	xTexEdit(getTexX() + frameWidth);
+	if (frame_time >= 59)
+	{
+		std::cout << "mustup";
+		frame_time = 0;
+		if (getTexX() >= textureWidth)
+		{
+			xTexEdit(0);
+		}
+	}
+	else
+	{
+		frame_time++;
+		std::cout << "UPDATE\n";
+	}
 }
 
 int Player::getY()
@@ -115,6 +147,18 @@ void Player::hTexEdit(int h)
 void Player::editMS(int speed)
 {
 	movementModifier = speed;
+}
+
+void Player::setTexture(SDL_Texture* texture)
+{
+	player_texture = texture;
+	SDL_QueryTexture(player_texture, NULL, NULL, &textureWidth, &textureHeight);
+	frameWidth = textureWidth / 60;
+	frameHeight = textureHeight;
+	xTexEdit(0);
+	yTexEdit(0);
+	wTexEdit(frameWidth);
+	hTexEdit(frameHeight);
 }
 
 void Player::handleMovement()

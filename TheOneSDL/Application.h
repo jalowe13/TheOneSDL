@@ -1,10 +1,12 @@
 #define SDL_MAIN_HANDLED
+#pragma once
 #include <iostream>
 #include <windows.h>
 #include <SDL_image.h>
 #include "SDL_ttf.h"
 #include "SDL.h"
 #include "Player.h"
+#include "TextureLoader.h"
 #include "terrain.h"
 
 const int SCREEN_WIDTH = 800;
@@ -38,6 +40,9 @@ public:
 	void clean();
 	bool running();
 
+	//Getters
+	//Player* getPlayer();
+
 	//Text Events
 	void createText(const char* text, float x, float y);
 	void createTexture(const char* filename, float x, float y);
@@ -67,10 +72,11 @@ private:
 
 	//Textures
 	SDL_Texture* titleTexture = NULL;
-	SDL_Texture* player_texture = NULL;
 
 
+	
 	Player* player = NULL;
+	TextureLoader* texLoader = NULL;
 
 
 	

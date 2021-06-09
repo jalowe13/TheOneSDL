@@ -1,3 +1,4 @@
+#pragma once
 #include "Application.h"
 #include <windows.h>
 #include "resource.h" //sounds
@@ -9,6 +10,7 @@
 
 //Pointers NULL
 Application* app = NULL; //Pointer to the app
+
 
 
 void framerate_cap(Uint32 frame, const int fps)

@@ -19,95 +19,65 @@ Application::~Application()
 	std::cout << "Application Destroyed!\n";
 }
 
-SDL_Window* Application::getWindow()
+bool Application::init()
 {
-	return window;
-}
-
-SDL_Surface* Application::getSurface()
-{
-	return surface;
-}
-
-SDL_Renderer* Application::getRenderer()
-{
-	return renderer;
-}
-
-const int Application::getScreenWidth()
-{
-	return SCREEN_WIDTH;
-}
-
-const int Application::getScreenHeight()
-{
-	return SCREEN_HEIGHT;
-}
-
-void Application::setWindow(SDL_Window* new_window)
-{
-	window = new_window;
-}
-
-void Application::setSurface(SDL_Surface* new_surface)
-{
-	surface = new_surface;
-}
-
-void Application::setRenderer(SDL_Renderer* new_renderer)
-{
-	renderer = new_renderer;
-}
-
-void Application::init()
-{
-	if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
+	try
 	{
-		std::cout << "SDL Init Done\n";
-		window = SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-			SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-
-		if (window)
+		if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
 		{
-			std::cout << "Window created\n";
+			std::cout << "SDL Init Done\n";
+			window = SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+				SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+
+			if (window)
+			{
+				std::cout << "Window created\n";
+			}
+
+			renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED); //Create renderer
+			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); //Set clear color to white
+
+			if (renderer)
+			{
+				std::cout << "Renderer created\n";
+			}
+
+			if (TTF_Init() == 0)
+			{
+				std::cout << "TTF Init Done \n";
+			}
+
+			//Loading texture memory
+			SDL_Texture* temp_tex = NULL;
+
+			//Create Player
+			temp_tex = IMG_LoadTexture(renderer, "VGB_Idle.png");
+			player = new Player(temp_tex);
+
+			//Create Texture loader
+			texLoader = new TextureLoader();
+			if (texLoader != NULL)
+			{
+				std::cout << "Texture Loader created\n";
+			}
+
+			createText("Testing", 0, 0);
+			//createTexture("X",0, 0);
+
+			gameRunning = true;
+			free(texLoader);
+
 		}
-
-		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED); //Create renderer
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); //Set clear color to white
-
-		if (renderer)
+		else
 		{
-			std::cout << "Renderer created\n";
+			gameRunning = false;
 		}
-
-		if (TTF_Init() == 0)
-		{
-			std::cout << "TTF Init Done \n";
-		}
-
-		//Loading texture memory
-		SDL_Texture* temp_tex = NULL;
-
-		//Create Player
-		temp_tex = IMG_LoadTexture(renderer, "VGB_Idle.png");
-		player = new Player(temp_tex);
-
-		//Create Texture loader
-		texLoader = new TextureLoader();
-		if (texLoader != NULL)
-		{
-			std::cout << "Texture Loader created\n";
-		}
-
-		createText("Testing", 0, 0);
-		//createTexture("X",0, 0);
-
-		gameRunning = true;
-
+		return true;
 	}
-	else
+	catch(const char* error)
 	{
-		gameRunning = false;
+		std::cout << error << std::endl;
+		return false;
 	}
 }
 
@@ -195,11 +165,6 @@ void Application::clean()
 	SDL_DestroyWindow(window); //destroy the window
 	SDL_Quit(); //quit and delete all SDL
 	TTF_Quit(); //Deletee all TTF text
-}
-
-bool Application::running()
-{
-	return gameRunning;
 }
 
 void Application::createText(const char* text, float x, float y)

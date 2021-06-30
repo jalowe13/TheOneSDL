@@ -71,9 +71,9 @@ private:
 	MovementDirection currentDirectionY = None;
 	int movementModifier;
 
-	const char* default_player_texture = "VGB_Idle.png";
 
 	int textureWidth, textureHeight, frameWidth, frameHeight;
+	std::string texture_name = "VGB_Idle";
 
 	int frame_time;
 

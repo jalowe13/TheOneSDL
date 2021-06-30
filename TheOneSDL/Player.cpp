@@ -54,13 +54,12 @@ SDL_Texture* Player::getTexture()
 
 void Player::updateTexture()
 {
-	std::cout << "[F,TEX_X,X,Y]" << frame_time << "," << getTexX()
+	std::cout << "[Type,F,TEX_X,X,Y]" << texture_name << "," << frame_time << "," << getTexX()
 		<< "," << getX() << "," << getY() << std::endl;
 
 	xTexEdit(getTexX() + frameWidth);
 	if (frame_time >= 59)
 	{
-		std::cout << "mustup";
 		frame_time = 0;
 		if (getTexX() >= textureWidth)
 		{
@@ -70,7 +69,6 @@ void Player::updateTexture()
 	else
 	{
 		frame_time++;
-		std::cout << "UPDATE\n";
 	}
 }
 
@@ -149,6 +147,7 @@ void Player::editMS(int speed)
 	movementModifier = speed;
 }
 
+//Setting Textures to the passed in texture
 void Player::setTexture(SDL_Texture* texture)
 {
 	player_texture = texture;

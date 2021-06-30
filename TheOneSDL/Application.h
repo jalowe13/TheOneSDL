@@ -23,22 +23,49 @@ public:
 	~Application();
 
 	//Windows and Surfaces
-	SDL_Window* getWindow();
-	SDL_Surface* getSurface();
-	SDL_Renderer* getRenderer();
-	const int getScreenWidth();
-	const int getScreenHeight();
-	void setWindow(SDL_Window* new_window);
-	void setSurface(SDL_Surface* new_surface);
-	void setRenderer(SDL_Renderer* new_renderer);
+	SDL_Window* getWindow()
+	{
+		return window;
+	}
+	SDL_Surface* getSurface()
+	{
+		return surface;
+	}
+	SDL_Renderer* getRenderer()
+	{
+		return renderer;
+	}
+	const int getScreenWidth()
+	{
+		return SCREEN_WIDTH;
+	}
+	const int getScreenHeight()
+	{
+		return SCREEN_HEIGHT;
+	}
+	void setWindow(SDL_Window* new_window)
+	{
+		window = new_window;
+	}
+	void setSurface(SDL_Surface* new_surface)
+	{
+		surface = new_surface;
+	}
+	void setRenderer(SDL_Renderer* new_renderer)
+	{
+		renderer = new_renderer;
+	}
 
 	//Events
-	void init();
+	bool init();
 	void handleEvents();
 	void update();
 	void render();
 	void clean();
-	bool running();
+	bool running()
+	{
+		return gameRunning;
+	}
 
 	//Getters
 	//Player* getPlayer();

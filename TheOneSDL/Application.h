@@ -97,6 +97,11 @@ private:
 	//Rectangles
 	SDL_Rect* titleRect; //Title Location rectangle
 
+	//Rectangle List
+	int terrainListSize = 0;
+	static const int terrainListCapacity = 493; //MAX SIZE
+	SDL_Rect* terrainList[terrainListCapacity];
+
 	//Textures
 	SDL_Texture* titleTexture = NULL;
 

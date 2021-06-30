@@ -54,8 +54,8 @@ SDL_Texture* Player::getTexture()
 
 void Player::updateTexture()
 {
-	std::cout << "[Type,F,TEX_X,X,Y]" << texture_name << "," << frame_time << "," << getTexX()
-		<< "," << getX() << "," << getY() << std::endl;
+	//std::cout << "[Type,F,TEX_X,X,Y]" << texture_name << "," << frame_time << "," << getTexX()
+	//	<< "," << getX() << "," << getY() << std::endl;
 
 	xTexEdit(getTexX() + frameWidth);
 	if (frame_time >= 59)

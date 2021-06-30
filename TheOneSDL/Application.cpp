@@ -61,12 +61,32 @@ bool Application::init()
 				std::cout << "Texture Loader created\n";
 			}
 
-			createText("Testing", 0, 0);
-			//createTexture("X",0, 0);
-
+			//createText("Testing", 0, 0);
+			int x = 0;
+			int y = 0;
+			// 26 max blocks in X Direction for a Y in 800*600
+			for (int i = 0; i < terrainListCapacity; i++)
+			{
+				createTexture("AIR",x, y);
+				if (terrainListSize > terrainListCapacity)
+				{
+					std::cout << "Cannot add: MAX SIZE OF TERRAIN REACHED" << std::endl;
+				}
+				else
+				{
+					if (x < SCREEN_WIDTH)
+					{
+						x = x + 32;
+					}
+					else if (x >= SCREEN_WIDTH)
+					{
+						x = 0;
+						y = y + 32;
+					}
+				}
+			}
 			gameRunning = true;
 			free(texLoader);
-
 		}
 		else
 		{
@@ -155,7 +175,10 @@ void Application::render()
 {
 	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, player->getTexture(), player->getRectTex(), player->getRect());
-	SDL_RenderCopy(renderer, titleTexture, NULL, titleRect);
+	for (int i = 0; i < terrainListSize; i++)
+	{
+		SDL_RenderCopy(renderer, titleTexture, NULL, terrainList[i]);
+	}
 	SDL_RenderPresent(renderer);
 }
 
@@ -198,7 +221,7 @@ void Application::createTexture(const char* filename, float x, float y)
 //Create Font
 	TTF_Font* font = TTF_OpenFont("arial.ttf", 25);
 	//Create Color
-	SDL_Color color = { 255, 255, 255 };
+	SDL_Color color = { 255, 0, 0 };
 	//Surface for Text
 	SDL_Surface* surface = TTF_RenderText_Solid(font,
 		filename, color);
@@ -206,12 +229,21 @@ void Application::createTexture(const char* filename, float x, float y)
 	titleTexture = SDL_CreateTextureFromSurface(renderer, surface);
 
 	//Create rectangle location
-	titleRect = new SDL_Rect();
-	titleRect->x = 32;
-	titleRect->y = 32;
-	titleRect->w = 100;
-	titleRect->h = 100;
+	terrainList[terrainListSize] = new SDL_Rect();
+	SDL_Rect* currentRect = terrainList[terrainListSize];
+	currentRect->x = x;
+	currentRect->y = y;
+	currentRect->w = 32;
+	currentRect->h = 32;
 
+	
+	//std::cout << "Rect created at " << terrainList[terrainListSize]->x << "," << terrainList[terrainListSize]->y << std::endl;
+	terrainListSize++;
+	std::cout << terrainListSize << std::endl;
+	//for (int i = 0; i < terrainListSize; i++)
+	//{
+	//	std::cout << "Rect at " << terrainList[i]->x << "," << terrainList[i]->y << std::endl;
+	//}
 
 	//Free Font
 	TTF_CloseFont(font);

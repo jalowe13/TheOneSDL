@@ -25,27 +25,33 @@ bool Application::init()
 	{
 		if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
 		{
-			std::cout << "SDL Init Done\n";
+			std::cout << "SDL Init Done" << std::endl;
 			window = SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 				SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-
-			if (window)
+			
+			if (!window)
 			{
-				std::cout << "Window created\n";
+				throw "Window creation failed.";
 			}
+			
+			std::cout << "Window created" << std::endl;
 
 			renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED); //Create renderer
 			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); //Set clear color to white
 
-			if (renderer)
+			if (!renderer)
 			{
-				std::cout << "Renderer created\n";
+				throw "Renderer creation failed.";
 			}
+			
+			std::cout << "Renderer created" << std::endl;
 
-			if (TTF_Init() == 0)
+			if (TTF_Init() != 0)
 			{
-				std::cout << "TTF Init Done \n";
+				throw "TTF Init failed.";
 			}
+			
+			std::cout << "TTF Init Done" << std::endl;
 
 			//Loading texture memory
 			SDL_Texture* temp_tex = NULL;
@@ -53,13 +59,20 @@ bool Application::init()
 			//Create Player
 			temp_tex = IMG_LoadTexture(renderer, "VGB_Idle.png");
 			player = new Player(temp_tex);
+			
+			if (!player)
+			{
+				throw "Player allocation failed.";
+			}
 
 			//Create Texture loader
 			texLoader = new TextureLoader();
-			if (texLoader != NULL)
+			if (!texLoader)
 			{
-				std::cout << "Texture Loader created\n";
+				throw "Texture Loader creation failed.";
 			}
+			
+			std::cout << "Texture Loader created." << std::endl;
 
 			createText("Testing", 0, 0);
 			//createTexture("X",0, 0);
@@ -72,6 +85,7 @@ bool Application::init()
 		{
 			gameRunning = false;
 		}
+		
 		return true;
 	}
 	catch(const char* error)

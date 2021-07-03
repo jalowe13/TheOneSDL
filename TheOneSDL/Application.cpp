@@ -73,14 +73,20 @@ bool Application::init()
 			}
 			
 			std::cout << "Texture Loader created." << std::endl;
+
+			//Texture Loading
+			ground = IMG_LoadTexture(renderer, "ground.bmp");
+			if (ground == nullptr)
+			{
+				std::cout << "Ground Texture Not Loaded!" << std::endl;
+			}
 			
 			terrain_gen = new Terrain(renderer);
 
 			std::cout << "Terrain gen created" << std::endl;
-
-			titleTexture = terrain_gen->fillScreen("-");
-
-			std::cout << "Screen filled" << std::endl;
+			std::cout << "-----Starting Terrain Generation-----" << std::endl;
+			
+			terrain_gen->generateTerrain(ground, 32, 32);
 
 			gameRunning = true;
 			free(texLoader);
@@ -171,52 +177,27 @@ void Application::update()
 
 void Application::render()
 {
-	SDL_RenderClear(renderer);
-	SDL_RenderCopy(renderer, player->getTexture(), player->getRectTex(), player->getRect());
+	SDL_RenderClear(renderer); //Clear Screen
+	//Terrain
 	for (int i = 0; i < terrain_gen->getTerrainSize(); i++)
 	{
-		SDL_RenderCopy(renderer, titleTexture, NULL, terrain_gen->getTerrain(i));
+		SDL_RenderCopy(renderer, ground, NULL, terrain_gen->getTerrain(i));
 	}
+	//Player
+	SDL_RenderCopy(renderer, player->getTexture(), player->getRectTex(), player->getRect());
+	//Show Frame
 	SDL_RenderPresent(renderer);
 }
 
 void Application::clean()
 {
 	delete player; // Destroy player memory
+	delete terrain_gen;
 	SDL_DestroyWindow(window); //destroy the window
 	SDL_Quit(); //quit and delete all SDL
 	TTF_Quit(); //Deletee all TTF text
 }
 
-void Application::createText(const char* text, int x, int y)
-{
-	//Create Text
-//Create Font
-	TTF_Font* font = TTF_OpenFont("arial.ttf", 25);
-	//Create Color
-	SDL_Color color = { 255, 0, 0 };
-	//Surface for Text
-	SDL_Surface* surface = TTF_RenderText_Solid(font,
-		text, color);
-	//Render Surface to Texture
-	titleTexture = SDL_CreateTextureFromSurface(renderer, surface);
-
-	//Create rectangle location
-	titleRect = new SDL_Rect();
-	titleRect->x = x;
-	titleRect->y = y;
-	titleRect->w = 200;
-	titleRect->h = 200;
-
-
-	//Free Font
-	TTF_CloseFont(font);
-}
-
-void Application::createTexture(const char* filename, float x, float y)
-{
-
-}
 
 
 

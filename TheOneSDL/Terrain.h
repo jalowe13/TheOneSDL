@@ -12,10 +12,9 @@ class Terrain
 public:
 	Terrain(SDL_Renderer* renderer_p);
 	~Terrain();
-	SDL_Texture* generateTerrain(const char* name, int x, int y);
-	void renderTerrain();
-	void placeTile(int x, int y);
-	SDL_Texture* fillScreen(const char* name);
+	SDL_Texture* generateText(const char* text, int x, int y);
+	bool generateTerrain(SDL_Texture* texture, int x, int y);
+	bool fillScreen(SDL_Texture* texture);
 	//Terrain
 
 	void incSize()

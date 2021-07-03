@@ -107,7 +107,8 @@ private:
 
 
 	//Textures
-	SDL_Texture* titleTexture = NULL;
+	SDL_Texture* ground = nullptr;
+	SDL_Texture* air = nullptr	;
 
 
 	

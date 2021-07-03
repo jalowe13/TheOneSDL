@@ -73,31 +73,15 @@ bool Application::init()
 			}
 			
 			std::cout << "Texture Loader created." << std::endl;
+			
+			terrain_gen = new Terrain(renderer);
 
-			//createText("Testing", 0, 0);
-			int x = 0;
-			int y = 0;
-			// 26 max blocks in X Direction for a Y in 800*600
-			for (int i = 0; i < terrainListCapacity; i++)
-			{
-				createTexture("AIR",x, y);
-				if (terrainListSize > terrainListCapacity)
-				{
-					std::cout << "Cannot add: MAX SIZE OF TERRAIN REACHED" << std::endl;
-				}
-				else
-				{
-					if (x < SCREEN_WIDTH)
-					{
-						x = x + 32;
-					}
-					else if (x >= SCREEN_WIDTH)
-					{
-						x = 0;
-						y = y + 32;
-					}
-				}
-			}
+			std::cout << "Terrain gen created" << std::endl;
+
+			titleTexture = terrain_gen->fillScreen("-");
+
+			std::cout << "Screen filled" << std::endl;
+
 			gameRunning = true;
 			free(texLoader);
 		}
@@ -189,9 +173,9 @@ void Application::render()
 {
 	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, player->getTexture(), player->getRectTex(), player->getRect());
-	for (int i = 0; i < terrainListSize; i++)
+	for (int i = 0; i < terrain_gen->getTerrainSize(); i++)
 	{
-		SDL_RenderCopy(renderer, titleTexture, NULL, terrainList[i]);
+		SDL_RenderCopy(renderer, titleTexture, NULL, terrain_gen->getTerrain(i));
 	}
 	SDL_RenderPresent(renderer);
 }
@@ -204,7 +188,7 @@ void Application::clean()
 	TTF_Quit(); //Deletee all TTF text
 }
 
-void Application::createText(const char* text, float x, float y)
+void Application::createText(const char* text, int x, int y)
 {
 	//Create Text
 //Create Font
@@ -231,36 +215,7 @@ void Application::createText(const char* text, float x, float y)
 
 void Application::createTexture(const char* filename, float x, float y)
 {
-	//Create Text
-//Create Font
-	TTF_Font* font = TTF_OpenFont("arial.ttf", 25);
-	//Create Color
-	SDL_Color color = { 255, 0, 0 };
-	//Surface for Text
-	SDL_Surface* surface = TTF_RenderText_Solid(font,
-		filename, color);
-	//Render Surface to Texture
-	titleTexture = SDL_CreateTextureFromSurface(renderer, surface);
 
-	//Create rectangle location
-	terrainList[terrainListSize] = new SDL_Rect();
-	SDL_Rect* currentRect = terrainList[terrainListSize];
-	currentRect->x = x;
-	currentRect->y = y;
-	currentRect->w = 32;
-	currentRect->h = 32;
-
-	
-	//std::cout << "Rect created at " << terrainList[terrainListSize]->x << "," << terrainList[terrainListSize]->y << std::endl;
-	terrainListSize++;
-	std::cout << terrainListSize << std::endl;
-	//for (int i = 0; i < terrainListSize; i++)
-	//{
-	//	std::cout << "Rect at " << terrainList[i]->x << "," << terrainList[i]->y << std::endl;
-	//}
-
-	//Free Font
-	TTF_CloseFont(font);
 }
 
 

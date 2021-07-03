@@ -7,7 +7,7 @@
 #include "SDL.h"
 #include "Player.h"
 #include "TextureLoader.h"
-#include "terrain.h"
+#include "Terrain.h"
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -56,6 +56,7 @@ public:
 		renderer = new_renderer;
 	}
 
+
 	//Events
 	bool init();
 	void handleEvents();
@@ -71,11 +72,13 @@ public:
 	//Player* getPlayer();
 
 	//Text Events
-	void createText(const char* text, float x, float y);
+	void createText(const char* text, int x, int y);
 	void createTexture(const char* filename, float x, float y);
 
 
 	//Constants for reference
+
+
 	const char* windowTitle = "C23 Engine: The One SDL v.0.6.0 FPS:";
 
 	int textureWidth = 1920;
@@ -94,13 +97,14 @@ private:
 	SDL_Surface* sf_background = NULL; //Background pointer
 	SDL_Surface* surface_temp = NULL;
 
+	Terrain* terrain_gen = nullptr; //Terrain Generation
+
 	//Rectangles
 	SDL_Rect* titleRect; //Title Location rectangle
 
-	//Rectangle List
-	int terrainListSize = 0;
-	static const int terrainListCapacity = 493; //MAX SIZE
-	SDL_Rect* terrainList[terrainListCapacity];
+
+
+
 
 	//Textures
 	SDL_Texture* titleTexture = NULL;

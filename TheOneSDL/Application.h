@@ -79,7 +79,7 @@ public:
 	//Constants for reference
 
 
-	const char* windowTitle = "C23 Engine: The One SDL v.0.6.0 FPS:";
+	const char* windowTitle = "C23 Engine: The One SDL v.0.10.2 FPS:";
 
 	int textureWidth = 1920;
 	int textureHeight = 32;
@@ -108,7 +108,9 @@ private:
 
 	//Textures
 	SDL_Texture* ground = nullptr;
-	SDL_Texture* air = nullptr	;
+	SDL_Texture* air = nullptr;
+
+	SDL_Texture* fancy_text = nullptr;
 
 
 	

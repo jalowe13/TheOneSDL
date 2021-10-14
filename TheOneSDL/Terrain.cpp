@@ -13,7 +13,7 @@ Terrain::~Terrain()
 	std::cout << "Terrain Deconstructed" << std::endl;
 }
 
-SDL_Texture* Terrain::generateText(const char* text, int x, int y)
+void Terrain::generateText(const char* text, int x, int y, int scale)
 {
 	//Create Text
 //Create Font
@@ -24,23 +24,24 @@ SDL_Texture* Terrain::generateText(const char* text, int x, int y)
 	SDL_Surface* surface = TTF_RenderText_Solid(font,
 		text, color);
 	//Create rectangle location
-	SDL_Rect* new_rect = new SDL_Rect();
-	setTerrain(new_rect);
-	SDL_Rect* currentRect = getTerrain(getTerrainSize());
-	currentRect->x = x;
-	currentRect->y = y;
-	currentRect->w = 32;
-	currentRect->h = 32;
+	SDL_Rect* new_text = new SDL_Rect();
+	new_text->x = x;
+	new_text->y = y;
+	new_text->w = 32*scale;
+	new_text->h = 32*scale;
+
+	setText(new_text);
 
 
-	//std::cout << "Rect created at " << terrainList[terrainListSize]->x << "," << terrainList[terrainListSize]->y << std::endl;
-	incSize();
+	std::cout << "Text created at " << textListRec[textListSize]->x << "," << textListRec[textListSize]->y << std::endl;
+	
 	//std::cout << getTerrainSize() << std::endl;
 
 	//Free Font
 	TTF_CloseFont(font);
 
-	return SDL_CreateTextureFromSurface(renderer, surface); //Returns texture
+	textList[textListSize] = SDL_CreateTextureFromSurface(renderer, surface); //Returns texture
+	textListSize++;
 }
 
 bool Terrain::generateTerrain(SDL_Texture* texture, int x, int y)
@@ -55,8 +56,8 @@ bool Terrain::generateTerrain(SDL_Texture* texture, int x, int y)
 		currentRect->y = y;
 		currentRect->w = 32;
 		currentRect->h = 32;
-		std::cout << "Rect created at " << terrainList[terrainListSize]->x << "," << terrainList[terrainListSize]->y << std::endl;
-		incSize();
+		//std::cout << "Rect created at " << terrainList[terrainListSize]->x << "," << terrainList[terrainListSize]->y << std::endl;
+		terrainListSize++;
 		//std::cout << getTerrainSize() << std::endl;
 		return true;
 	}

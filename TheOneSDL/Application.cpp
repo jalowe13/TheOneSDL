@@ -86,7 +86,9 @@ bool Application::init()
 			std::cout << "Terrain gen created" << std::endl;
 			std::cout << "-----Starting Terrain Generation-----" << std::endl;
 			
-			terrain_gen->generateTerrain(ground, 32, 32);
+			
+			terrain_gen->fillScreen(ground);
+			terrain_gen->generateText("The One", 64, 64, 4);
 
 			gameRunning = true;
 			free(texLoader);
@@ -182,6 +184,10 @@ void Application::render()
 	for (int i = 0; i < terrain_gen->getTerrainSize(); i++)
 	{
 		SDL_RenderCopy(renderer, ground, NULL, terrain_gen->getTerrain(i));
+	}
+	for (int i = 0; i < terrain_gen->getTextSize(); i++)
+	{
+		SDL_RenderCopy(renderer, terrain_gen->getText(i), NULL, terrain_gen->getTextRec(i));
 	}
 	//Player
 	SDL_RenderCopy(renderer, player->getTexture(), player->getRectTex(), player->getRect());

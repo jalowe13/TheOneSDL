@@ -37,7 +37,7 @@ bool Application::init()
 			std::cout << "Window created" << std::endl;
 
 			renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED); //Create renderer
-			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); //Set clear color to white
+			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0); //Set clear color to white
 
 			if (!renderer)
 			{
@@ -75,11 +75,6 @@ bool Application::init()
 			std::cout << "Texture Loader created." << std::endl;
 
 			//Texture Loading
-			ground = IMG_LoadTexture(renderer, "textures/floor.bmp");
-			if (ground == nullptr)
-			{
-				std::cout << "Ground Texture Not Loaded!" << std::endl;
-			}
 			
 			terrain_gen = new Terrain(renderer);
 
@@ -184,6 +179,10 @@ void Application::render()
 	for (int i = 0; i < terrain_gen->getTerrainSize(); i++)
 	{
 		SDL_RenderCopy(renderer, terrain_gen->getText(i), NULL, terrain_gen->getTerrain(i));
+	}
+	for (int i = 0; i < terrain_gen->getTerrainObjSize(); i++)
+	{
+		SDL_RenderCopy(renderer, terrain_gen->getTextObj(i), NULL, terrain_gen->getTerrainObj(i));
 	}
 	for (int i = 0; i < terrain_gen->getTextSize(); i++)
 	{

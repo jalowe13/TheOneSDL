@@ -5,7 +5,7 @@ Player::Player(SDL_Texture* default_texture)
 	playerR.h = 32;
 	playerR.w = 32;
 	playerR.x = 0;
-	playerR.y = 0;
+	playerR.y = 510;
 	textureWidth = 1920;
 	textureHeight = 32;
 	frameWidth = textureWidth / 60;

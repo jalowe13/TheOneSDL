@@ -32,7 +32,7 @@ void Terrain::generateText(const char* text, int x, int y, int scale)
 
 
 
-	std::cout << "Text created at " << textListRec[textListSize]->x << "," << textListRec[textListSize]->y << std::endl;
+	//std::cout << "Text created at " << textListRec[textListSize]->x << "," << textListRec[textListSize]->y << std::endl;
 	
 	//std::cout << getTerrainSize() << std::endl;
 
@@ -43,22 +43,35 @@ void Terrain::generateText(const char* text, int x, int y, int scale)
 	textListSize++;
 }
 
-bool Terrain::generateTerrain(SDL_Texture* texture, int x, int y)
+bool Terrain::generateTerrain(SDL_Texture* texture, int x, int y, int layer)
 {
 	try
 	{
 		//Create rectangle location
 		SDL_Rect* new_rect = new SDL_Rect();
-		setTerrain(new_rect);
-		setText(texture);
-		SDL_Rect* currentRect = getTerrain(getTerrainSize());
-		currentRect->x = x;
-		currentRect->y = y;
-		currentRect->w = 32;
-		currentRect->h = 32;
-		std::cout << "Rect created at " << terrainList[terrainListSize]->x << "," << terrainList[terrainListSize]->y << std::endl;
-		terrainListSize++;
-		//std::cout << getTerrainSize() << std::endl;
+		SDL_Rect* currentRect = NULL;
+		switch (layer){
+			case 0:
+				setTerrain(new_rect);
+				setText(texture);
+				currentRect = getTerrain(getTerrainSize());
+				currentRect->x = x;
+				currentRect->y = y;
+				currentRect->w = 32;
+				currentRect->h = 32;
+				terrainListSize++;
+				break;
+			case 1:
+				setTerrainObj(new_rect);
+				setTextObj(texture);
+				currentRect = getTerrainObj(getTerrainObjSize());
+				currentRect->x = x;
+				currentRect->y = y;
+				currentRect->w = 32;
+				currentRect->h = 32;
+				terrainObjListSize++;
+				break;
+		}
 		return true;
 	}
 	catch (const char* error)
@@ -69,47 +82,63 @@ bool Terrain::generateTerrain(SDL_Texture* texture, int x, int y)
 
 bool Terrain::fillScreen()
 {
-	int x = 0;
-	int y = 0;
+
 	SDL_Texture* textureFilled;
 	char tile = '~';
 	SDL_Texture* texture = NULL;
-	std::cout << "test" << FLOOR_TEX << std::endl;
 	// 26 max blocks in X Direction for a Y in 800*600 26 20
-	for (int iy = 0; iy < tilemapY; iy++)
-	{
-		for (int ix = 0; ix < tilemapX; ix++)
+	for (int layer = 0; layer < 2; layer++) {
+		int x = 0;
+		int y = 0;
+		for (int iy = 0; iy < tilemapY; iy++)
 		{
-			tile = tilemap[iy][ix];
-			texture = NULL;
-			std::cout << "tile:" << tile << std::endl;
-			switch (tile) {
-			case 'f':
-				texture = IMG_LoadTexture(renderer, FLOOR_TEX);
-				break;
-			case 'g':
-				texture = IMG_LoadTexture(renderer, GROUND_TEX);
-				break;
-			case 'w':
-				texture = IMG_LoadTexture(renderer, WALL_TEX);
-				break;
-			}
-			if (texture != NULL)
+			for (int ix = 0; ix < tilemapX; ix++)
 			{
-				generateTerrain(texture, x, y);
-			}
-			
-			if (x < SCREEN_WIDTH)
-			{
-				x = x + 32;
-			}
-			else if (x >= SCREEN_WIDTH)
-			{
-				x = 0;
-				y = y + 32;
+				switch (layer) {
+				case 0:
+					tile = background_tilemap[iy][ix];
+					break;
+				case 1:
+					tile = obj_tilemap[iy][ix];
+					break;
+				}
+				texture = NULL;
+				switch (tile) {
+				case 'f':
+					texture = IMG_LoadTexture(renderer, FLOOR_TEX);
+					break;
+				case 'g':
+					texture = IMG_LoadTexture(renderer, GROUND_TEX);
+					break;
+				case 'l':
+					texture = IMG_LoadTexture(renderer, LAMP_TEX);
+					break;
+				case 'p':
+					texture = IMG_LoadTexture(renderer, POSTER_TEX);
+					break;
+				case 't':
+					texture = IMG_LoadTexture(renderer, TV_TEX);
+					break;
+				case 'w':
+					texture = IMG_LoadTexture(renderer, WALL_TEX);
+					break;
+				}
+				if (texture != NULL) {
+					generateTerrain(texture, x, y, layer);
+				}
+				if (x < SCREEN_WIDTH)
+				{
+					x = x + 32;
+				}
+				else if (x >= SCREEN_WIDTH)
+				{
+					x = 0;
+					y = y + 32;
+				}
 			}
 		}
 	}
+
 	std::cout << "Fill complete, blocks created ["
 		<< terrainListSize << "]" << std::endl;
 	return true;

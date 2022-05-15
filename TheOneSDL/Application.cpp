@@ -75,7 +75,7 @@ bool Application::init()
 			std::cout << "Texture Loader created." << std::endl;
 
 			//Texture Loading
-			ground = IMG_LoadTexture(renderer, "ground.bmp");
+			ground = IMG_LoadTexture(renderer, "textures/floor.bmp");
 			if (ground == nullptr)
 			{
 				std::cout << "Ground Texture Not Loaded!" << std::endl;
@@ -87,8 +87,8 @@ bool Application::init()
 			std::cout << "-----Starting Terrain Generation-----" << std::endl;
 			
 			
-			terrain_gen->fillScreen(ground);
-			terrain_gen->generateText("The One", 64, 64, 4);
+			terrain_gen->fillScreen();
+			//terrain_gen->generateText("The One", 64, 64, 4);
 
 			gameRunning = true;
 			free(texLoader);
@@ -183,7 +183,7 @@ void Application::render()
 	//Terrain
 	for (int i = 0; i < terrain_gen->getTerrainSize(); i++)
 	{
-		SDL_RenderCopy(renderer, ground, NULL, terrain_gen->getTerrain(i));
+		SDL_RenderCopy(renderer, terrain_gen->getText(i), NULL, terrain_gen->getTerrain(i));
 	}
 	for (int i = 0; i < terrain_gen->getTextSize(); i++)
 	{

@@ -30,7 +30,6 @@ void Terrain::generateText(const char* text, int x, int y, int scale)
 	new_text->w = 32*scale;
 	new_text->h = 32*scale;
 
-	setText(new_text);
 
 
 	std::cout << "Text created at " << textListRec[textListSize]->x << "," << textListRec[textListSize]->y << std::endl;
@@ -51,12 +50,13 @@ bool Terrain::generateTerrain(SDL_Texture* texture, int x, int y)
 		//Create rectangle location
 		SDL_Rect* new_rect = new SDL_Rect();
 		setTerrain(new_rect);
+		setText(texture);
 		SDL_Rect* currentRect = getTerrain(getTerrainSize());
 		currentRect->x = x;
 		currentRect->y = y;
 		currentRect->w = 32;
 		currentRect->h = 32;
-		//std::cout << "Rect created at " << terrainList[terrainListSize]->x << "," << terrainList[terrainListSize]->y << std::endl;
+		std::cout << "Rect created at " << terrainList[terrainListSize]->x << "," << terrainList[terrainListSize]->y << std::endl;
 		terrainListSize++;
 		//std::cout << getTerrainSize() << std::endl;
 		return true;
@@ -67,15 +67,35 @@ bool Terrain::generateTerrain(SDL_Texture* texture, int x, int y)
 	}
 }
 
-bool Terrain::fillScreen(SDL_Texture* texture)
+bool Terrain::fillScreen()
 {
 	int x = 0;
 	int y = 0;
 	SDL_Texture* textureFilled;
-	// 26 max blocks in X Direction for a Y in 800*600
-	for (int i = 0; i < terrainListCapacity; i++)
+	char tile = '~';
+	SDL_Texture* texture = NULL;
+	std::cout << "test" << FLOOR_TEX << std::endl;
+	// 26 max blocks in X Direction for a Y in 800*600 26 20
+	for (int iy = 0; iy < tilemapY; iy++)
 	{
-			generateTerrain(texture, x, y);
+		for (int ix = 0; ix < tilemapX; ix++)
+		{
+			tile = tilemap[iy][ix];
+			texture = NULL;
+			std::cout << "tile:" << tile << std::endl;
+			switch (tile) {
+			case 'g':
+				texture = IMG_LoadTexture(renderer, GROUND_TEX);
+				break;
+			case 'f':
+				texture = IMG_LoadTexture(renderer, FLOOR_TEX);
+				break;
+			}
+			if (texture != NULL)
+			{
+				generateTerrain(texture, x, y);
+			}
+			
 			if (x < SCREEN_WIDTH)
 			{
 				x = x + 32;
@@ -85,6 +105,7 @@ bool Terrain::fillScreen(SDL_Texture* texture)
 				x = 0;
 				y = y + 32;
 			}
+		}
 	}
 	std::cout << "Fill complete, blocks created ["
 		<< terrainListSize << "]" << std::endl;

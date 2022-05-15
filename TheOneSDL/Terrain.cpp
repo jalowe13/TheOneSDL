@@ -84,11 +84,14 @@ bool Terrain::fillScreen()
 			texture = NULL;
 			std::cout << "tile:" << tile << std::endl;
 			switch (tile) {
+			case 'f':
+				texture = IMG_LoadTexture(renderer, FLOOR_TEX);
+				break;
 			case 'g':
 				texture = IMG_LoadTexture(renderer, GROUND_TEX);
 				break;
-			case 'f':
-				texture = IMG_LoadTexture(renderer, FLOOR_TEX);
+			case 'w':
+				texture = IMG_LoadTexture(renderer, WALL_TEX);
 				break;
 			}
 			if (texture != NULL)

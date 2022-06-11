@@ -28,12 +28,12 @@ bool Application::init()
 			std::cout << "SDL Init Done" << std::endl;
 			window = SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 				SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-			
+
 			if (!window)
 			{
 				throw "Window creation failed.";
 			}
-			
+
 			std::cout << "Window created" << std::endl;
 
 			renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED); //Create renderer
@@ -43,14 +43,14 @@ bool Application::init()
 			{
 				throw "Renderer creation failed.";
 			}
-			
+
 			std::cout << "Renderer created" << std::endl;
 
 			if (TTF_Init() != 0)
 			{
 				throw "TTF Init failed.";
 			}
-			
+
 			std::cout << "TTF Init Done" << std::endl;
 
 			//Loading texture memory
@@ -59,7 +59,7 @@ bool Application::init()
 			//Create Player
 			temp_tex = IMG_LoadTexture(renderer, "VGB_Idle.png");
 			player = new Player(temp_tex);
-			
+
 			if (!player)
 			{
 				throw "Player allocation failed.";
@@ -71,19 +71,22 @@ bool Application::init()
 			{
 				throw "Texture Loader creation failed.";
 			}
-			
+
 			std::cout << "Texture Loader created." << std::endl;
 
 			//Texture Loading
-			
+
 			terrain_gen = new Terrain(renderer);
 
 			std::cout << "Terrain gen created" << std::endl;
 			std::cout << "-----Starting Terrain Generation-----" << std::endl;
-			
-			
+
+
 			terrain_gen->fillScreen();
 			//terrain_gen->generateText("The One", 64, 64, 4);
+
+			// Start Physics engine
+			phys_eng = new Physics();
 
 			gameRunning = true;
 			free(texLoader);
@@ -92,7 +95,7 @@ bool Application::init()
 		{
 			gameRunning = false;
 		}
-		
+
 		return true;
 	}
 	catch(const char* error)
@@ -112,7 +115,7 @@ void Application::handleEvents()
 		gameRunning = false;
 		break;
 	case SDL_KEYDOWN:
-		switch (event.key.keysym.sym) 
+		switch (event.key.keysym.sym)
 		{
 		case SDLK_w:
 		{
@@ -169,7 +172,7 @@ void Application::handleEvents()
 void Application::update()
 {
 	player->updateTexture();
-	player->handleMovement();
+	player->handleMovement(phys_eng, terrain_gen);
 }
 
 void Application::render()
@@ -202,11 +205,3 @@ void Application::clean()
 	SDL_Quit(); //quit and delete all SDL
 	TTF_Quit(); //Deletee all TTF text
 }
-
-
-
-
-
-
-
-

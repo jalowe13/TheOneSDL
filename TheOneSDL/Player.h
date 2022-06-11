@@ -1,5 +1,7 @@
 
 #include "Application.h"
+#include "Physics.h"
+#include "Terrain.h"
 #include <iostream>
 
 #ifndef PLAYER_HPP
@@ -30,7 +32,7 @@ public:
 	int getMS();
 	SDL_Rect* getRect();
 	SDL_Rect* getRectTex();
-	
+
 	//Setters
 	void xPathEdit(MovementDirection path);
 	void yPathEdit(MovementDirection path);
@@ -39,7 +41,7 @@ public:
 	void wEdit(int w);
 	void hEdit(int h);
 	void editMS(int speed);
-	void handleMovement();
+	void handleMovement(Physics* phys_eng, Terrain* terrain_eng);
 	bool boundsCheck(int x, int y);
 	void setTexture(SDL_Texture* texture);
 
@@ -54,7 +56,7 @@ public:
 	SDL_Texture* getTexture();
 
 
-	
+
 
 private:
 

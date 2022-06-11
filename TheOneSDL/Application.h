@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "TextureLoader.h"
 #include "Terrain.h"
+#include "Physics.h"
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -104,7 +105,8 @@ private:
 
 
 
-
+	//Physics Engine
+	Physics* phys_eng = nullptr; //Pointer to Physics Engine
 
 	//Textures
 	SDL_Texture* ground = nullptr;
@@ -113,12 +115,12 @@ private:
 	SDL_Texture* fancy_text = nullptr;
 
 
-	
+
 	Player* player = NULL;
 	TextureLoader* texLoader = NULL;
 
 
-	
+
 
 	//Game Variables
 	bool gameRunning;
@@ -127,7 +129,7 @@ private:
 	int endTime;
 	int timeDifference;
 	float frameAverage;
-	
+
 
 };
 

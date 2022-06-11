@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Physics.h"
 
 Player::Player(SDL_Texture* default_texture)
 {
@@ -160,8 +161,9 @@ void Player::setTexture(SDL_Texture* texture)
 	hTexEdit(frameHeight);
 }
 
-void Player::handleMovement()
+void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 {
+
 	if (boundsCheck(getX(), getY()))
 	{
 		switch (xPath())
@@ -189,6 +191,14 @@ void Player::handleMovement()
 			yEdit(getY() + getSpeed());
 			break;
 		}
+		}
+		// Gravity handle
+
+
+		if(phys_eng->checkCollision(getX(),getY(),terrain_eng->obj_tilemap))
+		{
+			std::cout << "do\n";
+			yEdit(getY() + phys_eng->getGravity());
 		}
 	}
 	else if (!boundsCheck(getX(), getY()))

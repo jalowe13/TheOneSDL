@@ -201,25 +201,27 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng, bool animat
 			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '1';
 			break;
 		}
-		case Down:
-		{
-				yEdit(getY() + getSpeed());
-				terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '~';
-				tilemap_x = round(getX()/32);
-				tilemap_y = round(getY()/32);
-				terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '1';
-			}
-			break;
+		// Case Down will be needed in future not currently
+		// If Case down is needed implement collision check
+		// case Down:
+		// {
+		// 		yEdit(getY() + getSpeed());
+		// 		terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '~';
+		// 		tilemap_x = round(getX()/32);
+		// 		tilemap_y = round(getY()/32);
+		// 		terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '1';
+		// 		break;
+		// }
 		}
 		}
 		// Gravity handle
 
 
-		// if(phys_eng->checkCollision(getX(),getY(),terrain_eng->obj_tilemap))
-		// {
-		// 	std::cout << "do\n";
-		// 	yEdit(getY() + phys_eng->getGravity());
-		// }
+		if(phys_eng->checkCollision(getX(),getY(),terrain_eng->obj_tilemap))
+		{
+			//std::cout << "do\n";
+			yEdit(getY() + phys_eng->getGravity());
+		}
 	else if (!boundsCheck(getX(), getY()))
 	{
 		//std::cout << getX() << "," << getY() << std::endl;

@@ -123,8 +123,8 @@ bool Terrain::fillScreen()
 					texture = IMG_LoadTexture(renderer, WALL_TEX);
 					break;
 				case '1':
-					//For the Player
-					std::cout << "Pxy" << ix << "," << iy << std::endl;					
+					//For the Player, Might not be needed
+					//std::cout << "Pxy" << ix << "," << iy << std::endl;
 					break;
 				}
 				if (texture != NULL) {

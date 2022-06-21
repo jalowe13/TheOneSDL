@@ -80,7 +80,7 @@ public:
 	//Constants for reference
 
 
-	const char* windowTitle = "C23 Engine: The One SDL v.0.15 FPS:";
+	const char* windowTitle = "C23 Engine: The One SDL v.0.16 FPS:";
 
 	int textureWidth = 1920;
 	int textureHeight = 32;

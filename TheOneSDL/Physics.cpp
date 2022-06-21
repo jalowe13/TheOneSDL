@@ -8,19 +8,20 @@ Physics::~Physics(){
   std::cout << "Stopping Physics Engine" << std::endl;
 }
 
-int Physics::getGravity(){
+float Physics::getGravity(){
     return gravity;
 }
 
 bool Physics::checkCollision(int x, int y, char obj_tilemap[19][26]){
   //Convert cords to tile
-  y = y/20;
-  std::cout << x << "," << y << std::endl;
-
-  if(obj_tilemap[x][y] == 'f')
+  x = x/32;
+  y = (y/32)+1; // This + 1 is to account for a slight skew debug this
+  // std::cout << x << "," << y << std::endl;
+  // std::cout << obj_tilemap[y][x] << std::endl;
+  if(obj_tilemap[y][x] == 'f')
   {
-    std::cout << obj_tilemap[x][y] << std::endl;
-    std::cout << "stop" << std::endl;
+    // std::cout << obj_tilemap[y][x] << std::endl;
+    // std::cout << "stop" << std::endl;
     return FALSE;
   }
   // if (x == x){

@@ -5,14 +5,16 @@ Player::Player(SDL_Texture* default_texture)
 {
 	playerR.h = 32;
 	playerR.w = 32;
-	playerR.x = 0;
-	playerR.y = 510;
+	tilemap_x = 1;
+	tilemap_y = 16;
+	playerR.x = tilemap_x*32;
+	playerR.y = tilemap_y*32;
 	textureWidth = 1920;
 	textureHeight = 32;
 	frameWidth = textureWidth / 60;
 	frameHeight = textureHeight;
 	frame_time = 0;
-	editMS(5);
+	editMS(2);
 	setTexture(default_texture);
 	std::cout << "Player Created!\n";
 
@@ -23,7 +25,7 @@ Player::~Player()
 	std::cout << "Player Destroyed!\n";
 }
 
-const int Player::getSpeed()
+const float Player::getSpeed()
 {
 	return movementModifier;
 }
@@ -53,7 +55,7 @@ SDL_Texture* Player::getTexture()
 	return player_texture;
 }
 
-void Player::updateTexture()
+void Player::updateTexture(Physics* phys_eng, Terrain* terrain_eng)
 {
 	//std::cout << "[Type,F,TEX_X,X,Y]" << texture_name << "," << frame_time << "," << getTexX()
 	//	<< "," << getX() << "," << getY() << std::endl;
@@ -69,6 +71,7 @@ void Player::updateTexture()
 	}
 	else
 	{
+		handleMovement(phys_eng,terrain_eng, 1);
 		frame_time++;
 	}
 }
@@ -78,7 +81,7 @@ int Player::getY()
 	return playerR.y;
 }
 
-int Player::getMS()
+float Player::getMS()
 {
 	return movementModifier;
 }
@@ -143,7 +146,7 @@ void Player::hTexEdit(int h)
 	textureR.h = h;
 }
 
-void Player::editMS(int speed)
+void Player::editMS(float speed)
 {
 	movementModifier = speed;
 }
@@ -161,9 +164,9 @@ void Player::setTexture(SDL_Texture* texture)
 	hTexEdit(frameHeight);
 }
 
-void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
+void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng, bool animation)
 {
-
+	terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '1';
 	if (boundsCheck(getX(), getY()))
 	{
 		switch (xPath())
@@ -171,11 +174,19 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 		case Left:
 		{
 			xEdit(getX() - getSpeed());
+			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '~';
+			tilemap_x = round(getX()/32);
+			tilemap_y = round(getY()/32);
+			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '1';
 			break;
 		}
 		case Right:
 		{
 			xEdit(getX() + getSpeed());
+			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '~';
+			tilemap_x = round(getX()/32);
+			tilemap_y = round(getY()/32);
+			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '1';
 			break;
 		}
 		}
@@ -184,23 +195,31 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 		case Up:
 		{
 			yEdit(getY() - getSpeed());
+			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '~';
+			tilemap_x = round(getX()/32);
+			tilemap_y = round(getY()/32);
+			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '1';
 			break;
 		}
 		case Down:
 		{
-			yEdit(getY() + getSpeed());
+				yEdit(getY() + getSpeed());
+				terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '~';
+				tilemap_x = round(getX()/32);
+				tilemap_y = round(getY()/32);
+				terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '1';
+			}
 			break;
 		}
 		}
 		// Gravity handle
 
 
-		if(phys_eng->checkCollision(getX(),getY(),terrain_eng->obj_tilemap))
-		{
-			std::cout << "do\n";
-			yEdit(getY() + phys_eng->getGravity());
-		}
-	}
+		// if(phys_eng->checkCollision(getX(),getY(),terrain_eng->obj_tilemap))
+		// {
+		// 	std::cout << "do\n";
+		// 	yEdit(getY() + phys_eng->getGravity());
+		// }
 	else if (!boundsCheck(getX(), getY()))
 	{
 		//std::cout << getX() << "," << getY() << std::endl;
@@ -259,4 +278,10 @@ bool Player::boundsCheck(int x, int y)
 		}
 	}
 	return false;
+}
+
+void Player::set_tilemap_pos(int x, int y)
+{
+	tilemap_x = x;
+	tilemap_y = y;
 }

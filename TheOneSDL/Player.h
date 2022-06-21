@@ -21,15 +21,15 @@ public:
 	Player(SDL_Texture* default_texture);
 	~Player();
 
-	void updateTexture();
+	void updateTexture(Physics* phys_eng, Terrain* terrain_eng);
 
 	//Getters
-	const int getSpeed();
+	const float getSpeed();
 	MovementDirection xPath();
 	MovementDirection yPath();
 	int getX();
 	int getY();
-	int getMS();
+	float getMS();
 	SDL_Rect* getRect();
 	SDL_Rect* getRectTex();
 
@@ -40,10 +40,11 @@ public:
 	void yEdit(int y);
 	void wEdit(int w);
 	void hEdit(int h);
-	void editMS(int speed);
-	void handleMovement(Physics* phys_eng, Terrain* terrain_eng);
+	void editMS(float speed);
+	void handleMovement(Physics* phys_eng, Terrain* terrain_eng, bool animation);
 	bool boundsCheck(int x, int y);
 	void setTexture(SDL_Texture* texture);
+	void set_tilemap_pos(int x, int y);
 
 	//Texture Edits
 	void xTexEdit(int x);
@@ -67,11 +68,14 @@ private:
 	SDL_Rect playerR;
 	SDL_Rect textureR;
 
+	int tilemap_x;
+	int tilemap_y;
+
 	SDL_Texture* player_texture = NULL;
 
 	MovementDirection currentDirectionX = None;
 	MovementDirection currentDirectionY = None;
-	int movementModifier;
+	float movementModifier;
 
 
 	int textureWidth, textureHeight, frameWidth, frameHeight;

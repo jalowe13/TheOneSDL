@@ -64,6 +64,7 @@ bool Application::init()
 			{
 				throw "Player allocation failed.";
 			}
+			std::cout << "Player created\n";
 
 			//Create Texture loader
 			texLoader = new TextureLoader();
@@ -171,8 +172,10 @@ void Application::handleEvents()
 
 void Application::update()
 {
-	player->updateTexture();
-	player->handleMovement(phys_eng, terrain_gen);
+	player->updateTexture(phys_eng, terrain_gen);
+	//player->handleMovement(phys_eng, terrain_gen);
+	terrain_gen->fillScreen();
+	// system("pause"); // Frame by frame
 }
 
 void Application::render()
@@ -191,7 +194,7 @@ void Application::render()
 	{
 		SDL_RenderCopy(renderer, terrain_gen->getText(i), NULL, terrain_gen->getTextRec(i));
 	}
-	//Player
+	// //Player
 	SDL_RenderCopy(renderer, player->getTexture(), player->getRectTex(), player->getRect());
 	//Show Frame
 	SDL_RenderPresent(renderer);

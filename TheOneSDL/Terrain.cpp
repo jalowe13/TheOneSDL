@@ -33,7 +33,7 @@ void Terrain::generateText(const char* text, int x, int y, int scale)
 
 
 	//std::cout << "Text created at " << textListRec[textListSize]->x << "," << textListRec[textListSize]->y << std::endl;
-	
+
 	//std::cout << getTerrainSize() << std::endl;
 
 	//Free Font
@@ -122,6 +122,10 @@ bool Terrain::fillScreen()
 				case 'w':
 					texture = IMG_LoadTexture(renderer, WALL_TEX);
 					break;
+				case '1':
+					//For the Player
+					std::cout << "Pxy" << ix << "," << iy << std::endl;					
+					break;
 				}
 				if (texture != NULL) {
 					generateTerrain(texture, x, y, layer);
@@ -139,9 +143,7 @@ bool Terrain::fillScreen()
 		}
 	}
 
-	std::cout << "Fill complete, blocks created ["
-		<< terrainListSize << "]" << std::endl;
+	// std::cout << "Fill complete, blocks created ["
+	// 	<< terrainListSize << "]" << std::endl;
 	return true;
 }
-
-

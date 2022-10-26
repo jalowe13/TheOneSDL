@@ -1,8 +1,7 @@
-#pragma once
 #include "Application.h"
-#include <windows.h>
+
 #include "resource.h" //sounds
-#include <iostream>
+
 #include <string>
 #pragma comment(lib, "winmm.lib")
 
@@ -15,9 +14,9 @@ Application* app = NULL; //Pointer to the app
 
 void framerate_cap(Uint32 frame, const int fps)
 {
-	if ((1000 / fps) > SDL_GetTicks() - frame)
+	if ((1000 / fps) > SDL_GetTicks64() - frame)
 	{
-		SDL_Delay(1000 / fps - (SDL_GetTicks() - frame));
+		SDL_Delay(1000 / fps - (SDL_GetTicks64() - frame));
 	}
 }
 
@@ -32,7 +31,7 @@ int main(int argc, char* args[])
 	while (app->running())
 	{
 		Uint64 start_timer = SDL_GetPerformanceCounter(); //Start FPS Clock
-		starting_tick = SDL_GetTicks(); //Get current clock ticks
+		starting_tick = SDL_GetTicks64(); //Get current clock ticks
 
 		//Game handling events
 		app->handleEvents();

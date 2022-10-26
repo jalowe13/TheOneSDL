@@ -1,6 +1,3 @@
-
-#include "Application.h"
-
 #ifndef PHYSICS_HPP
 #define PHYSICS_HPP
 

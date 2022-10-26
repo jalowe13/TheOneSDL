@@ -1,4 +1,5 @@
 #include "TextureLoader.h"
+#include <string>
 
 
 bool TextureLoader::loadTexture(std::string file_name)

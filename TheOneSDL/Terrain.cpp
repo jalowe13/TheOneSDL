@@ -1,4 +1,4 @@
-#include "terrain.h"
+#include "Terrain.h"
 
 
 Terrain::Terrain(SDL_Renderer* renderer_p)

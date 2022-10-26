@@ -1,21 +1,26 @@
-#define SDL_MAIN_HANDLED
-#pragma once
-#include <iostream>
-#include <windows.h>
-#include <SDL_image.h>
-#include "SDL_ttf.h"
-#include "SDL.h"
-#include "Player.h"
-#include "TextureLoader.h"
-#include "Terrain.h"
-#include "Physics.h"
 
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
+// #define SDL_MAIN_HANDLED
 
 #ifndef APPLICATION_HPP
 #define APPLICATION_HPP
 
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
+
+#include <iostream>
+#include <windows.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#include "Physics.h"
+#include "Terrain.h"
+#include "Player.h"
+#include "Ground.h"
+#include "TextureLoader.h"
+
+// Some forward declerations for pointers
+class Player;
+class Terrain;
 
 class Application
 {
@@ -80,7 +85,7 @@ public:
 	//Constants for reference
 
 
-	const char* windowTitle = "C23 Engine: The One SDL v.0.16.2 FPS:";
+	const char* windowTitle = "C23 Engine: The One SDL v.0.16.3 FPS:";
 
 	int textureWidth = 1920;
 	int textureHeight = 32;
@@ -134,3 +139,4 @@ private:
 };
 
 #endif
+

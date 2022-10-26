@@ -1,5 +1,5 @@
 #include "Player.h"
-#include "Physics.h"
+#include <cmath>
 
 Player::Player(SDL_Texture* default_texture)
 {

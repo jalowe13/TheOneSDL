@@ -1,4 +1,5 @@
 #include "Physics.h"
+#include <iostream>
 
 Physics::Physics(){
   std::cout << "Start Physics Engine" << std::endl;
@@ -22,7 +23,7 @@ bool Physics::checkCollision(int x, int y, char obj_tilemap[19][26]){
   {
     // std::cout << obj_tilemap[y][x] << std::endl;
     // std::cout << "stop" << std::endl;
-    return FALSE;
+    return false;
   }
   // if (x == x){
   //   if(y1 + 1 == y2) // Detect next tile collision
@@ -31,5 +32,5 @@ bool Physics::checkCollision(int x, int y, char obj_tilemap[19][26]){
   //     return TRUE;
   //   }
   // }
-  return TRUE;
+  return true;
 }

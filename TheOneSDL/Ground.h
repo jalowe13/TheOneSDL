@@ -1,5 +1,3 @@
-#pragma once
-#include "SDL.h"
 
 #ifndef GROUND_HPP
 #define GROUND_HPP

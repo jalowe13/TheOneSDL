@@ -1,8 +1,6 @@
-#include <string>
-#include "SDL.h"
-
 #ifndef TEXTURELOADER_HPP
 #define TEXTURELOADER_HPP
+
 
 class TextureLoader
 {

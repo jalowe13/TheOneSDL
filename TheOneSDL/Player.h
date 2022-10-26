@@ -1,11 +1,11 @@
-
-#include "Application.h"
-#include "Physics.h"
-#include "Terrain.h"
-#include <iostream>
-
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
+
+
+#include "Terrain.h"
+#include <SDL2/SDL_ttf.h>
+
+class Terrain;
 
 enum MovementDirection {
 	Up,

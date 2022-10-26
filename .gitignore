@@ -13,3 +13,6 @@ TheOneSDL/TheOneSDL.rc
 TheOneSDL/TheOneSDL.pdb
 TheOneSDL/TheOneSDL.ilk
 TheOneSDL/TheOneSDL.exe
+TheOneSDL/.vscode/c_cpp_properties.json
+TheOneSDL/.vscode/settings.json
+TheOneSDL/.vscode/tasks.json

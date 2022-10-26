@@ -65,7 +65,7 @@ bool Terrain::generateTerrain(SDL_Texture* texture, int x, int y, int layer)
 				setTerrainObj(new_rect);
 				setTextObj(texture);
 				currentRect = getTerrainObj(getTerrainObjSize());
-				currentRect->x = x;
+				currentRect->x = x+16; // Added for the skew of hitboxes
 				currentRect->y = y;
 				currentRect->w = 32;
 				currentRect->h = 32;

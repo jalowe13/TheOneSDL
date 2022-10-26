@@ -119,11 +119,13 @@ void Application::handleEvents()
 		case SDLK_w:
 		{
 			player->yPathEdit(Up);
+			player->editMS(3);
 			break;
 		}
 		case SDLK_a:
 		{
 			player->xPathEdit(Left);
+			player->editMS(2);
 			break;
 		}
 		case SDLK_s:
@@ -134,6 +136,7 @@ void Application::handleEvents()
 		case SDLK_d:
 		{
 			player->xPathEdit(Right);
+			player->editMS(2);
 			break;
 		}
 		}

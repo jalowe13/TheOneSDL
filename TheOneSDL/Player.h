@@ -6,6 +6,7 @@
 #include <SDL2/SDL_ttf.h>
 
 class Terrain;
+class Physics;
 
 enum MovementDirection {
 	Up,

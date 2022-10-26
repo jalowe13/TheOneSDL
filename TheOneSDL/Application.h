@@ -21,6 +21,7 @@
 // Some forward declerations for pointers
 class Player;
 class Terrain;
+class Physics;
 
 class Application
 {
@@ -85,7 +86,7 @@ public:
 	//Constants for reference
 
 
-	const char* windowTitle = "C23 Engine: The One SDL v.0.16.3 FPS:";
+	const char* windowTitle = "C23 Engine: The One SDL v.0.17 FPS:";
 
 	int textureWidth = 1920;
 	int textureHeight = 32;

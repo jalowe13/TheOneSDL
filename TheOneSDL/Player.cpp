@@ -213,18 +213,21 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng, bool animat
 		// 		break;
 		// }
 		}
-		}
-		// Gravity handle
+	}
+	// Gravity handle
 
-
-		if(phys_eng->checkCollision(getX(),getY(),terrain_eng->obj_tilemap))
-		{
-			//std::cout << "do\n";
-			yEdit(getY() + phys_eng->getGravity());
-		}
-	else if (!boundsCheck(getX(), getY()))
+	if(phys_eng->checkCollision(getX(),getY(),terrain_eng->obj_tilemap))
 	{
-		//std::cout << getX() << "," << getY() << std::endl;
+		phys_eng->incTime(); // Increase time when away from ground
+		yEdit(getY() + phys_eng->getGravity() * phys_eng->getTime());
+		// std::cout << phys_eng->getGravity() * phys_eng->getTime() << std::endl;
+	}
+	else{
+		// std::cout << getX() << "," << getY() << std::endl;
+		phys_eng->resetTime(); // Reset time on ground
+	}
+	if (!boundsCheck(getX(), getY()))
+	{
 		switch (xPath())
 		{
 		case Right:

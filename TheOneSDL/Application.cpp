@@ -55,8 +55,8 @@ bool Application::init()
 			SDL_Texture* temp_tex = NULL;
 
 			//Create Player
-			temp_tex = IMG_LoadTexture(renderer, "VGB_Idle.png");
-			player = new Player(temp_tex);
+			// renderer is passed in to load the texture
+			player = new Player(renderer);
 
 			if (!player)
 			{
@@ -176,7 +176,7 @@ void Application::update()
 	player->updateTexture(phys_eng, terrain_gen);
 	//player->handleMovement(phys_eng, terrain_gen);
 	terrain_gen->fillScreen();
-	// system("pause"); // Frame by frame
+	//system("pause"); // Frame by frame
 }
 
 void Application::render()

@@ -1,7 +1,7 @@
 #include "Player.h"
 #include <cmath>
 
-Player::Player(SDL_Texture* default_texture)
+Player::Player(SDL_Renderer* renderer)
 {
 	playerR.h = 32;
 	playerR.w = 32;
@@ -9,13 +9,36 @@ Player::Player(SDL_Texture* default_texture)
 	tilemap_y = 16;
 	playerR.x = tilemap_x*32;
 	playerR.y = tilemap_y*32;
-	textureWidth = 1920;
-	textureHeight = 32;
+	// Defaults zero no texture loaded yet
+	textureWidth = 0;
+	textureHeight = 0;
 	frameWidth = textureWidth / 60;
 	frameHeight = textureHeight;
 	frame_time = 0;
+
+	// Check default file existance and load default texture
+	std::string idle_file = "textures\\VGB\\idle\\vgb_idle-Sheet.png";
+	const char* filename = idle_file.c_str();
+	SDL_Texture* default_texture = IMG_LoadTexture(renderer, filename);
+	SDL_QueryTexture(default_texture, NULL, NULL, &textureWidth, &textureHeight);
+
+	// Load check
+	if ( textureWidth == 0 || textureHeight == 0)
+	{
+		std::cout << "Error Player.cpp: Texture not loaded " << filename << "with dims " <<
+		textureWidth << " and " << textureHeight << std::endl;
+		exit(-1);
+	}
+
+	texture = default_texture; // The current texture is the default texture
+
+	// Test 2
+	filename = idle_file2.c_str();
+	texture2 = IMG_LoadTexture(renderer, filename);
+	SDL_QueryTexture(default_texture, NULL, NULL, &textureWidth, &textureHeight);
+
 	editMS(2);
-	setTexture(default_texture);
+	setTexture(texture);
 	std::cout << "Player Created!\n";
 
 }
@@ -57,7 +80,7 @@ SDL_Texture* Player::getTexture()
 
 void Player::updateTexture(Physics* phys_eng, Terrain* terrain_eng)
 {
-	//std::cout << "[Type,F,TEX_X,X,Y]" << texture_name << "," << frame_time << "," << getTexX()
+	std::cout << "[Type,F,TEX_X,X,Y]" << idle_file << "," << frame_time << "," << getTexX() << std::endl;
 	//	<< "," << getX() << "," << getY() << std::endl;
 
 	xTexEdit(getTexX() + frameWidth);
@@ -74,6 +97,8 @@ void Player::updateTexture(Physics* phys_eng, Terrain* terrain_eng)
 		handleMovement(phys_eng,terrain_eng, 1);
 		frame_time++;
 	}
+
+	
 }
 
 int Player::getY()
@@ -109,11 +134,13 @@ void Player::yPathEdit(MovementDirection path)
 void Player::xEdit(int x)
 {
 	playerR.x = x;
+	setTexture(texture2);
 }
 
 void Player::yEdit(int y)
 {
 	playerR.y = y;
+
 }
 
 void Player::wEdit(int w)
@@ -129,6 +156,7 @@ void Player::hEdit(int h)
 void Player::xTexEdit(int x)
 {
 	textureR.x = x;
+	
 }
 
 void Player::yTexEdit(int y)
@@ -194,12 +222,17 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng, bool animat
 		{
 		case Up:
 		{
+			setTexture(texture2);
 			yEdit(getY() - getSpeed());
 			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '~';
 			tilemap_x = round(getX()/32);
 			tilemap_y = round(getY()/32);
 			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '1';
 			break;
+		}
+		case None:
+		{
+			setTexture(texture);
 		}
 		// Case Down will be needed in future not currently
 		// If Case down is needed implement collision check

@@ -19,7 +19,7 @@ enum MovementDirection {
 class Player
 {
 public:
-	Player(SDL_Texture* default_texture);
+	Player(SDL_Renderer* default_texture);
 	~Player();
 
 	void updateTexture(Physics* phys_eng, Terrain* terrain_eng);
@@ -80,7 +80,13 @@ private:
 
 
 	int textureWidth, textureHeight, frameWidth, frameHeight;
-	std::string texture_name = "VGB_Idle";
+	//std::string texture_name = "VGB_Idle";
+	std::string idle_file = "textures\\VGB\\idle\\vgb_idle-Sheet.png";
+	std::string idle_file2 = "VGB_Idle.png";
+
+	//Textures stored
+	SDL_Texture* texture = NULL;
+	SDL_Texture* texture2 = NULL;
 
 	int frame_time;
 

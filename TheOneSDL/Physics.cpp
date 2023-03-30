@@ -22,7 +22,7 @@ void Physics::resetTime(){
 }
 
 float Physics::getTime(){
-  std::cout << "Time:" << time << std::endl;
+  // std::cout << "Time:" << time << std::endl;
   return time;
 }
 

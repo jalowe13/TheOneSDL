@@ -35,7 +35,12 @@ Player::Player(SDL_Renderer* renderer)
 	// Test 2
 	filename = idle_file2.c_str();
 	texture2 = IMG_LoadTexture(renderer, filename);
-	SDL_QueryTexture(default_texture, NULL, NULL, &textureWidth, &textureHeight);
+	SDL_QueryTexture(texture2, NULL, NULL, &textureWidth, &textureHeight);
+
+	// Load Run Left
+	filename = run_left_file.c_str();
+	run_left = IMG_LoadTexture(renderer, filename);
+	SDL_QueryTexture(run_left, NULL, NULL, &textureWidth, &textureHeight);
 
 	editMS(2);
 	setTexture(texture);
@@ -80,7 +85,7 @@ SDL_Texture* Player::getTexture()
 
 void Player::updateTexture(Physics* phys_eng, Terrain* terrain_eng)
 {
-	std::cout << "[Type,F,TEX_X,X,Y]" << idle_file << "," << frame_time << "," << getTexX() << std::endl;
+	std::cout << "[Frame]" << frame_time << std::endl;
 	//	<< "," << getX() << "," << getY() << std::endl;
 
 	xTexEdit(getTexX() + frameWidth);
@@ -134,7 +139,6 @@ void Player::yPathEdit(MovementDirection path)
 void Player::xEdit(int x)
 {
 	playerR.x = x;
-	setTexture(texture2);
 }
 
 void Player::yEdit(int y)
@@ -201,6 +205,12 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng, bool animat
 		{
 		case Left:
 		{
+			std::cout << "Left\n";
+			if (!inAnimation)
+			{
+				setTexture(run_left);
+				inAnimation = true;
+			}
 			xEdit(getX() - getSpeed());
 			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '~';
 			tilemap_x = round(getX()/32);
@@ -210,6 +220,8 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng, bool animat
 		}
 		case Right:
 		{
+			std::cout << "Right\n";
+			setTexture(texture);
 			xEdit(getX() + getSpeed());
 			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '~';
 			tilemap_x = round(getX()/32);
@@ -217,12 +229,17 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng, bool animat
 			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '1';
 			break;
 		}
+		default:
+		{
+			setTexture(texture);
+			inAnimation = false;
+		}
 		}
 		switch (yPath())
 		{
 		case Up:
 		{
-			setTexture(texture2);
+			std::cout << "Up\n";
 			yEdit(getY() - getSpeed());
 			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '~';
 			tilemap_x = round(getX()/32);
@@ -230,10 +247,7 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng, bool animat
 			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '1';
 			break;
 		}
-		case None:
-		{
-			setTexture(texture);
-		}
+
 		// Case Down will be needed in future not currently
 		// If Case down is needed implement collision check
 		// case Down:

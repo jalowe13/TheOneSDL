@@ -84,11 +84,15 @@ private:
 	std::string idle_file = "textures\\VGB\\idle\\vgb_idle-Sheet.png";
 	std::string idle_file2 = "VGB_Idle.png";
 
+	std::string run_left_file = "textures\\VGB\\run\\vgb_run_left-Sheet.png";
+
 	//Textures stored
 	SDL_Texture* texture = NULL;
 	SDL_Texture* texture2 = NULL;
+	SDL_Texture* run_left = NULL;
 
 	int frame_time;
+	bool inAnimation = false; // toggle to lock animation canceling
 
 
 };

@@ -4,6 +4,8 @@
 
 #include "Terrain.h"
 #include <SDL2/SDL_ttf.h>
+#include <list>
+#include <vector>
 
 class Terrain;
 class Physics;
@@ -72,6 +74,9 @@ private:
 	int tilemap_x;
 	int tilemap_y;
 
+	//Speed
+	int playerSpeed;
+
 	SDL_Texture* player_texture = NULL;
 
 	MovementDirection currentDirectionX = None;
@@ -80,16 +85,16 @@ private:
 
 
 	int textureWidth, textureHeight, frameWidth, frameHeight;
-	//std::string texture_name = "VGB_Idle";
-	std::string idle_file = "textures\\VGB\\idle\\vgb_idle-Sheet.png";
-	std::string idle_file2 = "VGB_Idle.png";
 
-	std::string run_left_file = "textures\\VGB\\run\\vgb_run_left-Sheet.png";
+	// Filenames
+	std::string idle = "textures\\VGB\\idle\\vgb_idle-Sheet.png";
+	std::string run_left = "textures\\VGB\\run\\vgb_run_left-Sheet.png";
+	std::string run_right = "textures\\VGB\\run\\vgb_run_right-Sheet.png";
+	std::list<std::string> tex_files;
 
 	//Textures stored
-	SDL_Texture* texture = NULL;
-	SDL_Texture* texture2 = NULL;
-	SDL_Texture* run_left = NULL;
+	std::map<std::string, SDL_Texture*> textures;
+
 
 	int frame_time;
 	bool inAnimation = false; // toggle to lock animation canceling

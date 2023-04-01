@@ -9,6 +9,8 @@ Player::Player(SDL_Renderer* renderer)
 	tilemap_y = 16;
 	playerR.x = tilemap_x*32;
 	playerR.y = tilemap_y*32;
+	// Set default speed
+	playerSpeed = 3;
 	// Defaults zero no texture loaded yet
 	textureWidth = 0;
 	textureHeight = 0;
@@ -30,20 +32,24 @@ Player::Player(SDL_Renderer* renderer)
 		exit(-1);
 	}
 
-	texture = default_texture; // The current texture is the default texture
+	// Load Textures
+	// Load filenames
 
-	// Test 2
-	filename = idle_file2.c_str();
-	texture2 = IMG_LoadTexture(renderer, filename);
-	SDL_QueryTexture(texture2, NULL, NULL, &textureWidth, &textureHeight);
+	std::list<std::string> tex_files = {idle, run_left, run_right};
+	std::list<std::string> tex_names = {"idle", "run_left","run_right"};
+	
 
-	// Load Run Left
-	filename = run_left_file.c_str();
-	run_left = IMG_LoadTexture(renderer, filename);
-	SDL_QueryTexture(run_left, NULL, NULL, &textureWidth, &textureHeight);
-
-	editMS(2);
-	setTexture(texture);
+	while (tex_files.size() > 0) {
+		filename = tex_files.front().c_str();		// Reference from front
+		std::string name = tex_names.front();
+		tex_names.pop_front();						// pop
+		tex_files.pop_front(); 						
+		textures[name] = IMG_LoadTexture(renderer,filename);
+		std::cout << name << "loaded with " << textures[name] << std::endl;
+	}
+	
+	editMS(3); // push default speed
+	setTexture(textures["idle"]);
 	std::cout << "Player Created!\n";
 
 }
@@ -85,7 +91,7 @@ SDL_Texture* Player::getTexture()
 
 void Player::updateTexture(Physics* phys_eng, Terrain* terrain_eng)
 {
-	std::cout << "[Frame]" << frame_time << std::endl;
+	//std::cout << "[Frame]" << frame_time << std::endl;
 	//	<< "," << getX() << "," << getY() << std::endl;
 
 	xTexEdit(getTexX() + frameWidth);
@@ -101,6 +107,7 @@ void Player::updateTexture(Physics* phys_eng, Terrain* terrain_eng)
 	{
 		handleMovement(phys_eng,terrain_eng, 1);
 		frame_time++;
+		
 	}
 
 	
@@ -205,10 +212,10 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng, bool animat
 		{
 		case Left:
 		{
-			std::cout << "Left\n";
+			// std::cout << "Left\n";
 			if (!inAnimation)
 			{
-				setTexture(run_left);
+				setTexture(textures["run_left"]);
 				inAnimation = true;
 			}
 			xEdit(getX() - getSpeed());
@@ -220,8 +227,11 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng, bool animat
 		}
 		case Right:
 		{
-			std::cout << "Right\n";
-			setTexture(texture);
+			if (!inAnimation)
+			{
+				setTexture(textures["run_right"]);
+				inAnimation = true;
+			}
 			xEdit(getX() + getSpeed());
 			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '~';
 			tilemap_x = round(getX()/32);
@@ -231,7 +241,7 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng, bool animat
 		}
 		default:
 		{
-			setTexture(texture);
+			setTexture(textures["idle"]);
 			inAnimation = false;
 		}
 		}
@@ -239,7 +249,7 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng, bool animat
 		{
 		case Up:
 		{
-			std::cout << "Up\n";
+			// std::cout << "Up\n";
 			yEdit(getY() - getSpeed());
 			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '~';
 			tilemap_x = round(getX()/32);

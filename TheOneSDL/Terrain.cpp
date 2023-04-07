@@ -78,6 +78,7 @@ bool Terrain::generateTerrain(SDL_Texture* texture, int x, int y, int layer)
 	{
 		std::cout << error << std::endl;
 	}
+	return false;
 }
 
 bool Terrain::fillScreen()

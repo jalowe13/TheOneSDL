@@ -18,11 +18,6 @@ else
 	LIB_LIST = -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image
 endif
 
-# Library Source
-LDFLAGS= -Lusr/include
-
-# Library List
-LIB_LIST = -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image
 
 
 all: TheOne

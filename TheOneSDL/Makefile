@@ -6,11 +6,23 @@ CXX=g++
 # Include Flags
 CXXFLAGS = -Isrc/Include
 
+
+# Swap between Windows and Unix installs
+ifeq ($(OS),Windows_NT)
+    RM = del /Q
+	LDFLAGS= -Lsrc/lib
+	LIB_LIST = -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image
+else
+    RM = rm -f
+	LDFLAGS= -Lusr/include
+	LIB_LIST = -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image
+endif
+
 # Library Source
-LDFLAGS= -Lsrc/lib
+LDFLAGS= -Lusr/include
 
 # Library List
-LIB_LIST = -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image
+LIB_LIST = -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image
 
 
 all: TheOne
@@ -27,7 +39,7 @@ Physics.o: Physics.cpp
 Terrain.o: Terrain.cpp
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c Terrain.cpp $(LIB_LIST)
 
-# Swap between Windows and Unix deletions
+# Swap between Windows and Unix installs
 ifeq ($(OS),Windows_NT)
     RM = del /Q
 else

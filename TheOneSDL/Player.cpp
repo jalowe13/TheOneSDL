@@ -19,7 +19,7 @@ Player::Player(SDL_Renderer* renderer)
 	frame_time = 0;
 
 	// Check default file existance and load default texture
-	std::string idle_file = "textures\\VGB\\idle\\vgb_idle-Sheet.png";
+	std::string idle_file = "textures/VGB/idle/vgb_idle-Sheet.png";
 	const char* filename = idle_file.c_str();
 	SDL_Texture* default_texture = IMG_LoadTexture(renderer, filename);
 	SDL_QueryTexture(default_texture, NULL, NULL, &textureWidth, &textureHeight);
@@ -29,7 +29,7 @@ Player::Player(SDL_Renderer* renderer)
 	{
 		std::cout << "Error Player.cpp: Texture not loaded " << filename << "with dims " <<
 		textureWidth << " and " << textureHeight << std::endl;
-		exit(-1);
+		// exit(-1);
 	}
 
 	// Load Textures

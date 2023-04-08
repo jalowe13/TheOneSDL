@@ -23,13 +23,15 @@ Player::Player(SDL_Renderer* renderer)
 	const char* filename = idle_file.c_str();
 	SDL_Texture* default_texture = IMG_LoadTexture(renderer, filename);
 	SDL_QueryTexture(default_texture, NULL, NULL, &textureWidth, &textureHeight);
-
+	std::cout << "File is " << filename << std::endl;
+	std::cout << "Error Player.cpp: Texture loaded " << filename << "with dims " <<
+	textureWidth << " and " << textureHeight << std::endl;
 	// Load check
 	if ( textureWidth == 0 || textureHeight == 0)
 	{
 		std::cout << "Error Player.cpp: Texture not loaded " << filename << "with dims " <<
 		textureWidth << " and " << textureHeight << std::endl;
-		// exit(-1);
+		exit(-1);
 	}
 
 	// Load Textures
@@ -40,12 +42,16 @@ Player::Player(SDL_Renderer* renderer)
 	
 
 	while (tex_files.size() > 0) {
-		filename = tex_files.front().c_str();		// Reference from front
+		std::string new_file = tex_files.front().c_str();		// Reference from front
+		filename = new_file.c_str();
 		std::string name = tex_names.front();
 		tex_names.pop_front();						// pop
 		tex_files.pop_front(); 						
 		textures[name] = IMG_LoadTexture(renderer,filename);
-		std::cout << name << "loaded with " << textures[name] << std::endl;
+		std::cout << filename << std::endl;
+		if (textures[name] == 0){
+			std::cout << name << "failed to load from path " << filename << std::endl;
+		}
 	}
 	
 	editMS(3); // push default speed

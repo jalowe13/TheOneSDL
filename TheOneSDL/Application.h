@@ -8,7 +8,6 @@
 #define SCREEN_HEIGHT 600
 
 #include <iostream>
-#include <time.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
@@ -18,6 +17,14 @@
 #include "Ground.h"
 #include "TextureLoader.h"
 
+// PreProcessor Declerations
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#include <time.h>
+#endif
+
 // Some forward declerations for pointers
 class Player;
 class Terrain;
@@ -26,6 +33,7 @@ class Physics;
 class Application
 {
 public:
+const char* windowTitle = "C23 Engine: The One SDL v.0.19.2 FPS:";
 	Application();
 	~Application();
 
@@ -86,7 +94,7 @@ public:
 	//Constants for reference
 
 
-	const char* windowTitle = "C23 Engine: The One SDL v.0.19 FPS:";
+	
 
 	int textureWidth = 1920;
 	int textureHeight = 32;

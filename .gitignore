@@ -18,3 +18,4 @@ TheOneSDL/.vscode/settings.json
 TheOneSDL/.vscode/tasks.json
 TheOneSDL/.vscode/launch.json
 *.mp4
+*.o

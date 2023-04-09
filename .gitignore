@@ -19,3 +19,5 @@ TheOneSDL/.vscode/tasks.json
 TheOneSDL/.vscode/launch.json
 *.mp4
 *.o
+TheOneSDL/TheOne.exe
+TheOneSDL/TheOne

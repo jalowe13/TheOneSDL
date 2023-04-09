@@ -42,4 +42,4 @@ else
 endif
 
 clean:
-	$(RM) *.o TheOne
+	$(RM) *.o

@@ -1,13 +1,27 @@
 #include "Application.h"
 
+#ifdef _WIN32
+#else
+uint32_t linux_tick(){
+	struct timespec ts;
+	clock_gettime(CLOCK_MONOTONIC, &ts);
+	return ((ts.tv_sec * 1000) + (ts.tv_nsec / 1000000));
+}
+#endif
 
 Application::Application()
 {
 	std::cout << "Application Created!\n";
 	gameRunning = true;
 	frameCount = 0;
-	startTime = GetTickCount();
-	endTime = GetTickCount();
+	// Windows and Linux Definitions
+	#ifdef _WIN32
+		startTime = GetTickCount();
+		endTime = GetTickCount();
+	#else
+		startTime = linux_tick();
+		endTime = linux_tick();
+	#endif
 	timeDifference = 0;
 	frameAverage = 0;
 }

@@ -1,7 +1,11 @@
 # TheOneSDL
-Game Engine created with C++ and SDL2
+ The One created with C++ and SDL
 
-Future action adventure game
+ Jacob Lowe
 
  Build Options
  Build with CMake
+
+Run TheOne.exe in TheOneSDL folder
+
+Tileset Game Engine made with SDL2 and C++

@@ -8,4 +8,4 @@
 
 Run TheOne.exe in TheOneSDL folder
 
-Tileset Game Engine made with SDL2 and C++
+Tileset Game Engine Prototype made with SDL2 and C++

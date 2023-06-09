@@ -33,7 +33,7 @@ class Physics;
 class Application
 {
 public:
-const char* windowTitle = "C23 Engine: The One SDL v.0.20 FPS:";
+const char* windowTitle = "C23 Engine: The One SDL v.0.20.5 FPS:";
 	Application();
 	~Application();
 
@@ -103,6 +103,7 @@ const char* windowTitle = "C23 Engine: The One SDL v.0.20 FPS:";
 	const int fps = 60;
 	int current_fps= 0;
 	int frame_time = 0;
+
 private:
 
 	//Pointers

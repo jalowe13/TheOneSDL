@@ -43,11 +43,12 @@ void Terrain::generateText(const char* text, int x, int y, int scale)
 	textListSize++;
 }
 
+//Sets each rectangle to its position in the array and its corresponding texture
 bool Terrain::generateTerrain(SDL_Texture* texture, int x, int y, int layer)
 {
 	try
 	{
-		//Create rectangle location
+		
 		SDL_Rect* new_rect = new SDL_Rect();
 		SDL_Rect* currentRect = NULL;
 		switch (layer){
@@ -65,7 +66,7 @@ bool Terrain::generateTerrain(SDL_Texture* texture, int x, int y, int layer)
 				setTerrainObj(new_rect);
 				setTextObj(texture);
 				currentRect = getTerrainObj(getTerrainObjSize());
-				currentRect->x = x+16; // Added for the skew of hitboxes
+				currentRect->x = x; // Added for the skew of hitboxes
 				currentRect->y = y;
 				currentRect->w = 32;
 				currentRect->h = 32;
@@ -129,6 +130,7 @@ bool Terrain::fillScreen()
 					break;
 				}
 				if (texture != NULL) {
+					std::cout << "x,y:["<< x << "," << y << "]\n";
 					generateTerrain(texture, x, y, layer);
 				}
 				if (x < SCREEN_WIDTH)

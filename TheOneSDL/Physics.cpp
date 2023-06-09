@@ -30,7 +30,7 @@ bool Physics::checkCollision(int x, int y, char obj_tilemap[19][26]){
   //Convert cords to tile
   int x_tile = int(x/Terrain::texBounds);
   int y_tile = int((y/Terrain::texBounds))+1; // This + 1 is to account for tilemap skew: must fix in rendering
-  if(obj_tilemap[y_tile][x_tile] == 'f' ) // Floor specifics
+  if(obj_tilemap[y_tile][x_tile] == 'f' || obj_tilemap[y_tile][x_tile] == 't' ) // Collision
   {
     // Need to check for top of the floor around ~20 pixels
     int a_y = int((y-jumpForgiveness)/Terrain::texBounds)+1;

@@ -4,6 +4,7 @@
 #include <deque>
 #include <tuple>
 #include <map>
+#include <regex>
 #include <iostream>
 #include "Application.h"
 
@@ -14,7 +15,13 @@ public:
 	Terrain(SDL_Renderer* renderer_p);
 	~Terrain();
 	void generateText(const char* text, int x, int y, int scale);
+
+	// Attempts to place a new rectangle at a position with the texture
 	bool generateTerrain(SDL_Texture* texture, int x, int y, int layer);
+
+	// Iterates through all tilemaps, and loads textures into a texture array created in generateTerrain
+	// Texture arrays are updated
+	// Rectangle arrays are updated
 	bool fillScreen();
 
 	// Array Max sizes 800x600
@@ -86,7 +93,7 @@ public:
 		{'~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~'},
 		{'~','~','~','~','~','~','~','~','~','~','~','f','f','~','~','~','~','~','~','~','~','~','~','~','~'},
 		{'~','~','~','~','~','~','~','~','~','~','f','~','~','~','~','~','~','~','~','~','~','~','~','~','~'},
-		{'~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','t','~','~','~'},
+		{'~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','f','~','~','~'},
 		{'f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f'},
 		{'~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~'}
 	};
@@ -101,26 +108,32 @@ public:
 
 
 	// Terrain Setters and Getters
+
+	// Sets the rectangle in the terrain rectangle list
 	void setTerrain(SDL_Rect* rect)
 	{
 		terrainList[terrainListSize] = rect;
 	}
 
+	// Sets the texture in the texture list
 	void setText(SDL_Texture* texture)
 	{
 		textList[terrainListSize] = texture;
 	}
 
+	// Storage of Background Objects Rectangles
 	SDL_Rect* getTerrain(int i)
 	{
 		return terrainList[i];
 	}
-
+	
+	// Get Texture in the Background Texture list
 	SDL_Texture* getText(int i)
 	{
 		return textList[i];
 	}
 
+	// Get "text" font, rectangle
 	SDL_Rect* getTextRec(int i)
 	{
 		return textListRec[i];
@@ -151,6 +164,7 @@ public:
 		textObjList[terrainObjListSize] = texture;
 	}
 
+	// Storage of Terrain Objects Rectangles
 	SDL_Rect* getTerrainObj(int i)
 	{
 		return terrainObjList[i];
@@ -178,11 +192,11 @@ private:
 	static const int terrainObjListCapacity = 493; //MAX SIZE
 
 	// Background Terrain
-	SDL_Rect* terrainList[terrainListCapacity];
+	SDL_Rect* terrainList[terrainListCapacity]; //Storage of Background textures
 	SDL_Texture* textList[terrainListCapacity]; //Storage of text textures
 
 	// Terrain Objects
-	SDL_Rect* terrainObjList[terrainObjListCapacity];
+	SDL_Rect* terrainObjList[terrainObjListCapacity]; // Storage of Terrain Objects
 	SDL_Texture* textObjList[terrainObjListCapacity]; //Storage of text textures
 
 	// Text

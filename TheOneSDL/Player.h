@@ -44,8 +44,11 @@ public:
 	void wEdit(int w);
 	void hEdit(int h);
 	void editMS(float speed);
-	void handleMovement(Physics* phys_eng, Terrain* terrain_eng, bool animation);
+	// Handle movement from the Physics engine 
+	void handleMovement(Physics* phys_eng, Terrain* terrain_eng);
+	// Check if Player is outside of the screen
 	bool boundsCheck(int x, int y);
+	//Setting Textures to the passed in texture
 	void setTexture(SDL_Texture* texture);
 	void set_tilemap_pos(int x, int y);
 
@@ -59,6 +62,8 @@ public:
 	int getTexX();
 	SDL_Texture* getTexture();
 
+	//Hitbox Methods
+	bool hitboxCheck();
 
 
 
@@ -70,6 +75,7 @@ private:
 	//Variables
 	SDL_Rect playerR;
 	SDL_Rect textureR;
+	bool hitboxOn;
 
 	int tilemap_x;
 	int tilemap_y;

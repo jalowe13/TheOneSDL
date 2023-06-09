@@ -187,32 +187,40 @@ void Application::handleEvents()
 
 void Application::update()
 {
-	player->updateTexture(phys_eng, terrain_gen);
-	//player->handleMovement(phys_eng, terrain_gen);
-	terrain_gen->fillScreen();
-	//system("pause"); // Frame by frame
+	player->updateTexture(phys_eng, terrain_gen); // Update players texture
+	terrain_gen->fillScreen(); // Update textures and rectangles
 }
 
 void Application::render()
 {
 	SDL_RenderClear(renderer); //Clear Screen
-	//Terrain
-	for (int i = 0; i < terrain_gen->getTerrainSize(); i++)
+	// Background Textures Rendering and placement
+	if (true) // Toggle to test background rendering versus object rendering
 	{
-		SDL_RenderCopy(renderer, terrain_gen->getText(i), NULL, terrain_gen->getTerrain(i));
+		for (int i = 0; i < terrain_gen->getTerrainSize(); i++)
+		{
+			SDL_RenderCopy(renderer, terrain_gen->getText(i), NULL, terrain_gen->getTerrain(i));
+			SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+			SDL_RenderDrawRect(renderer, terrain_gen->getTerrain(i));
+			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+		}
 	}
+	// // Object Rendering and placement
 	for (int i = 0; i < terrain_gen->getTerrainObjSize(); i++)
 	{
 		SDL_RenderCopy(renderer, terrain_gen->getTextObj(i), NULL, terrain_gen->getTerrainObj(i));
-	}
-	for (int i = 0; i < terrain_gen->getTextSize(); i++)
-	{
-		SDL_RenderCopy(renderer, terrain_gen->getText(i), NULL, terrain_gen->getTextRec(i));
+		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+		SDL_RenderDrawRect(renderer, terrain_gen->getTerrainObj(i));
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	}
 	// //Player
 	SDL_RenderCopy(renderer, player->getTexture(), player->getRectTex(), player->getRect());
-	//Show Frame
+	// Hitbox Rendering
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+	SDL_RenderDrawRect(renderer, player->getRect());
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderPresent(renderer);
+	
 }
 
 void Application::clean()

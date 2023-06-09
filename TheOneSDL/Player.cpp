@@ -3,14 +3,17 @@
 
 Player::Player(SDL_Renderer* renderer)
 {
+	// Rectangles
 	playerR.h = 32;
 	playerR.w = 32;
 	tilemap_x = 1;
 	tilemap_y = 16;
 	playerR.x = tilemap_x*32;
 	playerR.y = tilemap_y*32;
+	// Hitbox
+	hitboxOn = true;
 	// Set Player defaults
-	playerSpeed = 3;
+	playerSpeed = 4;
 	playerFalling = false;
 	// Defaults zero no texture loaded yet
 	textureWidth = 0;
@@ -65,6 +68,7 @@ Player::~Player()
 	std::cout << "Player Destroyed!\n";
 }
 
+// Getters
 const float Player::getSpeed()
 {
 	return movementModifier;
@@ -95,28 +99,6 @@ SDL_Texture* Player::getTexture()
 	return player_texture;
 }
 
-// Updating Texture per frame time
-void Player::updateTexture(Physics* phys_eng, Terrain* terrain_eng)
-{
-	xTexEdit(getTexX() + frameWidth);
-	if (frame_time >= 59)
-	{
-		frame_time = 0;
-		if (getTexX() >= textureWidth)
-		{
-			xTexEdit(0);
-		}
-	}
-	else
-	{
-		handleMovement(phys_eng,terrain_eng, 1);
-		frame_time++;
-		
-	}
-
-	
-}
-
 int Player::getY()
 {
 	return playerR.y;
@@ -136,6 +118,14 @@ SDL_Rect* Player::getRectTex()
 {
 	return &textureR;
 }
+
+bool Player::hitboxCheck()
+{
+	return hitboxOn;
+}
+
+
+// Setters
 
 void Player::xPathEdit(MovementDirection path)
 {
@@ -194,7 +184,6 @@ void Player::editMS(float speed)
 	movementModifier = speed;
 }
 
-//Setting Textures to the passed in texture
 void Player::setTexture(SDL_Texture* texture)
 {
 	player_texture = texture;
@@ -207,9 +196,37 @@ void Player::setTexture(SDL_Texture* texture)
 	hTexEdit(frameHeight);
 }
 
-void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng, bool animation)
+void Player::set_tilemap_pos(int x, int y)
 {
-	terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '1';
+	tilemap_x = x;
+	tilemap_y = y;
+}
+// Methods
+
+// Updating Texture per frame time
+void Player::updateTexture(Physics* phys_eng, Terrain* terrain_eng)
+{
+	xTexEdit(getTexX() + frameWidth);
+	if (frame_time >= 59)
+	{
+		frame_time = 0;
+		if (getTexX() >= textureWidth)
+		{
+			xTexEdit(0);
+		}
+	}
+	else
+	{
+		handleMovement(phys_eng,terrain_eng);
+		frame_time++;
+		
+	}
+
+	
+}
+
+void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
+{
 	if (boundsCheck(getX(), getY()))
 	{
 		switch (xPath())
@@ -279,8 +296,11 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng, bool animat
 		playerFalling = false;
 		phys_eng->resetTime(); // Reset time on ground
 	}
+
+	// If the Player is not outside of bounds
 	if (!boundsCheck(getX(), getY()))
 	{
+		// Movement
 		switch (xPath())
 		{
 		case Right:
@@ -307,6 +327,7 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng, bool animat
 			break;
 		}
 		}
+		// Reset if out of bounds
 		if (getX() >= SCREEN_WIDTH)
 		{
 			xEdit(getX() - getSpeed());
@@ -338,8 +359,4 @@ bool Player::boundsCheck(int x, int y)
 	return false;
 }
 
-void Player::set_tilemap_pos(int x, int y)
-{
-	tilemap_x = x;
-	tilemap_y = y;
-}
+

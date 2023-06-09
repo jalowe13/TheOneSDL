@@ -21,6 +21,7 @@ public:
 private:
 	const float gravity = 0.98;
 	const float timeI = .05;
+	const float jumpForgiveness = 6; // Skew for landing on top of a tile: Higher will forgive more
 	float time = 0.0;
 
 };

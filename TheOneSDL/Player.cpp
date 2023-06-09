@@ -9,8 +9,9 @@ Player::Player(SDL_Renderer* renderer)
 	tilemap_y = 16;
 	playerR.x = tilemap_x*32;
 	playerR.y = tilemap_y*32;
-	// Set default speed
+	// Set Player defaults
 	playerSpeed = 3;
+	playerFalling = false;
 	// Defaults zero no texture loaded yet
 	textureWidth = 0;
 	textureHeight = 0;
@@ -40,7 +41,6 @@ Player::Player(SDL_Renderer* renderer)
 	std::list<std::string> tex_files = {idle, run_left, run_right};
 	std::list<std::string> tex_names = {"idle", "run_left","run_right"};
 	
-
 	while (tex_files.size() > 0) {
 		std::string new_file = tex_files.front().c_str();		// Reference from front
 		filename = new_file.c_str();
@@ -95,11 +95,9 @@ SDL_Texture* Player::getTexture()
 	return player_texture;
 }
 
+// Updating Texture per frame time
 void Player::updateTexture(Physics* phys_eng, Terrain* terrain_eng)
 {
-	//std::cout << "[Frame]" << frame_time << std::endl;
-	//	<< "," << getX() << "," << getY() << std::endl;
-
 	xTexEdit(getTexX() + frameWidth);
 	if (frame_time >= 59)
 	{
@@ -218,7 +216,6 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng, bool animat
 		{
 		case Left:
 		{
-			// std::cout << "Left\n";
 			if (!inAnimation)
 			{
 				setTexture(textures["run_left"]);
@@ -255,38 +252,31 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng, bool animat
 		{
 		case Up:
 		{
-			// std::cout << "Up\n";
-			yEdit(getY() - getSpeed());
-			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '~';
-			tilemap_x = round(getX()/32);
-			tilemap_y = round(getY()/32);
-			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '1';
+			if (!playerFalling)
+			{
+				yEdit(getY() - getSpeed());
+				terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '~';
+				tilemap_x = round(getX()/32);
+				tilemap_y = round(getY()/32);
+				terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '1';
+			}
 			break;
 		}
-
-		// Case Down will be needed in future not currently
-		// If Case down is needed implement collision check
-		// case Down:
-		// {
-		// 		yEdit(getY() + getSpeed());
-		// 		terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '~';
-		// 		tilemap_x = round(getX()/32);
-		// 		tilemap_y = round(getY()/32);
-		// 		terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '1';
-		// 		break;
-		// }
+		case None: // No input
+		{
+			playerFalling = true;
+		}
 		}
 	}
 	// Gravity handle
-
+	// If the player is not colliding with another object/tile
 	if(phys_eng->checkCollision(getX(),getY(),terrain_eng->obj_tilemap))
 	{
 		phys_eng->incTime(); // Increase time when away from ground
 		yEdit(getY() + phys_eng->getGravity() * phys_eng->getTime());
-		// std::cout << phys_eng->getGravity() * phys_eng->getTime() << std::endl;
 	}
 	else{
-		// std::cout << getX() << "," << getY() << std::endl;
+		playerFalling = false;
 		phys_eng->resetTime(); // Reset time on ground
 	}
 	if (!boundsCheck(getX(), getY()))

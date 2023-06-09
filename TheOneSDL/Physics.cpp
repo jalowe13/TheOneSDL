@@ -1,4 +1,5 @@
 #include "Physics.h"
+#include "Terrain.h"
 #include <iostream>
 
 Physics::Physics(){
@@ -22,18 +23,21 @@ void Physics::resetTime(){
 }
 
 float Physics::getTime(){
-  // std::cout << "Time:" << time << std::endl;
   return time;
 }
 
 bool Physics::checkCollision(int x, int y, char obj_tilemap[19][26]){
   //Convert cords to tile
-  x = x/32;
-  y = (y/32)+1; // This + 1 is to account for a slight skew debug this
-  // std::cout << obj_tilemap[y][x] << std::endl;
-  if(obj_tilemap[y][x] == 'f')
+  int x_tile = int(x/Terrain::texBounds);
+  int y_tile = int((y/Terrain::texBounds))+1; // This + 1 is to account for tilemap skew: must fix in rendering
+  if(obj_tilemap[y_tile][x_tile] == 'f' ) // Floor specifics
   {
-    return false;
+    // Need to check for top of the floor around ~20 pixels
+    int a_y = int((y-jumpForgiveness)/Terrain::texBounds)+1;
+    if(obj_tilemap[a_y][x_tile] == '~')
+    {
+      return false; // Player is on the ground
+    }
   }
-  return true;
+  return true; // Player is not on the ground
 }

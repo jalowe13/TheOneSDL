@@ -4,7 +4,8 @@
 CXX=g++
 
 # Include Flags
-CXXFLAGS = -Isrc/Include
+# -g is a debugging flag
+CXXFLAGS = -Isrc/Include -g
 
 
 # Swap between Windows and Unix installs

@@ -77,6 +77,9 @@ private:
 	//Speed
 	int playerSpeed;
 
+	// Movemment Status
+	bool playerFalling;
+
 	SDL_Texture* player_texture = NULL;
 
 	MovementDirection currentDirectionX = None;

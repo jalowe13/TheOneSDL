@@ -232,10 +232,9 @@ void Application::render()
 		SDL_RenderDrawRect(renderer, player->getHitboxRect());
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	}
-	// // Declare block
-	// Block block(500,500);
-	// // Draw the block.
-	// block.draw(renderer);
+	//Physics
+	phys_eng->draw(renderer);
+
 	SDL_RenderPresent(renderer);
 }
 

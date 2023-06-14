@@ -32,6 +32,7 @@ public:
 	// Get block rectangle
 	SDL_Rect* get_Rect();
 
+
 	std::string name;
 
     private:

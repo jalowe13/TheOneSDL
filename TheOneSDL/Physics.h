@@ -16,31 +16,49 @@ public:
 	// Global Gravity return
 	float getGravity(); 
 
-	/*
-	Check Rectangle Collision, extension of SDL2
-	Check if A is colliding with something on the tilemap
-	Return true if true false if not
-	SDL_Rect* A - Rectangle A (Player or entity)
-	std::vector<Block>* blocks - Vector of blocks to check
+	// Block Types
+	static const std::string floor;
 
-	Returns integer code of kind of collision
-	*/
-	int checkRectCollision(SDL_Rect* A, Terrain* terrain);
-
-
-	/*
-	Check collision of object and tileset
-		x - Current entity calling x
-		y - Current entity calling y
-		char obj_tilemap[19][26] - current tilemap
-	*/
-	bool checkCollision(int x, int y, char obj_tilemap[19][26]);
 	//Start a float timer 
 	void incTime(); 
 	//End and reset float timer
 	void resetTime(); 
 	//Get the amount of time
 	float getTime(); 
+
+	/*
+	Check Rectangle Collision, extension of SDL2
+	Check if A is colliding with something on the tilemap
+	Return true if true false if not
+	SDL_Rect* A - Rectangle A (Player or entity)
+	Terrain* terrain - Reference to the running terrain generation
+
+	Returns integer code of kind of collision
+	0 - 
+	*/
+	int checkRectCollision(SDL_Rect* A, Terrain* terrain);
+
+	/*
+	Given two rectangles find distances from
+	Rectangle A to all 4 points on Rectangle B 
+	to figure out which direction Rectangle A is approaching from
+
+	SDL_Rect* A - Rectangle A
+	int centerX - Rectangle B center X
+	int centerY - Rectangle B center Y
+	
+	Return char - Direction approaching from [N,S,E,W] - [0,1,2,3]
+	*/
+	char get4Points(SDL_Rect* A, int centerX, int centerY);
+
+	/*
+	Draw actions that need to be done on each physics cycle
+	Ex: Drawing lines
+	*/
+	void draw(SDL_Renderer* renderer);
+
+	
+
 private:
 	const float gravity = 0.90;		// Would be .98 but cannot reach above 2 blocks
 	const float timeI = .05;

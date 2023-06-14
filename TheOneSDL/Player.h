@@ -35,6 +35,8 @@ public:
 	float getMS();
 	SDL_Rect* getRect();
 	SDL_Rect* getRectTex();
+	// Return Player Hitbox Rectangle
+	SDL_Rect* getHitboxRect();
 
 	//Setters
 	void xPathEdit(MovementDirection path);
@@ -67,6 +69,7 @@ public:
 
 
 
+
 private:
 
 	//Methods
@@ -75,6 +78,7 @@ private:
 	//Variables
 	SDL_Rect playerR;
 	SDL_Rect textureR;
+	SDL_Rect playerHitboxR;
 	bool hitboxOn;
 
 	int tilemap_x;

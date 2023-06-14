@@ -13,15 +13,25 @@ class Physics
 public:
 	Physics();
 	~Physics();
-	float getGravity(); // Global Gravity return
-	bool checkCollision(int x, int y, char obj_tilemap[19][26]); //Check collision of object and tileset
-	void incTime(); //Start a float timer
-	void resetTime(); //End and reset float timer
-	float getTime(); //Get the amount of time
+	// Global Gravity return
+	float getGravity(); 
+	/*
+	Check collision of object and tileset
+		x - Current entity calling x
+		y - Current entity calling y
+		char obj_tilemap[19][26] - current tilemap
+	*/
+	bool checkCollision(int x, int y, char obj_tilemap[19][26]);
+	//Start a float timer 
+	void incTime(); 
+	//End and reset float timer
+	void resetTime(); 
+	//Get the amount of time
+	float getTime(); 
 private:
 	const float gravity = 0.98;
 	const float timeI = .05;
-	const float jumpForgiveness = 7; // Skew for landing on top of a tile: Higher will forgive more
+	const float jumpForgiveness = 0; // Skew for landing on top of a tile: Higher will forgive more
 	float time = 0.0;
 
 };

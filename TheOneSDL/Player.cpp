@@ -10,8 +10,13 @@ Player::Player(SDL_Renderer* renderer)
 	tilemap_y = 16;
 	playerR.x = tilemap_x*32;
 	playerR.y = tilemap_y*32;
+
 	// Hitbox
 	hitboxOn = true;
+	playerHitboxR.h = 20;
+	playerHitboxR.w = 14;
+	playerHitboxR.x = playerR.x+10;
+	playerHitboxR.y = playerR.y+10;
 	// Set Player defaults
 	playerSpeed = 4;
 	playerFalling = false;
@@ -121,7 +126,15 @@ SDL_Rect* Player::getRectTex()
 
 bool Player::hitboxCheck()
 {
+	// Update position
+	playerHitboxR.x = playerR.x+10;
+	playerHitboxR.y = playerR.y+10;
 	return hitboxOn;
+}
+
+SDL_Rect* Player::getHitboxRect()
+{
+	return &playerHitboxR;
 }
 
 
@@ -285,8 +298,8 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 		}
 		}
 	}
-	// Gravity handle
-	// If the player is not colliding with another object/tile
+	// Gravity-Collide handle If the player is not colliding with another object/tile
+
 	if(phys_eng->checkCollision(getX(),getY(),terrain_eng->obj_tilemap))
 	{
 		phys_eng->incTime(); // Increase time when away from ground

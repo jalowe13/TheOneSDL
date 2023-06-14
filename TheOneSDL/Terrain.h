@@ -17,8 +17,8 @@ public:
     // Block placement with cord params
     Block(int x_i, int y_i);
     // Block placement with cord and texture
-    Block(std::string name, int x_i, int y_i, SDL_Texture* texture);
-
+    Block(std::string name, int x_i, int y_i, SDL_Texture* texture_i);
+	// Draw the current block in the renderer
     void draw(SDL_Renderer* renderer);
 
     // Get the center of the block.
@@ -27,11 +27,20 @@ public:
 
 	// Get block info
 	void print_blockInfo();
+	// Get block name
+	std::string* getName();
+	// Get block rectangle
+	SDL_Rect* get_Rect();
+
+	std::string name;
 
     private:
     int x, y, w, h, centerX, centerY;
     SDL_Texture* texture = NULL;
-    std::string name;
+    
+	SDL_Rect rect = {x, y, w, h};
+	//Debugging
+	bool hitboxRender = false;
 };
 
 class Terrain
@@ -51,6 +60,8 @@ public:
 
 	// Print all contents of all blocks
 	void print_allBlockInfo();
+	// Block Vector getter
+	std::vector<Block>* getBlockVector();
 
 	// Array Max sizes 800x600
 	const static int tilemapY = 19;
@@ -120,7 +131,7 @@ public:
 		{'~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~'},
 		{'~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~'},
 		{'~','~','~','~','~','~','~','~','~','~','~','~','~','f','~','~','~','~','~','~','~','~','~','~','~'},
-		{'~','~','~','~','~','~','~','~','~','~','~','~','f','~','~','~','~','~','~','~','~','~','~','~','~'},
+		{'~','~','f','~','~','~','~','~','~','~','~','~','f','~','~','~','~','~','~','~','~','~','~','~','~'},
 		{'~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~'},
 		{'f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f'},
 		{'~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~'}

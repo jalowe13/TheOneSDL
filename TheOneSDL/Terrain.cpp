@@ -19,10 +19,9 @@ Block::Block(int x_i, int y_i)
   h = 32;
   centerX = x + w / 2;
   centerY = y + h / 2;
-  //std::cout << "Block created at " << x << "," << y << std::endl;
 }
 
-Block::Block(std::string name_i, int x_i, int y_i, SDL_Texture* texture)
+Block::Block(std::string name_i, int x_i, int y_i, SDL_Texture* texture_i)
 {
   x = x_i;
   y = y_i;
@@ -31,7 +30,9 @@ Block::Block(std::string name_i, int x_i, int y_i, SDL_Texture* texture)
   centerX = x + w / 2;
   centerY = y + h / 2;
   name = name_i;
-  std::cout << name <<" created at " << x << "," << y << std::endl;
+  texture = texture_i;
+
+  std::cout << name <<" created at " << rect.x << "," << rect.y << std::endl;
 }
 
 void Block::draw(SDL_Renderer* renderer) {
@@ -39,18 +40,27 @@ void Block::draw(SDL_Renderer* renderer) {
 
   if (texture != NULL)
   {
-    std::cout << "No texture!\n";
+	SDL_RenderCopy(renderer, texture, NULL, &rect);
   }
   else
   {
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    SDL_RenderFillRect(renderer, &rect);
+	std::cout << "No texture at position" << x << "," << y << std::endl;
+	// Generate a random color as a no texture warning
+	Uint8 r = rand() % 256;
+	Uint8 g = rand() % 256;
+	Uint8 b = rand() % 256;
+    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
+	//SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderDrawRect(renderer, &rect);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
   }
-
-
-
-
+  if (hitboxRender)
+  {
+	SDL_Rect hitbox = {x, y, w, h};
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+	SDL_RenderDrawRect(renderer, &hitbox);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+  }
 }
 
 void Block::print_blockInfo()
@@ -60,6 +70,16 @@ void Block::print_blockInfo()
 	std::cout << "center x,y:" << centerX << "," << centerY << std::endl;
 }
 
+std::string* Block::getName()
+{
+	return &name;
+}
+
+
+SDL_Rect* Block::get_Rect()
+{
+	return &rect;
+}
 // Terrain functions
 
 Terrain::Terrain(SDL_Renderer* renderer_p)
@@ -91,12 +111,6 @@ void Terrain::generateText(const char* text, int x, int y, int scale)
 	new_text->y = y;
 	new_text->w = 32*scale;
 	new_text->h = 32*scale;
-
-
-
-	//std::cout << "Text created at " << textListRec[textListSize]->x << "," << textListRec[textListSize]->y << std::endl;
-
-	//std::cout << getTerrainSize() << std::endl;
 
 	//Free Font
 	TTF_CloseFont(font);
@@ -196,11 +210,9 @@ bool Terrain::fillScreen()
 					break;
 				case '1':
 					//For the Player, Might not be needed
-					//std::cout << "Pxy" << ix << "," << iy << std::endl;
 					break;
 				}
 				if (texture != NULL) {
-					//std::cout << "x,y:["<< x << "," << y << "]\n";
 					Block block(name,x,y,texture);
 					blocks.push_back(block);
 					std::cout << "Size:" << blocks.size() << std::endl;
@@ -218,9 +230,6 @@ bool Terrain::fillScreen()
 			}
 		}
 	}
-
-	// std::cout << "Fill complete, blocks created ["
-	// 	<< terrainListSize << "]" << std::endl;
 	return true;
 }
 
@@ -233,4 +242,9 @@ void Terrain::print_allBlockInfo()
 		blocks[i].print_blockInfo();
 	}
 	std::cout << "End\n";
+}
+
+std::vector<Block>* Terrain::getBlockVector()
+{
+	return &blocks;
 }

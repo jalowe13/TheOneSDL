@@ -46,6 +46,8 @@ public:
 	void wEdit(int w);
 	void hEdit(int h);
 	void editMS(float speed);
+	// Passing in char from Physics engine to check collision
+	void checkCollision(int i,Physics* phys_eng);
 	// Handle movement from the Physics engine 
 	void handleMovement(Physics* phys_eng, Terrain* terrain_eng);
 	// Check if Player is outside of the screen

@@ -26,22 +26,20 @@ float Physics::getTime(){
   return time;
 }
 
+int Physics::checkRectCollision(SDL_Rect* A, Terrain* terrain)
+{
+  std::vector<Block>* blocks = terrain->getBlockVector();
 
-
-bool Physics::checkCollision(int x, int y, char obj_tilemap[19][26]){
-  //Convert cords to tile
-  int x_tile = int(x/Terrain::texBounds);
-  int y_tile = int((y/Terrain::texBounds)); // This + 1 is to account for tilemap skew: must fix in rendering
-  //std::cout << "ytile:" << y_tile << std::endl;
-  //std::cout << obj_tilemap[y_tile][x_tile] << std::endl;
-  //std::cout << obj_tilemap[y_tile+1][x_tile] << std::endl;
-  if(obj_tilemap[y_tile+1][x_tile] == 'f' || obj_tilemap[y_tile][x_tile] == 'f' ) // Collision
-  {
-    if(obj_tilemap[y_tile][x_tile] == 'f')
+  for (Block block : *blocks) // Iterate
+	{
+    if (SDL_HasIntersection(A, block.get_Rect()))
     {
-      std::cout << "error in floor\n";
+      std::string floor = "Floor";
+      if(floor == block.name)
+      {
+        return 1;
+      }
     }
-    return false;
-  }
-  return true; // Player is not on the ground, keep falling
+	}
+  return 0;
 }

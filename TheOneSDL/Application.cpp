@@ -186,18 +186,18 @@ void Application::handleEvents()
 	}
 }
 
-void Application::update()
+void Application::update() // Physics and animation handling
 {
 	player->updateTexture(phys_eng, terrain_gen); // Update players texture
+	player->checkCollision(phys_eng->checkRectCollision(player->getHitboxRect(),terrain_gen),phys_eng); // Check player collision with terrain
 	//terrain_gen->fillScreen(); // Update textures and rectangles
-	// std::cout << "update\n";
 }
 
 void Application::render()
 {
 	SDL_RenderClear(renderer); //Clear Screen
 	// Background Textures Rendering and placement
-	if (true) // Toggle to test background rendering versus object rendering
+	if (false) // Toggle to test background rendering versus object rendering
 	{
 		for (int i = 0; i < terrain_gen->getTerrainSize(); i++)
 		{
@@ -207,8 +207,13 @@ void Application::render()
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 		}
 	}
+	std::vector<Block>* terrain_vector = terrain_gen->getBlockVector();
+	for (Block block : *terrain_vector) // Iterate
+	{
+		block.draw(renderer);
+	}
 	// // Object Rendering and placement
-	if (true)
+	if (false)
 	{
 		for (int i = 0; i < terrain_gen->getTerrainObjSize(); i++)
 		{
@@ -218,7 +223,7 @@ void Application::render()
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 		}
 	}
-	// //Player
+	//Player
 	SDL_RenderCopy(renderer, player->getTexture(), player->getRectTex(), player->getRect());
 	// Hitbox Rendering
 	if (player->hitboxCheck())

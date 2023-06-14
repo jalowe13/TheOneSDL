@@ -132,6 +132,7 @@ bool Player::hitboxCheck()
 	return hitboxOn;
 }
 
+
 SDL_Rect* Player::getHitboxRect()
 {
 	return &playerHitboxR;
@@ -238,6 +239,34 @@ void Player::updateTexture(Physics* phys_eng, Terrain* terrain_eng)
 	
 }
 
+void Player::checkCollision(int i, Physics* phys_eng)
+{
+	switch(i)
+	{	
+		case 0:	// Falling
+			phys_eng->incTime(); // Increase time when away from ground
+			yEdit(getY() + phys_eng->getGravity() * phys_eng->getTime());
+			break;
+		case 1: // On Ground
+			playerFalling = false;
+			phys_eng->resetTime(); // Reset time on ground
+			break;
+		
+	}
+	// Gravity-Collide handle If the player is not colliding with another object/tile
+
+	// Old Player Collision check
+	// if(phys_eng->checkCollision(getX(),getY(),terrain_eng->obj_tilemap))
+	// {
+	// 	phys_eng->incTime(); // Increase time when away from ground
+	// 	yEdit(getY() + phys_eng->getGravity() * phys_eng->getTime());
+	// }
+	// else{
+	// 	playerFalling = false;
+	// 	phys_eng->resetTime(); // Reset time on ground
+	// }
+}
+
 void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 {
 	if (boundsCheck(getX(), getY()))
@@ -298,17 +327,7 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 		}
 		}
 	}
-	// Gravity-Collide handle If the player is not colliding with another object/tile
 
-	if(phys_eng->checkCollision(getX(),getY(),terrain_eng->obj_tilemap))
-	{
-		phys_eng->incTime(); // Increase time when away from ground
-		yEdit(getY() + phys_eng->getGravity() * phys_eng->getTime());
-	}
-	else{
-		playerFalling = false;
-		phys_eng->resetTime(); // Reset time on ground
-	}
 
 	// If the Player is not outside of bounds
 	if (!boundsCheck(getX(), getY()))

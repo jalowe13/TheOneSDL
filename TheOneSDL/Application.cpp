@@ -96,6 +96,7 @@ bool Application::init()
 
 
 			terrain_gen->fillScreen();
+			terrain_gen->print_allBlockInfo();
 			//terrain_gen->generateText("The One", 64, 64, 4);
 
 			// Start Physics engine
@@ -225,7 +226,11 @@ void Application::render()
 		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 		SDL_RenderDrawRect(renderer, player->getHitboxRect());
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-	}	
+	}
+	// // Declare block
+	// Block block(500,500);
+	// // Draw the block.
+	// block.draw(renderer);
 	SDL_RenderPresent(renderer);
 }
 

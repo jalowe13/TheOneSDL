@@ -6,8 +6,33 @@
 #include <map>
 #include <regex>
 #include <iostream>
+#include <vector>
 #include "Application.h"
 
+// Block to be rendered by the terrain
+class Block {
+public:
+    // Default block placement
+    Block();
+    // Block placement with cord params
+    Block(int x_i, int y_i);
+    // Block placement with cord and texture
+    Block(std::string name, int x_i, int y_i, SDL_Texture* texture);
+
+    void draw(SDL_Renderer* renderer);
+
+    // Get the center of the block.
+    int getCenterX() { return x + w / 2; }
+    int getCenterY() { return y + h / 2; }
+
+	// Get block info
+	void print_blockInfo();
+
+    private:
+    int x, y, w, h, centerX, centerY;
+    SDL_Texture* texture = NULL;
+    std::string name;
+};
 
 class Terrain
 {
@@ -23,6 +48,9 @@ public:
 	// Texture arrays are updated
 	// Rectangle arrays are updated
 	bool fillScreen();
+
+	// Print all contents of all blocks
+	void print_allBlockInfo();
 
 	// Array Max sizes 800x600
 	const static int tilemapY = 19;
@@ -190,6 +218,11 @@ private:
 	int textObjListSize = 0;
 	static const int terrainListCapacity = 493; //MAX SIZE
 	static const int terrainObjListCapacity = 493; //MAX SIZE
+
+	// New Gen
+	std::vector<Block> blocks;
+
+	// Old Gen
 
 	// Background Terrain
 	SDL_Rect* terrainList[terrainListCapacity]; //Storage of Background textures

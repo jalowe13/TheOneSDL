@@ -33,7 +33,7 @@ class Physics;
 class Application
 {
 public:
-const char* windowTitle = "C23 Engine: The One SDL v.0.20.6 FPS:";
+const char* windowTitle = "C23 Engine: The One SDL v.0.20.7 FPS:";
 	Application();
 	~Application();
 
@@ -117,8 +117,6 @@ private:
 
 	//Rectangles
 	SDL_Rect* titleRect; //Title Location rectangle
-
-
 
 	//Physics Engine
 	Physics* phys_eng = nullptr; //Pointer to Physics Engine

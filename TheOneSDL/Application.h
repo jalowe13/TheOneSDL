@@ -33,7 +33,7 @@ class Physics;
 class Application
 {
 public:
-const char* windowTitle = "C23 Engine: The One SDL v.0.22.1 FPS:";
+const char* windowTitle = "C23 Engine: The One SDL v.0.22.2 FPS:";
 	Application();
 	~Application();
 

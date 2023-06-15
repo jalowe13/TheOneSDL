@@ -96,7 +96,7 @@ bool Application::init()
 
 
 			terrain_gen->fillScreen();
-			terrain_gen->print_allBlockInfo();
+			// terrain_gen->print_allBlockInfo();
 			//terrain_gen->generateText("The One", 64, 64, 4);
 
 			// Start Physics engine
@@ -197,31 +197,11 @@ void Application::render()
 {
 	SDL_RenderClear(renderer); //Clear Screen
 	// Background Textures Rendering and placement
-	if (false) // Toggle to test background rendering versus object rendering
-	{
-		for (int i = 0; i < terrain_gen->getTerrainSize(); i++)
-		{
-			SDL_RenderCopy(renderer, terrain_gen->getText(i), NULL, terrain_gen->getTerrain(i));
-			SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-			SDL_RenderDrawRect(renderer, terrain_gen->getTerrain(i));
-			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-		}
-	}
+
 	std::vector<Block>* terrain_vector = terrain_gen->getBlockVector();
 	for (Block block : *terrain_vector) // Iterate
 	{
 		block.draw(renderer);
-	}
-	// // Object Rendering and placement
-	if (false)
-	{
-		for (int i = 0; i < terrain_gen->getTerrainObjSize(); i++)
-		{
-			SDL_RenderCopy(renderer, terrain_gen->getTextObj(i), NULL, terrain_gen->getTerrainObj(i));
-			SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-			SDL_RenderDrawRect(renderer, terrain_gen->getTerrainObj(i));
-			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-		}
 	}
 	//Player
 	SDL_RenderCopy(renderer, player->getTexture(), player->getRectTex(), player->getRect());

@@ -31,12 +31,17 @@ Block::Block(std::string name_i, int x_i, int y_i, SDL_Texture* texture_i)
   centerY = y + h / 2;
   name = name_i;
   texture = texture_i;
-
-  std::cout << name <<" created at " << rect.x << "," << rect.y << std::endl;
+  SDL_Rect new_rect = {x, y, w, h};
+  rect = new_rect;
+  
+  if (name == "Floor")
+  {
+	std::cout << name <<" created at " << rect.x << "," << rect.y << std::endl;
+  }
 }
 
 void Block::draw(SDL_Renderer* renderer) {
-  SDL_Rect rect = {x, y, w, h};
+  
 
   if (texture != NULL)
   {
@@ -119,44 +124,6 @@ void Terrain::generateText(const char* text, int x, int y, int scale)
 	textListSize++;
 }
 
-//Sets each rectangle to its position in the array and its corresponding texture
-bool Terrain::generateTerrain(SDL_Texture* texture, int x, int y, int layer)
-{
-	try
-	{
-		
-		SDL_Rect* new_rect = new SDL_Rect();
-		SDL_Rect* currentRect = NULL;
-		switch (layer){
-			case 0: // Background
-				setTerrain(new_rect);
-				setText(texture);
-				currentRect = getTerrain(getTerrainSize());
-				currentRect->x = x;
-				currentRect->y = y;
-				currentRect->w = 32;
-				currentRect->h = 32;
-				terrainListSize++;
-				break;
-			case 1: // Object
-				setTerrainObj(new_rect);
-				setTextObj(texture);
-				currentRect = getTerrainObj(getTerrainObjSize());
-				currentRect->x = x; // Added for the skew of hitboxes
-				currentRect->y = y;
-				currentRect->w = 32;
-				currentRect->h = 32;
-				terrainObjListSize++;
-				break;
-		}
-		return true;
-	}
-	catch (const char* error)
-	{
-		std::cout << error << std::endl;
-	}
-	return false;
-}
 
 bool Terrain::fillScreen()
 {
@@ -174,9 +141,9 @@ bool Terrain::fillScreen()
 			{
 				// Pull each char from the tilemap to translate to textures
 				switch (layer) {
-				case 0:
-					tile = background_tilemap[iy][ix];
-					break;
+				// case 0:
+				// 	tile = background_tilemap[iy][ix];
+				// 	break;
 				case 1:
 					tile = obj_tilemap[iy][ix];
 					break;
@@ -212,11 +179,12 @@ bool Terrain::fillScreen()
 					//For the Player, Might not be needed
 					break;
 				}
-				if (texture != NULL) {
+				if (texture != NULL && x < SCREEN_WIDTH && y < SCREEN_HEIGHT) {
+					//std::cout << x << "," << y << std::endl;
 					Block block(name,x,y,texture);
 					blocks.push_back(block);
-					std::cout << "Size:" << blocks.size() << std::endl;
-					generateTerrain(texture, x, y, layer);
+					//std::cout << "Size:" << blocks.size() << std::endl;
+					//generateTerrain(texture, x, y, layer);
 				}
 				if (x < SCREEN_WIDTH)
 				{

@@ -12,9 +12,9 @@ Player::Player(SDL_Renderer* renderer)
 	playerR.y = tilemap_y*32;
 
 	// Hitbox
-	hitboxOn = true;
+	hitboxOn = false;
 	playerHitboxR.h = 20;
-	playerHitboxR.w = 14;
+	playerHitboxR.w = 12;
 	playerHitboxR.x = playerR.x+10;
 	playerHitboxR.y = playerR.y+10;
 	// Set Player defaults
@@ -251,6 +251,8 @@ void Player::checkCollision(int i, Physics* phys_eng)
 			playerFalling = false;
 			phys_eng->resetTime(); // Reset time on ground
 			break;
+		case 2: // No edits
+			break;
 		
 	}
 	// Gravity-Collide handle If the player is not colliding with another object/tile
@@ -281,10 +283,8 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 				inAnimation = true;
 			}
 			xEdit(getX() - getSpeed());
-			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '~';
 			tilemap_x = round(getX()/32);
 			tilemap_y = round(getY()/32);
-			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '1';
 			break;
 		}
 		case Right:
@@ -295,10 +295,8 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 				inAnimation = true;
 			}
 			xEdit(getX() + getSpeed());
-			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '~';
 			tilemap_x = round(getX()/32);
 			tilemap_y = round(getY()/32);
-			terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '1';
 			break;
 		}
 		default:
@@ -314,10 +312,8 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 			if (!playerFalling)
 			{
 				yEdit(getY() - getSpeed());
-				terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '~';
 				tilemap_x = round(getX()/32);
 				tilemap_y = round(getY()/32);
-				terrain_eng->background_tilemap[tilemap_y][tilemap_x] = '1';
 			}
 			break;
 		}

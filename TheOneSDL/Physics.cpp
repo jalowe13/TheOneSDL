@@ -52,6 +52,10 @@ int Physics::checkRectCollision(SDL_Rect* A, Terrain* terrain)
         {
           return 1;
         }
+        else
+        {
+          return 2;
+        }
       }
     }
 	}
@@ -115,9 +119,9 @@ char Physics::get4Points(SDL_Rect* A, int centerX, int centerY)
   // mindist = (dist_W < mindist) ? dist_W : mindist;
   // direction = (dist_W < mindist) ? "West" : direction;
 
-  std::cout << "Direction is " << direction;
+  //std::cout << "Direction is " << direction;
 
-  std::cout << " " << A_centerX << "," << A_centerY << " " << centerX << " " << centerY << std::endl;
+  //std::cout << " " << A_centerX << "," << A_centerY << " " << centerX << " " << centerY << std::endl;
   return direction;
 
 }

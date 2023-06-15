@@ -246,6 +246,7 @@ void Player::checkCollision(int i, Physics* phys_eng)
 		case 0:	// Falling
 			phys_eng->incTime(); // Increase time when away from ground
 			yEdit(getY() + phys_eng->getGravity() * phys_eng->getTime());
+			std::cout << "Air Time: " << phys_eng->getTime() << "\n";
 			break;
 		case 1: // On Ground
 			playerFalling = false;

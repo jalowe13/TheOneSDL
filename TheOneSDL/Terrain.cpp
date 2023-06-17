@@ -141,9 +141,9 @@ bool Terrain::fillScreen()
 			{
 				// Pull each char from the tilemap to translate to textures
 				switch (layer) {
-				// case 0:
-				// 	tile = background_tilemap[iy][ix];
-				// 	break;
+				case 0:
+					tile = background_tilemap[iy][ix];
+					break;
 				case 1:
 					tile = obj_tilemap[iy][ix];
 					break;

@@ -18,6 +18,11 @@ enum MovementDirection {
 	None
 };
 
+enum LookingDirection {
+	LookRight,
+	LookLeft
+};
+
 class Player
 {
 public:
@@ -89,6 +94,9 @@ private:
 	//Speed
 	int playerSpeed;
 
+	// Looking Status
+	LookingDirection looking = LookRight;
+
 	// Movemment Status
 	bool playerFalling;
 
@@ -102,7 +110,8 @@ private:
 	int textureWidth, textureHeight, frameWidth, frameHeight;
 
 	// Filenames
-	std::string idle = "textures/VGB/idle/vgb_idle-Sheet.png";
+	std::string idle_left = "textures/VGB/idle/vgb_idle-left-Sheet.png";
+	std::string idle_right = "textures/VGB/idle/vgb_idle-right-Sheet.png";
 	std::string run_left = "textures/VGB/run/vgb_run_left-Sheet.png";
 	std::string run_right = "textures/VGB/run/vgb_run_right-Sheet.png";
 	std::list<std::string> tex_files;

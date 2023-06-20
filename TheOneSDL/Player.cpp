@@ -18,7 +18,7 @@ Player::Player(SDL_Renderer* renderer)
 	playerHitboxR.x = playerR.x+10;
 	playerHitboxR.y = playerR.y+10;
 	// Set Player defaults
-	playerSpeed = 4;
+	playerSpeed = 3;
 	playerFalling = false;
 	// Defaults zero no texture loaded yet
 	textureWidth = 0;
@@ -27,43 +27,34 @@ Player::Player(SDL_Renderer* renderer)
 	frameHeight = textureHeight;
 	frame_time = 0;
 
-	// Check default file existance and load default texture
-	std::string idle_file = "textures/VGB/idle/vgb_idle-Sheet.png";
-	const char* filename = idle_file.c_str();
-	SDL_Texture* default_texture = IMG_LoadTexture(renderer, filename);
-	SDL_QueryTexture(default_texture, NULL, NULL, &textureWidth, &textureHeight);
-	std::cout << "File is " << filename << std::endl;
-	std::cout << "Error Player.cpp: Texture loaded " << filename << "with dims " <<
-	textureWidth << " and " << textureHeight << std::endl;
-	// Load check
-	if ( textureWidth == 0 || textureHeight == 0)
-	{
-		std::cout << "Error Player.cpp: Texture not loaded " << filename << "with dims " <<
-		textureWidth << " and " << textureHeight << std::endl;
-		exit(-1);
-	}
+	const char* filename; // Filename to load
+	SDL_Texture* texture; // Default texture pointer
 
 	// Load Textures
 	// Load filenames
 
-	std::list<std::string> tex_files = {idle, run_left, run_right};
-	std::list<std::string> tex_names = {"idle", "run_left","run_right"};
+	std::list<std::string> tex_files = {idle_left, idle_right, run_left, run_right};
+	std::list<std::string> tex_names = {"idle_left", "idle_right", "run_left","run_right"};
 	
 	while (tex_files.size() > 0) {
 		std::string new_file = tex_files.front().c_str();		// Reference from front
 		filename = new_file.c_str();
 		std::string name = tex_names.front();
 		tex_names.pop_front();						// pop
-		tex_files.pop_front(); 						
-		textures[name] = IMG_LoadTexture(renderer,filename);
-		std::cout << filename << std::endl;
-		if (textures[name] == 0){
+		tex_files.pop_front(); 		
+		texture = IMG_LoadTexture(renderer,filename);	
+		SDL_QueryTexture(texture, NULL, NULL, &textureWidth, &textureHeight);	
+		textures[name] = texture;
+		std::cout << "Player.cpp: Texture loaded " << name << " with path:" << filename << " with dims " <<
+		textureWidth << " and " << textureHeight << std::endl;
+		if (textures[name] == 0 || textureWidth == 0 || textureHeight == 0){
 			std::cout << name << "failed to load from path " << filename << std::endl;
+			exit(-1);
 		}
 	}
 	
 	editMS(3); // push default speed
-	setTexture(textures["idle"]);
+	setTexture(textures["idle_right"]);
 	std::cout << "Player Created!\n";
 
 }
@@ -221,13 +212,13 @@ void Player::set_tilemap_pos(int x, int y)
 void Player::updateTexture(Physics* phys_eng, Terrain* terrain_eng)
 {
 	xTexEdit(getTexX() + frameWidth);
-	if (frame_time >= 59)
+	if (getTexX() >= textureWidth) // Reset back to the end of the texture
+	{
+		xTexEdit(0);
+	}
+	if (frame_time > 60) // Unknown why this frametime feature exists, investigate further
 	{
 		frame_time = 0;
-		if (getTexX() >= textureWidth)
-		{
-			xTexEdit(0);
-		}
 	}
 	else
 	{
@@ -235,8 +226,6 @@ void Player::updateTexture(Physics* phys_eng, Terrain* terrain_eng)
 		frame_time++;
 		
 	}
-
-	
 }
 
 void Player::checkCollision(int i, Physics* phys_eng)
@@ -246,7 +235,7 @@ void Player::checkCollision(int i, Physics* phys_eng)
 		case 0:	// Falling
 			phys_eng->incTime(); // Increase time when away from ground
 			yEdit(getY() + phys_eng->getGravity() * phys_eng->getTime());
-			std::cout << "Air Time: " << phys_eng->getTime() << "\n";
+			//std::cout << "Air Time: " << phys_eng->getTime() << "\n";
 			break;
 		case 1: // On Ground
 			playerFalling = false;
@@ -278,6 +267,7 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 		{
 		case Left:
 		{
+			looking = LookLeft; // Player is looking left
 			if (!inAnimation)
 			{
 				setTexture(textures["run_left"]);
@@ -290,6 +280,7 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 		}
 		case Right:
 		{
+			looking = LookRight;
 			if (!inAnimation)
 			{
 				setTexture(textures["run_right"]);
@@ -300,10 +291,21 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 			tilemap_y = round(getY()/32);
 			break;
 		}
-		default:
+		case None:
 		{
-			setTexture(textures["idle"]);
-			inAnimation = false;
+			if(inAnimation)
+			{
+				switch(looking)
+				{
+					case LookLeft:
+							setTexture(textures["idle_left"]);
+						break;
+					case LookRight:
+							setTexture(textures["idle_right"]);
+						break;
+				}
+				inAnimation = false;
+			}
 		}
 		}
 		switch (yPath())

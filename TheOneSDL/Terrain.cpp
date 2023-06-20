@@ -34,10 +34,10 @@ Block::Block(std::string name_i, int x_i, int y_i, SDL_Texture* texture_i)
   SDL_Rect new_rect = {x, y, w, h};
   rect = new_rect;
   
-  if (name == "Floor")
-  {
-	std::cout << name <<" created at " << rect.x << "," << rect.y << std::endl;
-  }
+//   if (name == "Floor")
+//   {
+// 	std::cout << name <<" created at " << rect.x << "," << rect.y << std::endl;
+//   }
 }
 
 void Block::draw(SDL_Renderer* renderer) {

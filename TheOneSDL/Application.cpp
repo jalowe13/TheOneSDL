@@ -68,16 +68,20 @@ bool Application::init()
 			//Loading texture memory
 			SDL_Texture* temp_tex = NULL;
 
-			//Create Player
+			//Create Player This needs to be changed to be added in the tilemap
 			// renderer is passed in to load the texture
 			player = new Player(renderer);
+			enemy = new Enemy(renderer);
 
 			if (!player)
 			{
 				throw "Player allocation failed.";
 			}
-			std::cout << "Player created\n";
-
+			if (!enemy)
+			{
+				throw "Enemy allocation failed.";
+			}
+			//std::cout << "done\n";
 			//Create Texture loader
 			texLoader = new TextureLoader();
 			if (!texLoader)
@@ -93,9 +97,8 @@ bool Application::init()
 
 			std::cout << "Terrain gen created" << std::endl;
 			std::cout << "-----Starting Terrain Generation-----" << std::endl;
-
-
 			terrain_gen->fillScreen();
+			std::cout << "-----Terrain Generation Complete-----" << std::endl;
 			// terrain_gen->print_allBlockInfo();
 			//terrain_gen->generateText("The One", 64, 64, 4);
 
@@ -189,6 +192,7 @@ void Application::handleEvents()
 void Application::update() // Physics and animation handling
 {
 	player->updateTexture(phys_eng, terrain_gen); // Update players texture
+	enemy->updateTexture(phys_eng, terrain_gen); // Update enemy texture
 	player->checkCollision(phys_eng->checkRectCollision(player->getHitboxRect(),terrain_gen),phys_eng); // Check player collision with terrain
 	//terrain_gen->fillScreen(); // Update textures and rectangles
 }
@@ -205,6 +209,7 @@ void Application::render()
 	}
 	//Player
 	SDL_RenderCopy(renderer, player->getTexture(), player->getRectTex(), player->getRect());
+	
 	// Hitbox Rendering
 	if (player->hitboxCheck())
 	{
@@ -212,6 +217,10 @@ void Application::render()
 		SDL_RenderDrawRect(renderer, player->getHitboxRect());
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	}
+
+	// Enemies
+	SDL_RenderCopy(renderer, enemy->getTexture(), enemy->getRectTex(), enemy->getRect());
+
 	//Physics
 	phys_eng->draw(renderer);
 

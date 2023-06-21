@@ -91,7 +91,6 @@ Terrain::Terrain(SDL_Renderer* renderer_p)
 {
 	renderer = renderer_p;
 	std::cout << "Terrain Generation Started" << std::endl;
-	std::cout << "Terrain List Capacity " << terrainListCapacity << std::endl;
 	blocks.reserve(10);
 }
 
@@ -177,6 +176,12 @@ bool Terrain::fillScreen()
 					break;
 				case '1':
 					//For the Player, Might not be needed
+					break;
+				// Temporary Import 
+				case 'c':
+					texture = IMG_LoadTexture(renderer, CHOMPER_TEX);
+					name = "Chomper";
+					
 					break;
 				}
 				if (texture != NULL && x < SCREEN_WIDTH && y < SCREEN_HEIGHT) {

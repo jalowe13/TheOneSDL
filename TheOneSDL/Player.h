@@ -76,7 +76,6 @@ public:
 
 
 
-
 private:
 
 	//Methods
@@ -114,6 +113,7 @@ private:
 	std::string idle_right = "textures/VGB/idle/vgb_idle-right-Sheet.png";
 	std::string run_left = "textures/VGB/run/vgb_run_left-Sheet.png";
 	std::string run_right = "textures/VGB/run/vgb_run_right-Sheet.png";
+	std::string sit = "textures/VGB/idle/vgb_gamer_idle-Sheet.png";
 	std::list<std::string> tex_files;
 
 	//Textures stored

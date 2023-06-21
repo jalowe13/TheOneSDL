@@ -33,8 +33,8 @@ Player::Player(SDL_Renderer* renderer)
 	// Load Textures
 	// Load filenames
 
-	std::list<std::string> tex_files = {idle_left, idle_right, run_left, run_right};
-	std::list<std::string> tex_names = {"idle_left", "idle_right", "run_left","run_right"};
+	std::list<std::string> tex_files = {idle_left, idle_right, run_left, run_right, sit};
+	std::list<std::string> tex_names = {"idle_left", "idle_right", "run_left","run_right", "sit"};
 	
 	while (tex_files.size() > 0) {
 		std::string new_file = tex_files.front().c_str();		// Reference from front
@@ -48,7 +48,7 @@ Player::Player(SDL_Renderer* renderer)
 		std::cout << "Player.cpp: Texture loaded " << name << " with path:" << filename << " with dims " <<
 		textureWidth << " and " << textureHeight << std::endl;
 		if (textures[name] == 0 || textureWidth == 0 || textureHeight == 0){
-			std::cout << name << "failed to load from path " << filename << std::endl;
+			std::cout << name << " failed to load from path " << filename << std::endl;
 			exit(-1);
 		}
 	}
@@ -224,7 +224,6 @@ void Player::updateTexture(Physics* phys_eng, Terrain* terrain_eng)
 	{
 		handleMovement(phys_eng,terrain_eng);
 		frame_time++;
-		
 	}
 }
 
@@ -245,18 +244,7 @@ void Player::checkCollision(int i, Physics* phys_eng)
 			break;
 		
 	}
-	// Gravity-Collide handle If the player is not colliding with another object/tile
 
-	// Old Player Collision check
-	// if(phys_eng->checkCollision(getX(),getY(),terrain_eng->obj_tilemap))
-	// {
-	// 	phys_eng->incTime(); // Increase time when away from ground
-	// 	yEdit(getY() + phys_eng->getGravity() * phys_eng->getTime());
-	// }
-	// else{
-	// 	playerFalling = false;
-	// 	phys_eng->resetTime(); // Reset time on ground
-	// }
 }
 
 void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
@@ -319,6 +307,14 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 				tilemap_y = round(getY()/32);
 			}
 			break;
+		}
+		case Down:
+		{
+			if (!inAnimation)
+			{
+				setTexture(textures["sit"]);
+				inAnimation = true;
+			}
 		}
 		case None: // No input
 		{

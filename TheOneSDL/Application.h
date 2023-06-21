@@ -14,6 +14,7 @@
 #include "Physics.h"
 #include "Terrain.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "Ground.h"
 #include "TextureLoader.h"
 
@@ -27,13 +28,14 @@
 
 // Some forward declerations for pointers
 class Player;
+class Enemy;
 class Terrain;
 class Physics;
 
 class Application
 {
 public:
-const char* windowTitle = "C23 Engine: The One SDL v.0.22.4 FPS:";
+const char* windowTitle = "C23 Engine: The One SDL v.0.23 FPS:";
 	Application();
 	~Application();
 
@@ -128,8 +130,9 @@ private:
 	SDL_Texture* fancy_text = nullptr;
 
 
-
+	// Temporary pointers for enemy and player instantiation
 	Player* player = NULL;
+	Enemy* enemy = NULL;
 	TextureLoader* texLoader = NULL;
 
 

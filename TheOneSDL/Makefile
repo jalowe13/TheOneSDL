@@ -22,14 +22,16 @@ endif
 
 
 all: TheOne
-TheOne: main.o Application.o Player.o Physics.o Terrain.o
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) main.o Application.o Player.o Physics.o Terrain.o -o TheOne  $(LIB_LIST)
+TheOne: main.o Application.o Player.o Enemy.o Physics.o Terrain.o
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) main.o Application.o Player.o Enemy.o Physics.o Terrain.o -o TheOne  $(LIB_LIST)
 Application.o: Application.cpp
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c Application.cpp $(LIB_LIST)
 main.o: main.cpp
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c main.cpp $(LIB_LIST)
 Player.o: Player.cpp
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c Player.cpp $(LIB_LIST)
+Enemy.o: Enemy.cpp
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c Enemy.cpp $(LIB_LIST)
 Physics.o: Physics.cpp
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c Physics.cpp $(LIB_LIST)
 Terrain.o: Terrain.cpp

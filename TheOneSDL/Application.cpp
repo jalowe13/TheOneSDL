@@ -207,6 +207,9 @@ void Application::render()
 	{
 		block.draw(renderer);
 	}
+
+	// Enemies
+	SDL_RenderCopy(renderer, enemy->getTexture(), enemy->getRectTex(), enemy->getRect());
 	//Player
 	SDL_RenderCopy(renderer, player->getTexture(), player->getRectTex(), player->getRect());
 	
@@ -218,8 +221,7 @@ void Application::render()
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	}
 
-	// Enemies
-	SDL_RenderCopy(renderer, enemy->getTexture(), enemy->getRectTex(), enemy->getRect());
+
 
 	//Physics
 	phys_eng->draw(renderer);

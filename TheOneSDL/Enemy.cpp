@@ -6,7 +6,7 @@ Enemy::Enemy(SDL_Renderer* renderer)
     //Variables
 	enemyR.h = 32;
 	enemyR.w = 32;
-	tilemap_x = 2;
+	tilemap_x = 10;
 	tilemap_y = 16;
 	enemyR.x = tilemap_x*32;
 	enemyR.y = tilemap_y*32;
@@ -21,8 +21,8 @@ Enemy::Enemy(SDL_Renderer* renderer)
 
 	const char* filename; // Filename to load
 	SDL_Texture* texture; // Default texture pointer
-    std::list<std::string> tex_files = {chomper_idle_left};
-	std::list<std::string> tex_names = {"chomper_idle_left"};
+    std::list<std::string> tex_files = {chomper_idle_left, chomper_move_left,chomper_move_right};
+	std::list<std::string> tex_names = {"chomper_idle_left","chomper_move_left","chomper_move_right"};
 	
 	while (tex_files.size() > 0) {
 		std::string new_file = tex_files.front().c_str();		// Reference from front
@@ -55,7 +55,14 @@ void Enemy::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
     //std::cout << "Movement\n";
 	if (!inAnimation)
 		{
-		    setTexture(textures["chomper_idle_left"]);
+			if (left_look)
+			{
+		    	setTexture(textures["chomper_move_left"]);
+			}
+			else
+			{
+				setTexture(textures["chomper_move_right"]);
+			}
 			inAnimation = true;
         }
 }
@@ -70,8 +77,17 @@ void Enemy::updateTexture(Physics* phys_eng, Terrain* terrain_eng)
 	}
 	if (frame_time > 60) // Unknown why this frametime feature exists, investigate further
 	{
+		inAnimation = false;
+		if (left_look)
+		{
+			left_look = false;
+		}
+		else
+		{
+			left_look = true;
+		}
 		frame_time = 0;
-	}
+	} 
 	else
 	{
 		handleMovement(phys_eng,terrain_eng);

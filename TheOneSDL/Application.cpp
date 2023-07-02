@@ -1,5 +1,7 @@
 #include "Application.h"
 
+// Upgrade to C++ 11
+
 #ifdef _WIN32
 #else
 uint32_t linux_tick(){
@@ -70,7 +72,15 @@ bool Application::init()
 
 			//Create Player This needs to be changed to be added in the tilemap
 			// renderer is passed in to load the texture
-			player = new Player(renderer);
+			// If the memory is owned by the class and not shared outside of the class
+			// make it a unique ptr. If it is shared outside of the class weak ptr
+
+			// weak ptr.lock
+			//designed for shared references
+
+			// raw pointers for viewing  (careful with these!)
+
+			player = new Player(renderer); // make share ptr for different classes
 			enemy = new Enemy(renderer);
 
 			if (!player)
@@ -83,6 +93,11 @@ bool Application::init()
 			}
 			//std::cout << "done\n";
 			//Create Texture loader
+
+			//Unique make share
+			//include memroy.h
+			// std::make_unique 
+
 			texLoader = new TextureLoader();
 			if (!texLoader)
 			{
@@ -189,10 +204,14 @@ void Application::handleEvents()
 	}
 }
 
-void Application::update() // Physics and animation handling
+void Application::update() // Update Logic
 {
+	// Logic first before rendering texture
+	// Logic --> Physics --> Render Fix!!
+	// Update texture needs to go into render
 	player->updateTexture(phys_eng, terrain_gen); // Update players texture
 	enemy->updateTexture(phys_eng, terrain_gen); // Update enemy texture
+	// This is fine
 	player->checkCollision(phys_eng->checkRectCollision(player->getHitboxRect(),terrain_gen),phys_eng); // Check player collision with terrain
 	//terrain_gen->fillScreen(); // Update textures and rectangles
 }
@@ -202,8 +221,16 @@ void Application::render()
 	SDL_RenderClear(renderer); //Clear Screen
 	// Background Textures Rendering and placement
 
+	// Const reference to the block vector
+	// Never pass a string by copy
+
+	// C++ Unique Pointers, References and Ownership
+	// Look up books from creator of C++
+	// Scott Myers Effective C++, More effective C++, One for 11, Tour of C++ 17
+	// Rust and GO
+
 	std::vector<Block>* terrain_vector = terrain_gen->getBlockVector();
-	for (Block block : *terrain_vector) // Iterate
+	for (Block &block : *terrain_vector) // Iterate
 	{
 		block.draw(renderer);
 	}
@@ -221,17 +248,12 @@ void Application::render()
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	}
 
-
-
-	//Physics
-	phys_eng->draw(renderer);
-
 	SDL_RenderPresent(renderer);
 }
 
 void Application::clean()
 {
-	delete player; // Destroy player memory
+	delete player; // Destroy player memory //unique ptr would take care of this
 	delete terrain_gen;
 	SDL_DestroyWindow(window); //destroy the window
 	SDL_Quit(); //quit and delete all SDL

@@ -32,10 +32,7 @@ float Physics::getTime(){
   return time;
 }
 
-void Physics::draw(SDL_Renderer *renderer)
-{
-  //std::cout << "Draw Phys\n";
-}
+
 
 int Physics::checkRectCollision(SDL_Rect* A, Terrain* terrain)
 {
@@ -45,6 +42,7 @@ int Physics::checkRectCollision(SDL_Rect* A, Terrain* terrain)
 	{
     if (SDL_HasIntersection(A, block.get_Rect())) // Check if its intersecting with another hitbox
     {
+      // Only Check Collision not by direction
       if(floor == block.name)                     // If on Floor return Code for on top of block
       {
         char direction = get4Points(A,block.getX(),block.getY());
@@ -62,6 +60,8 @@ int Physics::checkRectCollision(SDL_Rect* A, Terrain* terrain)
   return 0;
 }
 
+// Utility function for something? Later on
+// Try not to pass pointers when you dont need to 
 char Physics::get4Points(SDL_Rect* A, int centerX, int centerY)
 {
   // A points p1

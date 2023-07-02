@@ -119,6 +119,7 @@ public:
 	};
 
 	// Object interactable tilemap
+	// JSON Format?
 	char obj_tilemap[tilemapY][tilemapX] = {
 		{'g','g','g','g','g','g','g','g','g','g','g','g','g','g','g','g','g','g','g','g','g','g','g','g','g'},
 		{'~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~'},

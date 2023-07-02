@@ -51,11 +51,7 @@ public:
 	*/
 	char get4Points(SDL_Rect* A, int centerX, int centerY);
 
-	/*
-	Draw actions that need to be done on each physics cycle
-	Ex: Drawing lines
-	*/
-	void draw(SDL_Renderer* renderer);
+
 
 	
 

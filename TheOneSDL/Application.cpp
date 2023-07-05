@@ -60,12 +60,13 @@ bool Application::init()
 
 			std::cout << "Renderer created" << std::endl;
 
-			if (TTF_Init() != 0)
-			{
-				throw "TTF Init failed.";
-			}
+			// SDL TTF Removed
+			// if (TTF_Init() != 0)
+			// {
+			// 	throw "TTF Init failed.";
+			// }
 
-			std::cout << "TTF Init Done" << std::endl;
+			// std::cout << "TTF Init Done" << std::endl;
 
 			//Loading texture memory
 			SDL_Texture* temp_tex = NULL;
@@ -257,5 +258,4 @@ void Application::clean()
 	delete terrain_gen;
 	SDL_DestroyWindow(window); //destroy the window
 	SDL_Quit(); //quit and delete all SDL
-	TTF_Quit(); //Deletee all TTF text
 }

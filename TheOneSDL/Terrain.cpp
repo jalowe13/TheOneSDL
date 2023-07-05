@@ -101,26 +101,27 @@ Terrain::~Terrain()
 
 void Terrain::generateText(const char* text, int x, int y, int scale)
 {
-	//Create Text
-//Create Font
-	TTF_Font* font = TTF_OpenFont("arial.ttf", 25);
-	//Create Color
-	SDL_Color color = { 255, 0, 0 };
-	//Surface for Text
-	SDL_Surface* surface = TTF_RenderText_Solid(font,
-		text, color);
-	//Create rectangle location
-	SDL_Rect* new_text = new SDL_Rect();
-	new_text->x = x;
-	new_text->y = y;
-	new_text->w = 32*scale;
-	new_text->h = 32*scale;
+	// SDL TTF Removed
+// 	//Create Text
+// //Create Font
+// 	TTF_Font* font = TTF_OpenFont("arial.ttf", 25);
+// 	//Create Color
+// 	SDL_Color color = { 255, 0, 0 };
+// 	//Surface for Text
+// 	SDL_Surface* surface = TTF_RenderText_Solid(font,
+// 		text, color);
+// 	//Create rectangle location
+// 	SDL_Rect* new_text = new SDL_Rect();
+// 	new_text->x = x;
+// 	new_text->y = y;
+// 	new_text->w = 32*scale;
+// 	new_text->h = 32*scale;
 
-	//Free Font
-	TTF_CloseFont(font);
+// 	//Free Font
+// 	TTF_CloseFont(font);
 
-	textList[textListSize] = SDL_CreateTextureFromSurface(renderer, surface); //Returns texture
-	textListSize++;
+// 	textList[textListSize] = SDL_CreateTextureFromSurface(renderer, surface); //Returns texture
+// 	textListSize++;
 }
 
 

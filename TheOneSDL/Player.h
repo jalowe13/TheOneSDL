@@ -3,7 +3,6 @@
 
 
 #include "Terrain.h"
-#include <SDL2/SDL_ttf.h>
 #include <list>
 #include <vector>
 

@@ -10,7 +10,6 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
 #include "Physics.h"
 #include "Terrain.h"
 #include "Player.h"
@@ -35,7 +34,7 @@ class Physics;
 class Application
 {
 public:
-const char* windowTitle = "C23 Engine: The One SDL v.0.23.1 FPS:";
+const char* windowTitle = "C23 Engine: The One SDL v.0.23.3 FPS:";
 	Application();
 	~Application();
 

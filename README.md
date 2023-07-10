@@ -6,8 +6,12 @@
 
 # Instructions to compile
 
-# Environment Variables to Edit
+# Environment Variables to add
+Search environment variables in your search bar then click Environment Variables
+Then click new under system variables for each of the following
+
 C:\msys64\mingw64\bin
+
 C:\ProgramData\chocolatey\bin
 
 # Install MSYS2 to install MinGW

@@ -12,7 +12,7 @@ CXXFLAGS = -Isrc/Include -g
 ifeq ($(OS),Windows_NT)
     RM = del /Q
 	LDFLAGS= -Lsrc/lib
-	LIB_LIST = -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image
+	LIB_LIST = -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image -static-libgcc -static-libstdc++
 else
     RM = rm -f
 	LDFLAGS= -Lusr/include

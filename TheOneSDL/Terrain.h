@@ -73,6 +73,7 @@ public:
 	// Texture height and width in pixels
 	const static int texBounds = 32;
 
+
 	// Empty Tilemap template
 	char empty_tilemap[tilemapY][tilemapX] = {
 		{'~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~'},

@@ -13,7 +13,7 @@ uint32_t linux_tick(){
 
 Application::Application()
 {
-	std::cout << "Application Created!\n";
+	std::cout << "-----Application Created\n";
 	gameRunning = true;
 	frameCount = 0;
 	// Windows and Linux Definitions
@@ -30,7 +30,7 @@ Application::Application()
 
 Application::~Application()
 {
-	std::cout << "Application Destroyed!\n";
+	std::cout << "-----Application Destroyed\n";
 }
 
 bool Application::init()
@@ -39,7 +39,7 @@ bool Application::init()
 	{
 		if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
 		{
-			std::cout << "SDL Init Done" << std::endl;
+			std::cout << "-----SDL Init Done" << std::endl;
 			window = SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 				SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 
@@ -48,7 +48,7 @@ bool Application::init()
 				throw "Window creation failed.";
 			}
 
-			std::cout << "Window created" << std::endl;
+			std::cout << "-----Window Created" << std::endl;
 
 			renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED); //Create renderer
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0); //Set clear color to white
@@ -58,15 +58,7 @@ bool Application::init()
 				throw "Renderer creation failed.";
 			}
 
-			std::cout << "Renderer created" << std::endl;
-
-			// SDL TTF Removed
-			// if (TTF_Init() != 0)
-			// {
-			// 	throw "TTF Init failed.";
-			// }
-
-			// std::cout << "TTF Init Done" << std::endl;
+			std::cout << "-----Renderer Created" << std::endl;
 
 			//Loading texture memory
 			SDL_Texture* temp_tex = NULL;
@@ -92,37 +84,30 @@ bool Application::init()
 			{
 				throw "Enemy allocation failed.";
 			}
-			//std::cout << "done\n";
 			//Create Texture loader
 
 			//Unique make share
 			//include memroy.h
 			// std::make_unique 
 
-			texLoader = new TextureLoader();
-			if (!texLoader)
-			{
-				throw "Texture Loader creation failed.";
-			}
-
-			std::cout << "Texture Loader created." << std::endl;
+			std::cout << "-----Texture Loader Created" << std::endl;
 
 			//Texture Loading
 
 			terrain_gen = new Terrain(renderer);
-
-			std::cout << "Terrain gen created" << std::endl;
-			std::cout << "-----Starting Terrain Generation-----" << std::endl;
-			terrain_gen->fillScreen();
-			std::cout << "-----Terrain Generation Complete-----" << std::endl;
-			// terrain_gen->print_allBlockInfo();
-			//terrain_gen->generateText("The One", 64, 64, 4);
+			if (!terrain_gen)
+			{
+				throw "Terrain Generator creation failed.";
+			}
+			std::cout << "-----Terrain Generator Created" << std::endl;
+			std::cout << "-----Starting Terrain Generation" << std::endl;
+			terrain_gen->loadLevel("Room");
+			std::cout << "-----Terrain Generation Complete" << std::endl;
 
 			// Start Physics engine
 			phys_eng = new Physics();
 
 			gameRunning = true;
-			free(texLoader);
 		}
 		else
 		{

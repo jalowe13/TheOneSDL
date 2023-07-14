@@ -32,10 +32,10 @@ Player::Player(SDL_Renderer* renderer)
 
 	// Load Textures
 	// Load filenames
-
+	std::cout << "Loading Player Textures...\n";
 	std::list<std::string> tex_files = {idle_left, idle_right, run_left, run_right, sit};
 	std::list<std::string> tex_names = {"idle_left", "idle_right", "run_left","run_right", "sit"};
-	
+
 	while (tex_files.size() > 0) {
 		std::string new_file = tex_files.front().c_str();		// Reference from front
 		filename = new_file.c_str();
@@ -45,23 +45,23 @@ Player::Player(SDL_Renderer* renderer)
 		texture = IMG_LoadTexture(renderer,filename);	
 		SDL_QueryTexture(texture, NULL, NULL, &textureWidth, &textureHeight);	
 		textures[name] = texture;
-		std::cout << "Player.cpp: Texture loaded " << name << " with path:" << filename << " with dims " <<
-		textureWidth << " and " << textureHeight << std::endl;
+		//std::cout << "Player.cpp: Texture loaded " << name << " with path:" << filename << " with dims " <<
+		//textureWidth << " and " << textureHeight << std::endl;
 		if (textures[name] == 0 || textureWidth == 0 || textureHeight == 0){
-			std::cout << name << " failed to load from path " << filename << std::endl;
+			std::cout << "!!!!!" << name << " failed to load from path " << filename << "!!!!!" << std::endl;
 			exit(-1);
 		}
 	}
 	
 	editMS(3); // push default speed
 	setTexture(textures["idle_right"]);
-	std::cout << "Player Created!\n";
+	std::cout << "-----Player Created\n";
 
 }
 
 Player::~Player()
 {
-	std::cout << "Player Destroyed!\n";
+	std::cout << "-----Player Destroyed\n";
 }
 
 // Getters

@@ -1,21 +1,25 @@
-
-// #define SDL_MAIN_HANDLED
-
 #ifndef APPLICATION_HPP
 #define APPLICATION_HPP
 
+// Version Number
+#define VERSION_MAJOR 0 
+#define VERSION_MINOR 23
+#define VERSION_PATCH 4
+#define STR_HELPER(x) #x // convert to fit window title
+#define STR(x) STR_HELPER(x)
+
+// Screen Definitions
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <json/json.h>
 #include "Physics.h"
 #include "Terrain.h"
 #include "Player.h"
 #include "Enemy.h"
-#include "Ground.h"
-#include "TextureLoader.h"
 
 // PreProcessor Declerations
 #ifdef _WIN32
@@ -34,7 +38,7 @@ class Physics;
 class Application
 {
 public:
-const char* windowTitle = "C23 Engine: The One SDL v.0.23.4 FPS:";
+const char* windowTitle = "C23 Engine: The One SDL v." STR(VERSION_MAJOR) "." STR(VERSION_MINOR) "." STR(VERSION_PATCH) " FPS:";
 	Application();
 	~Application();
 
@@ -132,7 +136,6 @@ private:
 	// Temporary pointers for enemy and player instantiation
 	Player* player = NULL;
 	Enemy* enemy = NULL;
-	TextureLoader* texLoader = NULL;
 
 
 

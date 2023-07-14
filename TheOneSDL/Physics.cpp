@@ -7,13 +7,13 @@
 const std::string Physics::floor = "Floor";
 
 Physics::Physics(){
-  std::cout << "Start Physics Engine\n";
+  std::cout << "-----Start Physics Engine\n";
   
-  std::cout << "Physics Engine Started\n";
+  std::cout << "-----Physics Engine Started\n";
 }
 
 Physics::~Physics(){
-  std::cout << "Stopping Physics Engine" << std::endl;
+  std::cout << "-----Stopping Physics Engine" << std::endl;
 }
 
 float Physics::getGravity(){

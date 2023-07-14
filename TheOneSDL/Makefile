@@ -44,5 +44,10 @@ else
     RM = rm -f
 endif
 
-clean:
+# Clean all object files
+cleanall:
 	$(RM) *.o
+
+# Clean specific object file, used more if a header file is edited and not detected as a change
+clean:
+	$(RM) $(addsuffix .o,$(filter-out $@,$(MAKECMDGOALS)))

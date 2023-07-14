@@ -1,7 +1,27 @@
 {
-    "levels": 0,
     "name": "Room",
-    "tilemap":[
+	"background_tilemap":[
+		"wwwwwwwwwwwwwwwwwwwwwwwww",
+		"wwwwwwwwwwwwwwwwwwwwwwwww",
+		"wwwwwwwwwwwwwwwwwwwwwwwww",
+		"wwwwwwwwwwwwwwwwwwwwwwwww",
+		"wwwwwwwwwwwwwwwwwwwwwwwww",
+		"wwwwwwwwwwwwwwwwwwwwwwwww",
+		"wwwwwwwwwwwwwwwwwwwwwwwww",
+		"wwwwwwwwwwwwwwwwwwwwwwwww",
+		"wwwwwwwwwwwwwwwwwwwwwwwww",
+		"wwwwwwwwwwwwwwwwwwwwwwwww",
+		"wwwwwwwwwwwwwwwwwwwwwwwww",
+		"wwwwwwwwwwwwwwwwwwwwwwwww",
+		"wwwwwwwwwwwwwwwwwwwwwwwww",
+		"wwwwwwwwwwwwwwwwwwwwwwwww",
+		"wwwwwwwwwwwwwwwwwwwwwwwww",
+		"wwwwwwwwwwwwwwwwwwwwwwwww",
+		"wwwwwwwwwwwwwwwwwwwwwwwww",
+		"wwwwwwwwwwwwwwwwwwwwwwwww",
+		"wwwwwwwwwwwwwwwwwwwwwwwww"
+    ],
+    "obj_tilemap":[
 		"ggggggggggggggggggggggggg",
 		"~~~~~~~~~~~~~~~~~~~~~~~~~",
 		"~~~~~~~~~~~~~~~~~~~~~~~~~",

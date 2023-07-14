@@ -22,3 +22,4 @@ TheOneSDL/.vscode/launch.json
 TheOneSDL/TheOne.exe
 TheOneSDL/TheOne
 TheOneSDL/build
+*.zip

@@ -90,13 +90,13 @@ SDL_Rect* Block::get_Rect()
 Terrain::Terrain(SDL_Renderer* renderer_p)
 {
 	renderer = renderer_p;
-	std::cout << "Terrain Generation Started" << std::endl;
+	std::cout << "-----Terrain Generation Started" << std::endl;
 	blocks.reserve(10);
 }
 
 Terrain::~Terrain()
 {
-	std::cout << "Terrain Deconstructed" << std::endl;
+	std::cout << "-----Terrain Deconstructed" << std::endl;
 }
 
 void Terrain::generateText(const char* text, int x, int y, int scale)
@@ -207,6 +207,12 @@ bool Terrain::fillScreen()
 	return true;
 }
 
+
+void Terrain::loadLevel(std::string level)
+{
+	std::cout << "Load level: " << level << std::endl;
+	fillScreen();
+}
 
 void Terrain::print_allBlockInfo()
 {

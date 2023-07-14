@@ -19,6 +19,8 @@ Enemy::Enemy(SDL_Renderer* renderer)
 	frame_time = 0;
 
 
+	std::cout << "Loading Enemy Textures...\n";
+
 	const char* filename; // Filename to load
 	SDL_Texture* texture; // Default texture pointer
     std::list<std::string> tex_files = {chomper_idle_left, chomper_move_left,chomper_move_right};
@@ -33,8 +35,8 @@ Enemy::Enemy(SDL_Renderer* renderer)
 		texture = IMG_LoadTexture(renderer,filename);	
 		SDL_QueryTexture(texture, NULL, NULL, &textureWidth, &textureHeight);	
 		textures[name] = texture;
-		std::cout << "Enemy.cpp: Texture loaded " << name << " with path:" << filename << " with dims " <<
-		textureWidth << " and " << textureHeight << std::endl;
+		//std::cout << "Enemy.cpp: Texture loaded " << name << " with path:" << filename << " with dims " <<
+		//textureWidth << " and " << textureHeight << std::endl;
 		if (textures[name] == 0 || textureWidth == 0 || textureHeight == 0){
 			std::cout << name << " failed to load from path " << filename << std::endl;
 			exit(-1);
@@ -42,17 +44,16 @@ Enemy::Enemy(SDL_Renderer* renderer)
 	}
 
 
-    std::cout << "Enemy Created!\n";
+    std::cout << "-----Enemy Created\n";
 }
 
 Enemy::~Enemy()
 {
-    std::cout << "Enemy Destroyed!\n";
+    std::cout << "-----Enemy Destroyed\n";
 }
 
 void Enemy::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 {
-    //std::cout << "Movement\n";
 	if (!inAnimation)
 		{
 			if (left_look)

@@ -3,20 +3,23 @@
 
 CXX=g++
 
-# Include Flags
-# -g is a debugging flag
-CXXFLAGS = -Isrc/Include -g
+
+
+# VCPKG Source using the current user profile
+VCPKG_ROOT := $(USERPROFILE)/vcpkg
+VCPKG_TARGET_TRIPLET := x64-windows
 
 
 # Swap between Windows and Unix installs
 ifeq ($(OS),Windows_NT)
     RM = del /Q
-	LDFLAGS= -Lsrc/lib
-	LIB_LIST = -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image -static-libgcc -static-libstdc++
+	CXXFLAGS = -I$(VCPKG_ROOT)/installed/$(VCPKG_TARGET_TRIPLET)/include
+	LDFLAGS := -L$(VCPKG_ROOT)/installed/$(VCPKG_TARGET_TRIPLET)/lib
+	LIB_LIST = -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image -ljsoncpp -static-libgcc -static-libstdc++
 else
     RM = rm -f
 	LDFLAGS= -Lusr/include
-	LIB_LIST = -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image
+	LIB_LIST = -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image -ljsoncpp
 endif
 
 

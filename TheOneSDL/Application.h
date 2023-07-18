@@ -4,7 +4,7 @@
 // Version Number
 #define VERSION_MAJOR 0 
 #define VERSION_MINOR 23
-#define VERSION_PATCH 5
+#define VERSION_PATCH 6
 #define STR_HELPER(x) #x // convert to fit window title
 #define STR(x) STR_HELPER(x)
 
@@ -15,6 +15,7 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <fstream>
 #include <json/json.h>
 #include "Physics.h"
 #include "Terrain.h"

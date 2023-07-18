@@ -12,29 +12,27 @@ Then click new under system variables for each of the following
 
 C:\msys64\mingw64\bin
 
-C:\ProgramData\chocolatey\bin
-
-# Install MSYS2 to install MinGW
+# Step 1: Install MSYS2 to install MinGW for C++ compiler
 https://www.msys2.org/
 Open Msys2
-Install MinGW with the following command. This will install the compiler that the make file will use
+Install MinGW with the following command. This will update all package dependencies for mingw which also installs the compiler and jsoncpp package that the make file will use
 ```
-pacman -S mingw-w64-x86_64-gcc
-```
-
-# Install Chocolatey in an Admin Powershell
-```
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-```
-Once chocolatey is installed install make
-# Install make in a new command prompt
-```
-choco install make -y
+pacman -Syuu && pacman -Sy make mingw-w64-x86_64-boost mingw-w64-x86_64-cmake mingw-w64-x86_64-gcc mingw-w64-x86_64-jsoncpp mingw-w64-x86_64-make
 ```
 
+# Step 2: Run the setup.ps1 script in an Admin Terminal/Powershell to install Chocolatey
+Open a Admin Terminal/Powershell and navagate to the game directory of TheOneSDL that contains dll files
+You could copy your path from the file explorer and paste it in the path if you'd like
+```
+cd (your game path here)
+```
+Then run the script with
+```
+.\setup.ps1
+```
 
-# Compile Program with make and execute
-Navigate to where you downloaded and extracted TheOne to
+# Compile Instructions stated in the setup script
+
 Compiles program
 `
 ```
@@ -42,7 +40,7 @@ make
 ```
 Cleans up all object files (use this if you edit code in a header file or delete a specific object file you edited)
 ```
-make clean
+make cleanall
 ```
 Execute program
 ```

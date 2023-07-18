@@ -6,15 +6,15 @@ CXX=g++
 
 
 # VCPKG Source using the current user profile
-VCPKG_ROOT := $(USERPROFILE)/vcpkg
-VCPKG_TARGET_TRIPLET := x64-windows
+MSYS2_ROOT := C:/vcpkg
+MSYS2_TARGET_TRIPLET := mingw64
 
 
 # Swap between Windows and Unix installs
 ifeq ($(OS),Windows_NT)
     RM = del /Q
-	CXXFLAGS = -I$(VCPKG_ROOT)/installed/$(VCPKG_TARGET_TRIPLET)/include
-	LDFLAGS := -L$(VCPKG_ROOT)/installed/$(VCPKG_TARGET_TRIPLET)/lib
+	CXXFLAGS = -I$(MSYS2_ROOT)/$(MSYS2_TARGET_TRIPLET)/include
+	LDFLAGS := -L$(MSYS2_ROOT)/$(MSYS2_TARGET_TRIPLET)/lib
 	LIB_LIST = -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image -ljsoncpp -static-libgcc -static-libstdc++
 else
     RM = rm -f

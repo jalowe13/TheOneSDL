@@ -206,20 +206,26 @@ bool Terrain::fillScreen()
 
 void Terrain::loadLevel(std::string level)
 {
-	std::cout << "Load level: " << level << std::endl;
-
 	std::ifstream ifs("levels.json"); // JSON file to open
-
-	Json::Value obj;	// Map of other JSON values can returna value type, null, int etc...
+	Json::Value lvl_data;	// Map of other JSON values can returna value type, null, int etc...
 	Json::Reader reader; 
 	
-
-	if (reader.parse(ifs, obj))
+	if (!reader.parse(ifs, lvl_data)) // If not parsable
 	{
-
+		std::cout << "!!!!!Error Parsing Level Data for Level " << level << std::endl;
 	}
 
+	for (const auto& levelObject: lvl_data)
+	{
+		if (levelObject["name"].asString() == level) {
+			std::cout << "Load Level: " + level << std::endl;
+			// Parse the background tilemap from json to terrain object
+				//TODO
+			// Parse the obj_tilemap from json to terrain object
+		}
+	}
 
+	std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
 	// std::string line = 
 
 

@@ -12,12 +12,16 @@ if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
 choco install make -y
 
 # Set the path to the vcpkg executable
+$vcinstall = $env:USERPROFILE
 $vcpkg = $env:USERPROFILE + "/vcpkg"
 
 # Install jsoncpp using vcpkg
 Write-Host "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" -ForegroundColor Magenta
 Write-Host "Installing packages..." -ForegroundColor Green
 Write-Host "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" -ForegroundColor Magenta
+cd $vcinstall
+git clone https://github.com/Microsoft/vcpkg.git
+.\vcpkg\bootstrap-vcpkg.bat
 cd $vcpkg 
 ./bootstrap-vcpkg.sh
 ./vcpkg integrate install

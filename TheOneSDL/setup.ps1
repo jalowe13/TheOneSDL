@@ -11,28 +11,22 @@ if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
 # Install make using Chocolatey
 choco install make -y
 
-# Set the path to the vcpkg executable
-$vcinstall = $env:USERPROFILE
-$vcpkg = $env:USERPROFILE + "/vcpkg"
+# Set the path to the MSYS2 installation directory
+$msys2Path = "C:\msys64"
 
-# Install jsoncpp using vcpkg
 Write-Host "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" -ForegroundColor Magenta
 Write-Host "Installing packages..." -ForegroundColor Green
 Write-Host "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" -ForegroundColor Magenta
-cd $vcinstall
-git clone https://github.com/Microsoft/vcpkg.git
-.\vcpkg\bootstrap-vcpkg.bat
-cd $vcpkg 
-./bootstrap-vcpkg.sh
-./vcpkg integrate install
-./vcpkg install sdl2 sdl2-ttf sdl2-image --triplet x64-windows
+Write-Host "Once the packages are installed in the msys2 terminal"
+# Launch the MSYS2 terminal and run the script
+cd $msys2Path
+.\msys2_shell.cmd -mingw64 -c "pacman -Syuu && pacman -Sy make mingw-w64-x86_64-boost mingw-w64-x86_64-cmake mingw-w64-x86_64-gcc mingw-w64-x86_64-jsoncpp mingw-w64-x86_64-make mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_image mingw-w64-x86_64-SDL2_ttf"
+Pause
 cd $PSScriptRoot
-
 Write-Host "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" -ForegroundColor Magenta
 Write-Host "Compiling program for the first time..." -ForegroundColor Green
 Write-Host "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" -ForegroundColor Magenta
 make
-# vcpkg install jsoncpp
 Write-Host
 Write-Host 
 Write-Host  

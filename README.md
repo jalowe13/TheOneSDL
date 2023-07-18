@@ -14,15 +14,9 @@ C:\msys64\mingw64\bin
 
 # Step 1: Install MSYS2 to install MinGW for C++ compiler
 https://www.msys2.org/
-Open Msys2
-Install MinGW with the following command. This will update all package dependencies for mingw which also installs the compiler and jsoncpp package that the make file will use.
-Note: If your mingw terminal closes and says it needs to restart. Run the command again in a new window.
-```
-pacman -Syuu && pacman -Sy make mingw-w64-x86_64-boost mingw-w64-x86_64-cmake mingw-w64-x86_64-gcc mingw-w64-x86_64-jsoncpp mingw-w64-x86_64-make mingw-w64-x86_64-SDL2
+Install Msys2
 
-```
-
-# Step 2: Run the setup.ps1 script in an Admin Terminal/Powershell to install Chocolatey
+# Step 2: Run the setup.ps1 script in an Admin Terminal/Powershell to install Chocolatey and MinGW with dependencies
 Open a Admin Terminal/Powershell and navagate to the game directory of TheOneSDL that contains dll files
 You could copy your path from the file explorer and paste it in the path if you'd like
 ```

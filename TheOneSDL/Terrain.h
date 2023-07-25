@@ -76,6 +76,9 @@ public:
 	// Load level from JSON
 	void loadLevel(std::string level);
 
+	// Load Tilemap
+	void loadTilemap(Json::Value json_tilemap, int map_type);
+
 	// Tilemaps
 	char background_tilemap[tilemapY][tilemapX] = {
 		{'w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w'},

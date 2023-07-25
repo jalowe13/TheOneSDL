@@ -45,7 +45,7 @@ bool Application::init()
 
 			if (!window)
 			{
-				throw "Window creation failed.";
+				throw "Window creation failed!";
 			}
 
 			std::cout << "-----Window Created" << std::endl;

@@ -3,8 +3,8 @@
 
 // Version Number
 #define VERSION_MAJOR 0 
-#define VERSION_MINOR 23
-#define VERSION_PATCH 10
+#define VERSION_MINOR 24
+#define VERSION_PATCH 
 #define STR_HELPER(x) #x // convert to fit window title
 #define STR(x) STR_HELPER(x)
 
@@ -39,7 +39,7 @@ class Physics;
 class Application
 {
 public:
-const char* windowTitle = "C23 Engine: The One SDL v." STR(VERSION_MAJOR) "." STR(VERSION_MINOR) "." STR(VERSION_PATCH) " FPS:";
+const char* windowTitle = "C23 Engine: The One SDL v." STR(VERSION_MAJOR) "." STR(VERSION_MINOR) STR(VERSION_PATCH) " FPS:";
 	Application();
 	~Application();
 

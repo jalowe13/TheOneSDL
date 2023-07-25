@@ -178,7 +178,6 @@ bool Terrain::fillScreen()
 				case 'c':
 					texture = IMG_LoadTexture(renderer, CHOMPER_TEX);
 					name = "Chomper";
-					
 					break;
 				}
 				if (texture != NULL && x < SCREEN_WIDTH && y < SCREEN_HEIGHT) {
@@ -215,22 +214,85 @@ void Terrain::loadLevel(std::string level)
 		std::cout << "!!!!!Error Parsing Level Data for Level " << level << std::endl;
 	}
 
-	for (const auto& levelObject: lvl_data)
+	if (!lvl_data.isObject())
 	{
-		if (levelObject["name"].asString() == level) {
-			std::cout << "Load Level: " + level << std::endl;
-			// Parse the background tilemap from json to terrain object
-				//TODO
-			// Parse the obj_tilemap from json to terrain object
-		}
+	std::cout << "!!!!Error Parsing: Level data is not object \n";
 	}
 
-	std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-	// std::string line = 
+	if (!lvl_data.isArray())
+	{
+		std::cout << "!!!!Error Parsing: Level Data is not an Array\n";
+	}
 
-
-
+	for (int i = 0; i < lvl_data.size(); i++) // Iterate through level data
+	{
+		std::string level_name = lvl_data[i]["name"].asString(); // Grab level name
+		
+		if (level_name == level)
+		{
+			for (int map_i = 0; map_i < 2; map_i++) // Load background and tilemap
+			{
+				switch(map_i)
+				{
+					case 0:
+						loadTilemap(lvl_data[i]["background_tilemap"], 0);
+						break;
+					case 1:
+						// std::cout << "Start obj\n";
+						// std::cout << lvl_data[i] << std::endl;
+						loadTilemap(lvl_data[i]["obj_tilemap"], 1);
+						break;
+				}
+			}
+		}
+	}
+	
 	fillScreen();
+}
+
+void Terrain::loadTilemap(Json::Value json_tilemap, int map_type)
+{
+	std::cout << "Load Tilemap" << std::endl;
+	// Iterators for tilemap
+	int tilemapY_i = 0;
+	int tilemapX_i = 0;
+	std::cout << "size:" << json_tilemap.size() << std::endl;
+	if (json_tilemap.size() == 0)
+	{
+		std::cout << "Error: Tilemap of type " << map_type << " is size " << json_tilemap.size();
+	}
+	for (int j = 0; j < json_tilemap.size(); j++)
+	{
+		for (char c : json_tilemap[j].asString()) // Grab new char
+		{
+			//std::cout << c << std::endl;
+			if (tilemapX_i < tilemapX) // Iterate Col
+			{
+				//std::cout << "Replacing " << background_tilemap[tilemapY_i][tilemapX_i] << "with " << c << std::endl;
+				switch(map_type)
+				{
+					case 0:
+						background_tilemap[tilemapY_i][tilemapX_i] = c;
+						break;
+					case 1:
+						//obj_tilemap[tilemapY_i][tilemapX_i] = c;
+						break;
+				}
+				
+				//std::cout << "[" << tilemapY_i << "," << tilemapX_i << "]" << background_tilemap[tilemapY_i][tilemapX_i] << std::endl;
+				tilemapX_i++;
+			}
+			else
+			{
+				tilemapX_i = 0;
+				if (tilemapY_i < tilemapY) // Iterate Row
+				{
+					tilemapY_i++;
+				}
+						
+			}		
+		}
+	}
 }
 
 void Terrain::print_allBlockInfo()

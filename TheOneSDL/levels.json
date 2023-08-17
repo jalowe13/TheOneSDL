@@ -47,6 +47,7 @@
 	{
 		"name": "Room",
 		"background_tilemap": [
+			"ggggggggggggggggggggggggg",
 			"wwwwwwwwwwwwwwwwwwwwwwwww",
 			"wwwwwwwwwwwwwwwwwwwwwwwww",
 			"wwwwwwwwwwwwwwwwwwwwwwwww",
@@ -64,29 +65,28 @@
 			"wwwwwwwwwwwwwwwwwwwwwwwww",
 			"wwwwwwwwwwwwwwwwwwwwwwwww",
 			"wwwwwwwwwwwwwwwwwwwwwwwww",
-			"wwwwwwwwwwwwwwwwwwwwwwwww",
-			"wwwwwwwwwwwwwwwwwwwwwwwww"
+			"ggggggggggggggggggggggggg"
 		],
 		"obj_tilemap":[
-			"ggggggggggggggggggggggggg",
 			"~~~~~~~~~~~~~~~~~~~~~~~~~",
-			"~~~~~~~~~~~~~~~~~~~~~~~~~",
-			"~~~~~~~~~~~~~~~~~~~~~~~~~",
+			"f~ff~fff~ffff~fffff~ffff~",
+			"f~ffffffffffffffffffffff~",
+			"f~~~~~~~~~~~~~~~~~~~~~~~~",
+			"f~~f~~~~~~~~~~~~~~~~~f~~f",
+			"~~~f~~~~~~~~~~~~~~~~~f~~~",
+			"~~~f~~~~~~~~~~~~~~~~~ff~f",
+			"~~~f~~~~~~~~~~~~~~~~~f~f~",
+			"~~~f~~~~~~~~~~~~~~~~~f~~f",
 			"~~~f~~~~~~~~~~~~~~~~~~~~~",
-			"~~~f~~~~~~fff~~~~~~~~~~~~",
-			"~~~f~~~~~~~~~~~f~~~~~~~~~",
-			"~~~f~~~~~~~~~~~~~~f~~~~~~",
-			"~~~f~~~~~~~~~f~~~~~~f~~~~",
-			"~~~f~~~~~~~~~f~~~~~~~f~~~",
-			"~~~f~~~~~~~~fff~~~~~~~~~~",
-			"~~~f~~~~~~~~~f~~~~~~~~~f~",
-			"~~~~~~~~~ff~~f~~~~~~~~f~~",
-			"~~~~~~~~f~~~~~~~~~~~~f~~~",
-			"~f~~~~~ff~~~~~~~~p~~f~~~~",
-			"~~~~~ff~f~~~~~~~~~~f~~~~~",
-			"~~~~~~~~f~~~~lct~~f~~~~~~",
+			"~~~f~~~~~~~~~~~~~~~~~~~~f",
+			"~~~f~~~~fff~~~~~~~~~~f~~~",
+			"~~~~~~~~~~~~~~~~~f~~~~~~~",
+			"~~~~~~~~~~~~~~~~f~~~~p~~~",
+			"~~~~~~~~~~~~~~~f~~~~~~~~~",
+			"~~~~~~ff~~~~~f~~~~~~~~~~~",
+			"~~~~~f~~~~~~~~~~~l~c~t~~~",
 			"fffffffffffffffffffffffff",
-			"ggggggggggggggggggggggggg"
+			"~~~~~~~~~~~~~~~~~~~~~~~~~"
 		]
 	}
 ]

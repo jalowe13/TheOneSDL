@@ -139,9 +139,11 @@ bool Terrain::fillScreen()
 				switch (layer) {
 				case 0:
 					tile = background_tilemap[iy][ix];
+					//std::cout << "fill screen y:" << iy << " x:" << ix << "with: " << tile << std::endl;
 					break;
 				case 1:
 					tile = obj_tilemap[iy][ix];
+					//std::cout << "fill screen y:" << iy << " x:" << ix << "with: " << tile << std::endl;
 					break;
 				}
 				texture = NULL;
@@ -216,7 +218,7 @@ void Terrain::loadLevel(std::string level)
 
 	if (!lvl_data.isObject())
 	{
-	std::cout << "!!!!Error Parsing: Level data is not object \n";
+	//std::cout << "!!!!Error Parsing: Level data is not object \n";
 	}
 
 	if (!lvl_data.isArray())
@@ -248,6 +250,7 @@ void Terrain::loadLevel(std::string level)
 	}
 	
 	fillScreen();
+	// print_allBlockInfo();
 }
 
 void Terrain::loadTilemap(Json::Value json_tilemap, int map_type)
@@ -256,7 +259,6 @@ void Terrain::loadTilemap(Json::Value json_tilemap, int map_type)
 	// Iterators for tilemap
 	int tilemapY_i = 0;
 	int tilemapX_i = 0;
-	std::cout << "size:" << json_tilemap.size() << std::endl;
 	if (json_tilemap.size() == 0)
 	{
 		std::cout << "Error: Tilemap of type " << map_type << " is size " << json_tilemap.size();
@@ -265,21 +267,21 @@ void Terrain::loadTilemap(Json::Value json_tilemap, int map_type)
 	{
 		for (char c : json_tilemap[j].asString()) // Grab new char
 		{
-			//std::cout << c << std::endl;
-			if (tilemapX_i < tilemapX) // Iterate Col
+			if (tilemapX_i < 24 && tilemapY_i < 20) // Iterate Col
 			{
-				//std::cout << "Replacing " << background_tilemap[tilemapY_i][tilemapX_i] << "with " << c << std::endl;
+				// The bug is skipping over the iterated char
 				switch(map_type)
 				{
 					case 0:
+						//std::cout << "Replacing " << background_tilemap[tilemapY_i][tilemapX_i] << " with " << c << " at map " << map_type << std::endl;
 						background_tilemap[tilemapY_i][tilemapX_i] = c;
 						break;
 					case 1:
-						//obj_tilemap[tilemapY_i][tilemapX_i] = c;
+						//std::cout << "[Replacing " << obj_tilemap[tilemapY_i][tilemapX_i] << " with " << c << " at map " << map_type << std::endl;
+						obj_tilemap[tilemapY_i][tilemapX_i] = c;
+						//std::cout << "Replacing at " << tilemapY_i << "," << tilemapX_i << "]" << std::endl;
 						break;
 				}
-				
-				//std::cout << "[" << tilemapY_i << "," << tilemapX_i << "]" << background_tilemap[tilemapY_i][tilemapX_i] << std::endl;
 				tilemapX_i++;
 			}
 			else
@@ -289,7 +291,6 @@ void Terrain::loadTilemap(Json::Value json_tilemap, int map_type)
 				{
 					tilemapY_i++;
 				}
-						
 			}		
 		}
 	}

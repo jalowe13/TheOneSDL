@@ -4,7 +4,7 @@
 // Version Number
 #define VERSION_MAJOR 0 
 #define VERSION_MINOR 24
-#define VERSION_PATCH .2
+#define VERSION_PATCH .3
 #define STR_HELPER(x) #x // convert to fit window title
 #define STR(x) STR_HELPER(x)
 
@@ -100,7 +100,7 @@ const char* windowTitle = "C23 Engine: The One SDL v." STR(VERSION_MAJOR) "." ST
 	//Constants for reference
 
 
-	
+	bool debugMode = false;
 
 	int textureWidth = 1920;
 	int textureHeight = 32;

@@ -127,6 +127,7 @@ bool Terrain::fillScreen()
 	char tile = '~';
 	SDL_Texture* texture = NULL;
 	std::string name;
+	blocks.clear(); // Reset block collisions
 	// 26 max blocks in X Direction for a Y in 800*600 26 20
 	for (int layer = 0; layer < 2; layer++) {
 		int x = 0;
@@ -229,9 +230,9 @@ void Terrain::loadLevel(std::string level)
 	for (int i = 0; i < lvl_data.size(); i++) // Iterate through level data
 	{
 		std::string level_name = lvl_data[i]["name"].asString(); // Grab level name
-		
 		if (level_name == level)
 		{
+			std::cout << "Load" << level_name << std::endl;
 			for (int map_i = 0; map_i < 2; map_i++) // Load background and tilemap
 			{
 				switch(map_i)
@@ -255,7 +256,6 @@ void Terrain::loadLevel(std::string level)
 
 void Terrain::loadTilemap(Json::Value json_tilemap, int map_type)
 {
-	std::cout << "Load Tilemap" << std::endl;
 	// Iterators for tilemap
 	int tilemapY_i = 0;
 	int tilemapX_i = 0;

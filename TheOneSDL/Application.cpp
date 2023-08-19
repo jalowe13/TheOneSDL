@@ -101,7 +101,8 @@ bool Application::init()
 			}
 			std::cout << "-----Terrain Generator Created" << std::endl;
 			std::cout << "-----Starting Terrain Generation" << std::endl;
-			terrain_gen->loadLevel("Room");
+			//terrain_gen->loadLevel("Room");
+			terrain_gen->fillScreen();
 			std::cout << "-----Terrain Generation Complete" << std::endl;
 
 			// Start Physics engine
@@ -182,6 +183,27 @@ void Application::handleEvents()
 		{
 			player->xPathEdit(None);
 			break;
+		}
+		// Debug Mode Toggle
+		case SDLK_BACKQUOTE:
+		{
+			debugMode = (debugMode) ? false : true;
+			std::cout << "Debug Mode: " << debugMode << std::endl;
+			break;
+		}
+		case SDLK_KP_0:
+		{
+			if (debugMode) terrain_gen->loadLevel("DefaultLoad");
+			break;
+		}
+		case SDLK_KP_1:
+		{
+			if (debugMode) terrain_gen->loadLevel("Room");
+			break;
+		}
+		case SDLK_KP_2:
+		{
+			if (debugMode) terrain_gen->loadLevel("EmptyFloor");
 		}
 		}
 		break;

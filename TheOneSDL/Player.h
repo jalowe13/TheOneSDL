@@ -73,6 +73,8 @@ public:
 	//Hitbox Methods
 	bool hitboxCheck();
 
+	// Is Colliding
+	bool isColliding = false;
 
 
 private:

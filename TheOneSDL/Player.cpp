@@ -234,13 +234,26 @@ void Player::checkCollision(int i, Physics* phys_eng)
 		case 0:	// Falling
 			phys_eng->incTime(); // Increase time when away from ground
 			yEdit(getY() + phys_eng->getGravity() * phys_eng->getTime());
-			//std::cout << "Air Time: " << phys_eng->getTime() << "\n";
+			//std::cout << "Air Time: " << phys_eng->getTime() << "\r";
+			isColliding = false;
 			break;
-		case 1: // On Ground
+		case 1: // Colliding Ground
 			playerFalling = false;
 			phys_eng->resetTime(); // Reset time on ground
+			isColliding = false;
+			//std::cout << "~~~Collide~~~\r";
 			break;
-		case 2: // No edits
+		case 2: // Colliding from left
+			isColliding = true;
+			xEdit(getX() + getSpeed()+4);
+			break;
+		case 3: // Colliding from right
+			isColliding = true;
+			xEdit(getX() - getSpeed()-4);
+			break;
+		case 4: // Colliding from below
+			isColliding = true;
+			yEdit(getY() + getSpeed()+4);
 			break;
 		
 	}
@@ -261,7 +274,9 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 				setTexture(textures["run_left"]);
 				inAnimation = true;
 			}
-			xEdit(getX() - getSpeed());
+			// std::cout << "Is colliding " << isColliding << " "  << std::endl;
+			(!isColliding) ? xEdit(getX() - getSpeed()) : xEdit(getX() + getSpeed());
+			// xEdit(getX() - getSpeed());
 			tilemap_x = round(getX()/32);
 			tilemap_y = round(getY()/32);
 			break;
@@ -274,7 +289,7 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 				setTexture(textures["run_right"]);
 				inAnimation = true;
 			}
-			xEdit(getX() + getSpeed());
+			(!isColliding) ? xEdit(getX() + getSpeed()) : xEdit(getX() - getSpeed());
 			tilemap_x = round(getX()/32);
 			tilemap_y = round(getY()/32);
 			break;
@@ -302,7 +317,7 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 		{
 			if (!playerFalling)
 			{
-				yEdit(getY() - getSpeed());
+				(!isColliding) ? yEdit(getY() - getSpeed()) : yEdit(getY() + getSpeed());
 				tilemap_x = round(getX()/32);
 				tilemap_y = round(getY()/32);
 			}
@@ -324,7 +339,7 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 	}
 
 
-	// If the Player is not outside of bounds
+	//If the Player is not outside of bounds
 	if (!boundsCheck(getX(), getY()))
 	{
 		// Movement
@@ -332,7 +347,7 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 		{
 		case Right:
 		{
-			xEdit(getX() + getSpeed());
+			xEdit(getX() - getSpeed());
 			break;
 		}
 		case Left:

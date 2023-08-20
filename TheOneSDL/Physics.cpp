@@ -37,7 +37,6 @@ float Physics::getTime(){
 int Physics::checkRectCollision(SDL_Rect* A, Terrain* terrain)
 {
   std::vector<Block>* blocks = terrain->getBlockVector();
-
   for (Block block : *blocks)                     // Iterate through every block
 	{
     if (SDL_HasIntersection(A, block.get_Rect())) // Check if its intersecting with another hitbox
@@ -45,15 +44,29 @@ int Physics::checkRectCollision(SDL_Rect* A, Terrain* terrain)
       // Only Check Collision not by direction
       if(floor == block.name)                     // If on Floor return Code for on top of block
       {
-        char direction = get4Points(A,block.getX(),block.getY());
-        if (direction == 'N')
+        //char direction = get4Points(A,block.getX(),block.getY());
+        
+        if (block.getY() > A->y) // If On top of block
         {
           return 1;
         }
-        else
+        if (block.getX() < A->x) // If to the left of a block
         {
+          if (block.getY() < (A->y - 20)) // But under another one
+          {
+            return 4;
+          }
           return 2;
         }
+        else if (block.getX() > A->x) // If to the right of a block
+        {
+          if (block.getY() < (A->y - 20)) // But under a block
+          {
+            return 4;
+          }
+          return 3;
+        }
+        return 5; // Unknown collision error
       }
     }
 	}
@@ -68,8 +81,8 @@ char Physics::get4Points(SDL_Rect* A, int centerX, int centerY)
   float A_centerX, A_centerY;
   A_centerX = A->x + 16;
   A_centerY = A->y + 16;
-  //std::cout << "[" << A_centerX << "," << A_centerY << "]\n";
-  //std::cout << " " << A_centerX << "," << A_centerY << " " << centerX << " " << centerY << std::endl;
+  // std::cout << "[" << A_centerX << "," << A_centerY << "] ";
+  // std::cout << " " << A_centerX << "," << A_centerY << " " << centerX << " " << centerY << "\r";
 
   // B Points of interest
   int B_NorthY = centerY;
@@ -90,7 +103,7 @@ char Physics::get4Points(SDL_Rect* A, int centerX, int centerY)
   float dist_E = sqrt(pow(A_centerX - east.first, 2) + pow(A_centerY - east.second, 2));
   float dist_W = sqrt(pow(A_centerX - west.first, 2) + pow(A_centerY - west.second, 2));
   // std::cout << "Center[" << A_centerX << "," << A_centerY << "]\n";
-  //std::cout << "N[" << dist_N << "]S[" << dist_S << "]E[" << dist_E << "]W[" << dist_W << "] ";
+  // std::cout << "N[" << dist_N << "]S[" << dist_S << "]E[" << dist_E << "]W[" << dist_W << "] ";
 
   // Finding minimum distance
   float mindist = dist_N;
@@ -119,9 +132,9 @@ char Physics::get4Points(SDL_Rect* A, int centerX, int centerY)
   // mindist = (dist_W < mindist) ? dist_W : mindist;
   // direction = (dist_W < mindist) ? "West" : direction;
 
-  //std::cout << "Direction is " << direction;
+  // std::cout << " Direction is " << direction << " ";
 
-  //std::cout << " " << A_centerX << "," << A_centerY << " " << centerX << " " << centerY << std::endl;
+  // std::cout << "" << A_centerX << "," << A_centerY << " " << centerX << " " << centerY << "\r";
   return direction;
 
 }

@@ -232,7 +232,7 @@ void Terrain::loadLevel(std::string level)
 		std::string level_name = lvl_data[i]["name"].asString(); // Grab level name
 		if (level_name == level)
 		{
-			std::cout << "Load" << level_name << std::endl;
+			std::cout << "Load: " << level_name << std::endl;
 			for (int map_i = 0; map_i < 2; map_i++) // Load background and tilemap
 			{
 				switch(map_i)

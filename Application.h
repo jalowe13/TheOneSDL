@@ -3,8 +3,8 @@
 
 // Version Number
 #define VERSION_MAJOR 0
-#define VERSION_MINOR 25
-#define VERSION_PATCH 0
+#define VERSION_MINOR 26
+#define VERSION_PATCH
 #define VERSION_ALT -minimal
 #define STR_HELPER(x) #x // convert to fit window title
 #define STR(x) STR_HELPER(x)
@@ -36,8 +36,9 @@ class Physics;
 
 class Application {
 public:
-  const char *windowTitle = "C23 Engine: SDL2 v." STR(VERSION_MAJOR) "." STR(
-      VERSION_MINOR) "." STR(VERSION_PATCH) STR(VERSION_ALT) " FPS:";
+  const char *windowTitle =
+      "C23 Engine: SDL2 v." STR(VERSION_MAJOR) "." STR(VERSION_MINOR)
+          STR(VERSION_PATCH) STR(VERSION_ALT) " FPS:";
   Application();
   ~Application();
 
@@ -47,6 +48,8 @@ public:
   SDL_Renderer *getRenderer() { return renderer; }
   const int getScreenWidth() { return SCREEN_WIDTH; }
   const int getScreenHeight() { return SCREEN_HEIGHT; }
+  const int getXMouse() { return xMouse; }
+  const int getYMouse() { return yMouse; }
   void setWindow(SDL_Window *new_window) { window = new_window; }
   void setSurface(SDL_Surface *new_surface) { surface = new_surface; }
   void setRenderer(SDL_Renderer *new_renderer) { renderer = new_renderer; }
@@ -72,9 +75,12 @@ public:
 
   int textureWidth = 1920;
   int textureHeight = 32;
-  int frameWidth, frameHeight;
 
-  const int fps = 60;
+  int frameWidth, frameHeight;
+  // Refresh Rate
+  void setRefreshRate();
+
+  int fps = 60;
   int current_fps = 0;
   int frame_time = 0;
 
@@ -87,6 +93,10 @@ private:
   SDL_Surface *surface_temp = NULL;
 
   Terrain *terrain_gen = nullptr; // Terrain Generation
+
+  // Mouse
+  bool mouseDown;
+  int xMouse, yMouse;
 
   // Rectangles
   SDL_Rect *titleRect; // Title Location rectangle

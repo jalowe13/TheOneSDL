@@ -19,6 +19,7 @@ Application::Application() {
 #ifdef _WIN32
   startTime = GetTickCount();
   endTime = GetTickCount();
+  setRefreshRate();
 #else
   startTime = linux_tick();
   endTime = linux_tick();
@@ -33,9 +34,9 @@ bool Application::init() {
   try {
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
       std::cout << "-----SDL Init Done" << std::endl;
-      window = SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_CENTERED,
-                                SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH,
-                                SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+      window = SDL_CreateWindow(
+          windowTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+          SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
       if (!window) {
         throw "Window creation failed!";
@@ -70,10 +71,27 @@ bool Application::init() {
   }
 }
 
+void Application::setRefreshRate() {
+  DEVMODE dm;
+  dm.dmSize = sizeof(dm);
+  EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dm);
+  this->fps = dm.dmDisplayFrequency;
+  std::cout << "Refresh Rate: " << this->fps << std::endl;
+}
+
 void Application::handleEvents() {
   SDL_Event event;
   SDL_PollEvent(&event);
   switch (event.type) {
+  case SDL_MOUSEMOTION:
+    SDL_GetMouseState(&xMouse, &yMouse);
+    break;
+  case SDL_MOUSEBUTTONDOWN:
+    mouseDown = true;
+    break;
+  case SDL_MOUSEBUTTONUP:
+    mouseDown = false;
+    break;
   case SDL_QUIT:
     gameRunning = false;
     break;

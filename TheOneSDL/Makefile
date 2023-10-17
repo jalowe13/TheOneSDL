@@ -4,41 +4,59 @@
 CXX=g++
 
 
-
+EXE = TheOne
+IMGUI_DIR = ./imgui
 # VCPKG Source using the current user profile
-MSYS2_ROOT := C:/vcpkg
+MSYS2_ROOT := C:/msys32
 MSYS2_TARGET_TRIPLET := mingw64
+
+#Icon
+# Application Icon
+ICON = icon.ico
+# Resource Script
+RC = icon.rc
+# Icon Object
+RES = icon.o
+
+# Im GUI Compilation
+SOURCES = main.cpp
+SOURCES += $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_demo.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_tables.cpp $(IMGUI_DIR)/imgui_widgets.cpp
+SOURCES += $(IMGUI_DIR)/backends/imgui_impl_sdl2.cpp $(IMGUI_DIR)/backends/imgui_impl_sdlrenderer2.cpp
+# Game Compilation
+SOURCES += Application.cpp Player.cpp Enemy.cpp Physics.cpp Terrain.cpp
+OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
 
 
 # Swap between Windows and Unix installs
 ifeq ($(OS),Windows_NT)
     RM = del /Q
-	CXXFLAGS = -I$(MSYS2_ROOT)/$(MSYS2_TARGET_TRIPLET)/include
-	LDFLAGS := -L$(MSYS2_ROOT)/$(MSYS2_TARGET_TRIPLET)/lib
-	LIB_LIST = -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image -ljsoncpp -static-libgcc -static-libstdc++
+	ECHO_MESSAGE = "MinGW"
+	CXXFLAGS = -std=c++11 -I$(MSYS2_ROOT)/$(MSYS2_TARGET_TRIPLET)/include  -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends
+	LDFLAGS := -L$(MSYS2_ROOT)/$(MSYS2_TARGET_TRIPLET)/lib 
+	CXXFLAGS += -g -Wall -Wformat
+	LIB_LIST = -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image -ljsoncpp -static-libgcc -static-libstdc++ -lgdi32 -lopengl32 -limm32
 else
     RM = rm -f
 	LDFLAGS= -Lusr/include
 	LIB_LIST = -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image -ljsoncpp
 endif
 
+%.o:%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
+%.o:$(IMGUI_DIR)/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-all: TheOne
-TheOne: main.o Application.o Player.o Enemy.o Physics.o Terrain.o
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) main.o Application.o Player.o Enemy.o Physics.o Terrain.o -o TheOne  $(LIB_LIST)
-Application.o: Application.cpp
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c Application.cpp $(LIB_LIST)
-main.o: main.cpp
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c main.cpp $(LIB_LIST)
-Player.o: Player.cpp
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c Player.cpp $(LIB_LIST)
-Enemy.o: Enemy.cpp
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c Enemy.cpp $(LIB_LIST)
-Physics.o: Physics.cpp
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c Physics.cpp $(LIB_LIST)
-Terrain.o: Terrain.cpp
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c Terrain.cpp $(LIB_LIST)
+%.o:$(IMGUI_DIR)/backends/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+$(RES): $(RC)
+	windres -O coff -i $(RC) -o $(RES)
+
+all: $(EXE)
+	@echo Build complete for $(ECHO_MESSAGE)
+$(EXE): $(OBJS) $(RES)
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIB_LIST)
 
 # Swap between Windows and Unix installs
 ifeq ($(OS),Windows_NT)

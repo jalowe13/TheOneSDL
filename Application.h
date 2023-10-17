@@ -3,7 +3,7 @@
 
 // Version Number
 #define VERSION_MAJOR 0
-#define VERSION_MINOR 26
+#define VERSION_MINOR 27
 #define VERSION_PATCH
 #define VERSION_ALT -minimal
 #define STR_HELPER(x) #x // convert to fit window title

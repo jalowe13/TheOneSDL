@@ -20,6 +20,7 @@ TheOneSDL/.vscode/tasks.json
 TheOneSDL/.vscode/launch.json
 *.mp4
 *.o
+*.gch
 TheOneSDL/TheOne.exe
 TheOneSDL/TheOne
 TheOneSDL/build
@@ -27,3 +28,4 @@ TheOneSDL/build
 *.lnk
 *.zip
 *.exe
+imguiclone/imgui/

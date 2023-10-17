@@ -58,16 +58,6 @@ all: $(EXE)
 $(EXE): $(OBJS) $(RES)
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIB_LIST)
 
-# all: C23Engine 
-# C23Engine: main.o Application.o icon.o 
-# 	$(CXX) $(CXXFLAGS) $(LDFLAGS) main.o Application.o icon.o -o engine  $(LIB_LIST)
-# main.o: main.cpp
-# 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c main.cpp $(LIB_LIST)
-# Application.o: Application.cpp
-# 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c Application.cpp $(LIB_LIST)
-# icon.o: icon.rc
-# 	windres -O coff -i icon.rc -o icon.o
-
 # Swap between Windows and Unix installs
 ifeq ($(OS),Windows_NT)
     RM = del /Q

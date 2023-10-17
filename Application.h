@@ -3,7 +3,7 @@
 
 // Version Number
 #define VERSION_MAJOR 0
-#define VERSION_MINOR 27
+#define VERSION_MINOR 28
 #define VERSION_PATCH
 #define VERSION_ALT -minimal
 #define STR_HELPER(x) #x // convert to fit window title
@@ -18,6 +18,10 @@
 #include <fstream>
 #include <iostream>
 #include <json/json.h>
+
+#include "imgui.h"
+#include "imgui_impl_sdl2.h"
+#include "imgui_impl_sdlrenderer2.h"
 
 // PreProcessor Declerations
 #ifdef _WIN32
@@ -94,6 +98,11 @@ private:
 
   Terrain *terrain_gen = nullptr; // Terrain Generation
 
+  // ImGui
+  ImGuiIO io;
+  bool show_demo_window = true;
+  bool show_another_window = false;
+  ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
   // Mouse
   bool mouseDown;
   int xMouse, yMouse;

@@ -56,6 +56,19 @@ bool Application::init() {
 
       std::cout << "-----Renderer Created" << std::endl;
 
+      std::cout << "-----Start ImGUI\n";
+      IMGUI_CHECKVERSION();
+      ImGui::CreateContext();
+      io = ImGui::GetIO();
+      io.ConfigFlags |=
+          ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+      io.ConfigFlags |=
+          ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
+      ImGui::StyleColorsDark();
+      // Setup Platform/Renderer backends
+      ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
+      ImGui_ImplSDLRenderer2_Init(renderer);
+      std::cout << "-----ImGUI Created" << std::endl;
       // Loading texture memory
       SDL_Texture *temp_tex = NULL;
 
@@ -82,6 +95,7 @@ void Application::setRefreshRate() {
 void Application::handleEvents() {
   SDL_Event event;
   SDL_PollEvent(&event);
+  ImGui_ImplSDL2_ProcessEvent(&event);
   switch (event.type) {
   case SDL_MOUSEMOTION:
     SDL_GetMouseState(&xMouse, &yMouse);
@@ -139,10 +153,31 @@ void Application::update() // Update Logic
 }
 
 void Application::render() {
-  SDL_RenderClear(renderer); // Clear Screen
-  // C++ Unique Pointers, References and Ownership
+  SDL_SetRenderDrawColor(
+      renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255),
+      (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
+  if (debugMode) {
+    // Start the Dear ImGui frame
+    ImGui_ImplSDLRenderer2_NewFrame();
+    ImGui_ImplSDL2_NewFrame();
+    ImGui::NewFrame();
+    // Frame actions
+    static float f = 0.0f;
+    static int counter = 0;
+    ImGui::Text("Hello, world %d", 123);
+    ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
 
-  SDL_RenderPresent(renderer);
+    // Rendering Frame
+    ImGui::Render();
+    SDL_RenderSetScale(renderer, io.DisplayFramebufferScale.x,
+                       io.DisplayFramebufferScale.y);
+    SDL_RenderClear(renderer);
+    ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
+    SDL_RenderPresent(renderer);
+  } else {
+    SDL_RenderClear(renderer);
+    SDL_RenderPresent(renderer);
+  }
 }
 
 void Application::clean() {

@@ -2,6 +2,9 @@
  The One created with C++ and SDL2
  Tileset Game Engine Prototype made with SDL2 and C++
 
+ Includes ImGui for debug window buttons and prompts
+ https://github.com/ocornut/imgui
+
 # Jacob Lowe
 
 # Instructions to compile

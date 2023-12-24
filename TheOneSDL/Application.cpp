@@ -225,10 +225,6 @@ void Application::update() // Update Logic
 {
   // Logic first before rendering texture
   // Logic --> Physics --> Render Fix!!
-  // Update texture needs to go into render
-  player->updateTexture(phys_eng, terrain_gen); // Update players texture
-  enemy->updateTexture(phys_eng, terrain_gen);  // Update enemy texture
-  // This is fine
   player->checkCollision(
       phys_eng->checkRectCollision(player->getHitboxRect(), terrain_gen),
       phys_eng); // Check player collision with terrain
@@ -236,6 +232,8 @@ void Application::update() // Update Logic
 }
 
 void Application::render() {
+  player->updateTexture(phys_eng, terrain_gen); // Update players texture
+  enemy->updateTexture(phys_eng, terrain_gen);  // Update enemy texture
   SDL_RenderClear(renderer); // Clear Screen
 
   if (debugMode) {

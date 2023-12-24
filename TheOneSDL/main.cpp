@@ -26,6 +26,7 @@ int main(int argc, char* args[])
 	app->init();
 
 	Uint32 starting_tick;
+	Uint32 fps_update_timer = 0;
 	
 	//Application loop
 	while (app->running())
@@ -47,7 +48,14 @@ int main(int argc, char* args[])
 		SDL_SetWindowTitle(app->getWindow(),currentFPS.c_str());
 
 		app->current_fps = 1.0f / elapsed_time; // pass to application current fps
-	
+
+		// Update frames only every second
+		if (SDL_GetTicks64() - fps_update_timer > 1000) {
+        std::stringstream ss;
+        ss << app->windowTitle << app->current_fps;
+        SDL_SetWindowTitle(app->getWindow(), ss.str().c_str());
+        fps_update_timer = SDL_GetTicks64();
+		}
 	}
 	app->clean();
 	delete app;

@@ -28,3 +28,4 @@ TheOneSDL/build
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/settings.json
+TheOneSDL/.vscode/extensions.json

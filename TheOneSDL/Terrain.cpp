@@ -123,7 +123,6 @@ void Terrain::generateText(const char* text, int x, int y, int scale)
 
 bool Terrain::fillScreen()
 {
-	SDL_Texture* textureFilled;
 	char tile = '~';
 	SDL_Texture* texture = NULL;
 	std::string name;
@@ -227,7 +226,7 @@ void Terrain::loadLevel(std::string level)
 		std::cout << "!!!!Error Parsing: Level Data is not an Array\n";
 	}
 
-	for (int i = 0; i < lvl_data.size(); i++) // Iterate through level data
+	for (int i = 0; i < static_cast<int>(lvl_data.size()); i++) // Iterate through level data
 	{
 		std::string level_name = lvl_data[i]["name"].asString(); // Grab level name
 		if (level_name == level)
@@ -263,7 +262,7 @@ void Terrain::loadTilemap(Json::Value json_tilemap, int map_type)
 	{
 		std::cout << "Error: Tilemap of type " << map_type << " is size " << json_tilemap.size();
 	}
-	for (int j = 0; j < json_tilemap.size(); j++)
+	for (int j = 0; j < static_cast<int>(json_tilemap.size()); j++)
 	{
 		for (char c : json_tilemap[j].asString()) // Grab new char
 		{
@@ -300,7 +299,7 @@ void Terrain::print_allBlockInfo()
 {
 	std::cout << "Start\n";
 	std::cout << "Blocks" << blocks.size() << std::endl;
-	for (int i = 0; i < blocks.size(); i++)
+	for (std::vector<Block>::size_type i = 0; i < blocks.size(); i++)
 	{
 		blocks[i].print_blockInfo();
 	}

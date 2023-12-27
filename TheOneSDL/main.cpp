@@ -3,7 +3,7 @@
 #include "resource.h" //sounds
 
 #include <string>
-#pragma comment(lib, "winmm.lib")
+// #pragma comment(lib, "winmm.lib")
 
 
 
@@ -12,7 +12,7 @@ Application* app = NULL; //Pointer to the app
 
 
 
-void framerate_cap(Uint32 frame, const int fps)
+void framerate_cap(Uint32 frame, const Uint64 fps)
 {
 	if ((1000 / fps) > SDL_GetTicks64() - frame)
 	{

@@ -69,10 +69,7 @@ bool Application::init() {
       ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
       ImGui_ImplSDLRenderer2_Init(renderer);
       std::cout << "-----ImGUI Created" << std::endl;
-
-      // Loading texture memory
-      SDL_Texture *temp_tex = NULL;
-
+      
       // Create Player This needs to be changed to be added in the tilemap
       //  renderer is passed in to load the texture
       //  If the memory is owned by the class and not shared outside of the
@@ -85,14 +82,14 @@ bool Application::init() {
       // raw pointers for viewing  (careful with these!)
 
       player = new Player(renderer); // make share ptr for different classes
-      enemy = new Enemy(renderer);
-
       if (!player) {
         throw "Player allocation failed.";
       }
-      if (!enemy) {
-        throw "Enemy allocation failed.";
-      }
+      // Create Enemy
+      //enemy = new Enemy(renderer);
+      // if (!enemy) {
+      //   throw "Enemy allocation failed.";
+      // }
       // Create Texture loader
 
       // Unique make share
@@ -200,17 +197,17 @@ void Application::handleEvents() {
       std::cout << "Debug Mode: " << debugMode << std::endl;
       break;
     }
-    case SDLK_KP_0: {
+    case SDLK_1: {
       if (debugMode)
         terrain_gen->loadLevel("DefaultLoad");
       break;
     }
-    case SDLK_KP_1: {
+    case SDLK_2: {
       if (debugMode)
         terrain_gen->loadLevel("Room");
       break;
     }
-    case SDLK_KP_2: {
+    case SDLK_3: {
       if (debugMode)
         terrain_gen->loadLevel("EmptyFloor");
     }
@@ -232,8 +229,9 @@ void Application::update() // Update Logic
 }
 
 void Application::render() {
+  // This should change for updating all entities
   player->updateTexture(phys_eng, terrain_gen); // Update players texture
-  enemy->updateTexture(phys_eng, terrain_gen);  // Update enemy texture
+  //enemy->updateTexture(phys_eng, terrain_gen);  // Update enemy texture
   SDL_RenderClear(renderer); // Clear Screen
 
   if (debugMode) {
@@ -265,8 +263,8 @@ void Application::render() {
     }
 
     // Enemies
-    SDL_RenderCopy(renderer, enemy->getTexture(), enemy->getRectTex(),
-                   enemy->getRect());
+    //SDL_RenderCopy(renderer, enemy->getTexture(), enemy->getRectTex(),
+    //               enemy->getRect());
     // Player
     SDL_RenderCopy(renderer, player->getTexture(), player->getRectTex(),
                    player->getRect());

@@ -4,7 +4,7 @@
 // Version Number
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 29
-#define VERSION_PATCH .1
+#define VERSION_PATCH .2
 #define STR_HELPER(x) #x // convert to fit window title
 #define STR(x) STR_HELPER(x)
 
@@ -87,9 +87,9 @@ public:
   int textureHeight = 32;
   int frameWidth, frameHeight;
 
-  int fps = 60;
-  int current_fps = 0;
-  int frame_time = 0;
+  Uint64 fps = 60;
+  Uint64 current_fps = 0;
+  Uint64 frame_time = 0;
 
 private:
   // Pointers

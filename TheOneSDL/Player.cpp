@@ -294,6 +294,15 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 			tilemap_y = round(getY()/32);
 			break;
 		}
+		case Up:
+		{
+			std::cout << "Unknown call in handle movement in x direction 'Up'\n";
+			exit(1);
+		}
+		case Down:{
+			std::cout << "Unknown call in handle movement in x direction 'Down'\n";
+			exit(1);
+		}
 		case None:
 		{
 			if(inAnimation)
@@ -331,6 +340,14 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 				inAnimation = true;
 			}
 		}
+		case Left:{
+			std::cout << "Unknown call in handle movement in y direction 'Left'\n";
+			exit(1);
+		}
+		case Right:{
+			std::cout << "Unknown call in handle movement in y direction 'Right'\n";
+			exit(1);
+		}
 		case None: // No input
 		{
 			playerFalling = true;
@@ -355,6 +372,21 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 			xEdit(getX() - getSpeed());
 			break;
 		}
+		case Up:
+		{
+			std::cout << "Unknown call in bounds check in x direction 'Up'\n";
+			exit(1);
+		}
+		case Down:
+		{
+			std::cout << "Unknown call in bounds check in x direction 'Down'\n";
+			exit(1);
+		}
+		case None:
+		{
+			std::cout << "Unknown call in bounds check in x direction 'None'\n";
+			exit(1);
+		}
 		}
 		switch (yPath())
 		{
@@ -367,6 +399,21 @@ void Player::handleMovement(Physics* phys_eng, Terrain* terrain_eng)
 		{
 			yEdit(getY() - getSpeed());
 			break;
+		}
+		case Left:
+		{
+			std::cout << "Unknown call in bounds check in y direction 'Left'\n";
+			exit(1);
+		}
+		case Right:
+		{
+			std::cout << "Unknown call in bounds check in y direction 'Right'\n";
+			exit(1);
+		}
+		case None:
+		{
+			std::cout << "Unknown call in bounds check in y direction 'None'\n";
+			exit(1);
 		}
 		}
 		// Reset if out of bounds

@@ -69,7 +69,7 @@ bool Application::init() {
       ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
       ImGui_ImplSDLRenderer2_Init(renderer);
       std::cout << "-----ImGUI Created" << std::endl;
-      
+
       // Create Player This needs to be changed to be added in the tilemap
       //  renderer is passed in to load the texture
       //  If the memory is owned by the class and not shared outside of the
@@ -86,7 +86,7 @@ bool Application::init() {
         throw "Player allocation failed.";
       }
       // Create Enemy
-      //enemy = new Enemy(renderer);
+      // enemy = new Enemy(renderer);
       // if (!enemy) {
       //   throw "Enemy allocation failed.";
       // }
@@ -153,21 +153,21 @@ void Application::handleEvents() {
   case SDL_KEYDOWN:
     switch (event.key.keysym.sym) {
     case SDLK_w: {
-      player->yPathEdit(Up);
+      player->yPathEdit(Entity::Up);
       player->editMS(3);
       break;
     }
     case SDLK_a: {
-      player->xPathEdit(Left);
+      player->xPathEdit(Entity::Left);
       player->editMS(2);
       break;
     }
     case SDLK_s: {
-      player->yPathEdit(Down);
+      player->yPathEdit(Entity::Down);
       break;
     }
     case SDLK_d: {
-      player->xPathEdit(Right);
+      player->xPathEdit(Entity::Right);
       player->editMS(2);
       break;
     }
@@ -176,19 +176,19 @@ void Application::handleEvents() {
   case SDL_KEYUP:
     switch (event.key.keysym.sym) {
     case SDLK_w: {
-      player->yPathEdit(None);
+      player->yPathEdit(Entity::None);
       break;
     }
     case SDLK_a: {
-      player->xPathEdit(None);
+      player->xPathEdit(Entity::None);
       break;
     }
     case SDLK_s: {
-      player->yPathEdit(None);
+      player->yPathEdit(Entity::None);
       break;
     }
     case SDLK_d: {
-      player->xPathEdit(None);
+      player->xPathEdit(Entity::None);
       break;
     }
     // Debug Mode Toggle
@@ -231,7 +231,7 @@ void Application::update() // Update Logic
 void Application::render() {
   // This should change for updating all entities
   player->updateTexture(phys_eng, terrain_gen); // Update players texture
-  //enemy->updateTexture(phys_eng, terrain_gen);  // Update enemy texture
+  // enemy->updateTexture(phys_eng, terrain_gen);  // Update enemy texture
   SDL_RenderClear(renderer); // Clear Screen
 
   if (debugMode) {
@@ -263,7 +263,7 @@ void Application::render() {
     }
 
     // Enemies
-    //SDL_RenderCopy(renderer, enemy->getTexture(), enemy->getRectTex(),
+    // SDL_RenderCopy(renderer, enemy->getTexture(), enemy->getRectTex(),
     //               enemy->getRect());
     // Player
     SDL_RenderCopy(renderer, player->getTexture(), player->getRectTex(),

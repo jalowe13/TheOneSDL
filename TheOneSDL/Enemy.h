@@ -1,7 +1,11 @@
 #ifndef ENEMY_HPP
 #define ENEMY_HPP
 
-#include "Terrain.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <fstream>
+#include <iostream>
+#include <list>
 #include <map>
 #include <string>
 

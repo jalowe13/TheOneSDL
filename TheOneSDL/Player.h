@@ -1,21 +1,16 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include "Terrain.h"
+#include "Entity.h"
+#include "Physics.h"
 #include <list>
 #include <map>
 #include <string>
-#include <vector>
-
 
 class Terrain;
 class Physics;
 
-enum MovementDirection { Up, Down, Left, Right, None };
-
-enum LookingDirection { LookRight, LookLeft };
-
-class Player {
+class Player : public Entity {
 public:
   Player(SDL_Renderer *default_texture);
   ~Player();
@@ -24,8 +19,8 @@ public:
 
   // Getters
   const float getSpeed();
-  MovementDirection xPath();
-  MovementDirection yPath();
+  Entity::MovementDirection xPath();
+  Entity::MovementDirection yPath();
   int getX();
   int getY();
   float getMS();
@@ -35,8 +30,8 @@ public:
   SDL_Rect *getHitboxRect();
 
   // Setters
-  void xPathEdit(MovementDirection path);
-  void yPathEdit(MovementDirection path);
+  void xPathEdit(Entity::MovementDirection path);
+  void yPathEdit(Entity::MovementDirection path);
   void xEdit(int x);
   void yEdit(int y);
   void wEdit(int w);
@@ -91,8 +86,8 @@ private:
 
   SDL_Texture *player_texture = NULL;
 
-  MovementDirection currentDirectionX = None;
-  MovementDirection currentDirectionY = None;
+  Entity::MovementDirection currentDirectionX = None;
+  Entity::MovementDirection currentDirectionY = None;
   float movementModifier;
 
   int textureWidth, textureHeight, frameWidth, frameHeight;

@@ -4,7 +4,7 @@
 // Version Number
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 29
-#define VERSION_PATCH .2
+#define VERSION_PATCH .3
 #define STR_HELPER(x) #x // convert to fit window title
 #define STR(x) STR_HELPER(x)
 
@@ -12,13 +12,7 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-
-#include "Enemy.h"
-#include "Physics.h"
-#include "Player.h"
-#include "Terrain.h"
+// External Libraries
 #include "imgui.h"
 #include "imgui_impl_sdl2.h"
 #include "imgui_impl_sdlrenderer2.h"
@@ -27,6 +21,13 @@
 #include <fstream>
 #include <iostream>
 #include <json/json.h>
+
+// Internal Libraries
+#include "Enemy.h"
+#include "Entity.h"
+#include "Physics.h"
+#include "Player.h"
+#include "Terrain.h"
 
 // PreProcessor Declerations
 #ifdef _WIN32

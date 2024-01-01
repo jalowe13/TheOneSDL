@@ -1,5 +1,4 @@
-#ifndef PLAYER_HPP
-#define PLAYER_HPP
+#pragma once
 
 #include "Entity.h"
 #include "Physics.h"
@@ -106,4 +105,3 @@ private:
   int frame_time;
   bool inAnimation = false; // toggle to lock animation canceling
 };
-#endif

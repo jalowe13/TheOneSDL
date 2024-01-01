@@ -1,5 +1,4 @@
-#ifndef ENEMY_HPP
-#define ENEMY_HPP
+#pragma once
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -54,4 +53,3 @@ private:
   int textureWidth, textureHeight, frameWidth, frameHeight, frame_time;
   bool inAnimation = false; // toggle to lock animation canceling
 };
-#endif

@@ -1,10 +1,9 @@
-#ifndef APPLICATION_HPP
-#define APPLICATION_HPP
+#pragma once
 
 // Version Number
 #define VERSION_MAJOR 0
-#define VERSION_MINOR 29
-#define VERSION_PATCH .3
+#define VERSION_MINOR 30
+#define VERSION_PATCH
 #define STR_HELPER(x) #x // convert to fit window title
 #define STR(x) STR_HELPER(x)
 
@@ -22,13 +21,6 @@
 #include <iostream>
 #include <json/json.h>
 
-// Internal Libraries
-#include "Enemy.h"
-#include "Entity.h"
-#include "Physics.h"
-#include "Player.h"
-#include "Terrain.h"
-
 // PreProcessor Declerations
 #ifdef _WIN32
 #include <windows.h>
@@ -38,11 +30,17 @@
 
 #endif
 
-// Some forward declerations for pointers
-class Player;
+// Forward declarations for internal classes
 class Enemy;
-class Terrain;
+class Entity;
 class Physics;
+class Terrain;
+
+// Include internal headers after forward declarations
+#include "Enemy.h"
+#include "Entity.h"
+#include "Physics.h"
+#include "Terrain.h"
 
 class Application {
 public:
@@ -125,7 +123,7 @@ private:
   SDL_Texture *fancy_text = nullptr;
 
   // Temporary pointers for enemy and player instantiation
-  Player *player = NULL;
+  Entity *entity = NULL;
   Enemy *enemy = NULL;
 
   // Game Variables
@@ -136,5 +134,3 @@ private:
   int timeDifference;
   float frameAverage;
 };
-
-#endif

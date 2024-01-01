@@ -1,5 +1,4 @@
-#ifndef TERRAIN_HPP
-#define TERRAIN_HPP
+#pragma once
 
 #include "Application.h"
 #include <deque>
@@ -9,7 +8,6 @@
 #include <regex>
 #include <tuple>
 #include <vector>
-
 
 // Block to be rendered by the terrain
 class Block {
@@ -239,4 +237,4 @@ private:
   SDL_Renderer *renderer;
 };
 
-#endif
+#pragma once

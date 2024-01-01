@@ -81,9 +81,9 @@ bool Application::init() {
 
       // raw pointers for viewing  (careful with these!)
 
-      player = new Player(renderer); // make share ptr for different classes
-      if (!player) {
-        throw "Player allocation failed.";
+      entity = new Entity(renderer); // make share ptr for different classes
+      if (!entity) {
+        throw "Entity allocation failed.";
       }
       // Create Enemy
       // enemy = new Enemy(renderer);
@@ -153,22 +153,22 @@ void Application::handleEvents() {
   case SDL_KEYDOWN:
     switch (event.key.keysym.sym) {
     case SDLK_w: {
-      player->yPathEdit(Entity::Up);
-      player->editMS(3);
+      entity->yPathEdit(Entity::Up);
+      entity->editMS(3);
       break;
     }
     case SDLK_a: {
-      player->xPathEdit(Entity::Left);
-      player->editMS(2);
+      entity->xPathEdit(Entity::Left);
+      entity->editMS(2);
       break;
     }
     case SDLK_s: {
-      player->yPathEdit(Entity::Down);
+      entity->yPathEdit(Entity::Down);
       break;
     }
     case SDLK_d: {
-      player->xPathEdit(Entity::Right);
-      player->editMS(2);
+      entity->xPathEdit(Entity::Right);
+      entity->editMS(2);
       break;
     }
     }
@@ -176,19 +176,19 @@ void Application::handleEvents() {
   case SDL_KEYUP:
     switch (event.key.keysym.sym) {
     case SDLK_w: {
-      player->yPathEdit(Entity::None);
+      entity->yPathEdit(Entity::None);
       break;
     }
     case SDLK_a: {
-      player->xPathEdit(Entity::None);
+      entity->xPathEdit(Entity::None);
       break;
     }
     case SDLK_s: {
-      player->yPathEdit(Entity::None);
+      entity->yPathEdit(Entity::None);
       break;
     }
     case SDLK_d: {
-      player->xPathEdit(Entity::None);
+      entity->xPathEdit(Entity::None);
       break;
     }
     // Debug Mode Toggle
@@ -222,15 +222,15 @@ void Application::update() // Update Logic
 {
   // Logic first before rendering texture
   // Logic --> Physics --> Render Fix!!
-  player->checkCollision(
-      phys_eng->checkRectCollision(player->getHitboxRect(), terrain_gen),
-      phys_eng); // Check player collision with terrain
+  entity->checkCollision(
+      phys_eng->checkRectCollision(entity->getHitboxRect(), terrain_gen),
+      phys_eng); // Check entity collision with terrain
                  // terrain_gen->fillScreen(); // Update textures and rectangles
 }
 
 void Application::render() {
   // This should change for updating all entities
-  player->updateTexture(phys_eng, terrain_gen); // Update players texture
+  entity->updateTexture(phys_eng, terrain_gen); // Update entity texture
   // enemy->updateTexture(phys_eng, terrain_gen);  // Update enemy texture
   SDL_RenderClear(renderer); // Clear Screen
 
@@ -265,14 +265,14 @@ void Application::render() {
     // Enemies
     // SDL_RenderCopy(renderer, enemy->getTexture(), enemy->getRectTex(),
     //               enemy->getRect());
-    // Player
-    SDL_RenderCopy(renderer, player->getTexture(), player->getRectTex(),
-                   player->getRect());
+    // Entity
+    SDL_RenderCopy(renderer, entity->getTexture(), entity->getRectTex(),
+                   entity->getRect());
 
     // Hitbox Rendering
-    if (player->hitboxCheck()) {
+    if (entity->hitboxCheck()) {
       SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-      SDL_RenderDrawRect(renderer, player->getHitboxRect());
+      SDL_RenderDrawRect(renderer, entity->getHitboxRect());
       SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
     }
   }
@@ -280,7 +280,7 @@ void Application::render() {
 }
 
 void Application::clean() {
-  delete player; // Destroy player memory //unique ptr would take care of this
+  delete entity; // Destroy entity memory //unique ptr would take care of this
   delete terrain_gen;
   SDL_DestroyWindow(window); // destroy the window
   SDL_Quit();                // quit and delete all SDL

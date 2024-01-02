@@ -71,4 +71,4 @@ cleanall:
 
 # Clean specific object file, used more if a header file is edited and not detected as a change
 clean:
-	$(RM) $(addsuffix .o,$(filter-out $@,$(MAKECMDGOALS)))
+	$(RM) $(filter-out $@,$(MAKECMDGOALS:%=%.o))

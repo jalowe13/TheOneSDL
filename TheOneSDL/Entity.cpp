@@ -2,7 +2,7 @@
 #include "Player.h"
 #include <cmath>
 
-Entity::Entity(SDL_Renderer *renderer, int x, int y, EntityType type) {
+Entity::Entity(SDL_Renderer *renderer, int x, int y) {
   // Rectangles
   entityR.h = 32;
   entityR.w = 32;
@@ -27,38 +27,12 @@ Entity::Entity(SDL_Renderer *renderer, int x, int y, EntityType type) {
   frameHeight = textureHeight;
   frame_time = 0;
 
-  const char *filename; // Filename to load
-  SDL_Texture *texture; // Default texture pointer
-
   // Load Textures
   // Load filenames
   std::cout << "Loading Entity Textures...\n";
-  std::list<std::string> tex_files = {idle_left, idle_right, run_left,
-                                      run_right, sit};
-  std::list<std::string> tex_names = {"idle_left", "idle_right", "run_left",
-                                      "run_right", "sit"};
-
-  while (tex_files.size() > 0) {
-    std::string new_file = tex_files.front().c_str(); // Reference from front
-    filename = new_file.c_str();
-    std::string name = tex_names.front();
-    tex_names.pop_front(); // pop
-    tex_files.pop_front();
-    texture = IMG_LoadTexture(renderer, filename);
-    SDL_QueryTexture(texture, NULL, NULL, &textureWidth, &textureHeight);
-    textures[name] = texture;
-    // std::cout << "Entity.cpp: Texture loaded " << name << " with path:" <<
-    // filename << " with dims " << textureWidth << " and " << textureHeight <<
-    // std::endl;
-    if (textures[name] == 0 || textureWidth == 0 || textureHeight == 0) {
-      std::cout << "!!!!!" << name << " failed to load from path " << filename
-                << "!!!!!" << std::endl;
-      exit(-1);
-    }
-  }
 
   editMS(3); // push default speed
-  setTexture(textures["idle_right"]);
+
   std::cout << "-----Entity Created\n";
 }
 
@@ -146,8 +120,33 @@ void Entity::set_tilemap_pos(int x, int y) {
   tilemap_y = y;
 }
 // Methods
+void Entity::loadTextures(SDL_Renderer *renderer) {
+  std::cout << "Load Textures\n";
+  const char *filename; // Filename to load
+  SDL_Texture *texture; // Default texture pointer
+  while (tex_files.size() > 0) {
+    std::string new_file = tex_files.front().c_str(); // Reference from front
+    filename = new_file.c_str();
+    std::string name = tex_names.front();
+    tex_names.pop_front(); // pop
+    tex_files.pop_front();
+    texture = IMG_LoadTexture(renderer, filename);
+    SDL_QueryTexture(texture, NULL, NULL, &textureWidth, &textureHeight);
+    textures[name] = texture;
+    // std::cout << "Entity.cpp: Texture loaded " << name << " with path:" <<
+    // filename << " with dims " << textureWidth << " and " << textureHeight
+    // << std::endl;
+    if (textures[name] == 0 || textureWidth == 0 || textureHeight == 0) {
+      std::cout << "!!!!!" << name << " failed to load from path " << filename
+                << "!!!!!" << std::endl;
+      exit(-1);
+    }
+  }
+  std::cout << "Textures done loading\n";
+}
 
 // Updating Texture per frame time
+
 void Entity::updateTexture(Physics *phys_eng, Terrain *terrain_eng) {
   xTexEdit(getTexX() + frameWidth);
   if (getTexX() >= textureWidth) // Reset back to the end of the texture
@@ -289,15 +288,15 @@ void Entity::handleMovement(Physics *phys_eng, Terrain *terrain_eng) {
     }
     case Up: {
       std::cout << "Unknown call in bounds check in x direction 'Up'\n";
-      exit(1);
+      // exit(1);
     }
     case Down: {
       std::cout << "Unknown call in bounds check in x direction 'Down'\n";
       exit(1);
     }
     case None: {
-      std::cout << "Unknown call in bounds check in x direction 'None'\n";
-      exit(1);
+      // std::cout << "Unknown call in bounds check in x direction 'None'\n";
+      // exit(1);
     }
     }
     switch (yPath()) {
@@ -318,8 +317,8 @@ void Entity::handleMovement(Physics *phys_eng, Terrain *terrain_eng) {
       exit(1);
     }
     case None: {
-      std::cout << "Unknown call in bounds check in y direction 'None'\n";
-      exit(1);
+      // std::cout << "Unknown call in bounds check in y direction 'None'\n";
+      //  exit(1);
     }
     }
     // Reset if out of bounds

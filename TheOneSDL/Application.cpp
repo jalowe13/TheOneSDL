@@ -84,8 +84,8 @@ bool Application::init() {
       if (!entityManager) {
         throw "EntityManager allocation failed.";
       }
-      entity =
-          std::make_unique<Entity>(renderer, 1, 16, Entity::EntityType::Player);
+      std::unique_ptr<Entity> entity =
+          std::make_unique<Player>(renderer, 1, 16);
       entityManager->addEntity(std::move(entity));
       if (entityManager->getEntityCount() == 0) {
         throw "Entity allocation failed.";

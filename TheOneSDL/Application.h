@@ -2,7 +2,7 @@
 
 // Version Number
 #define VERSION_MAJOR 0
-#define VERSION_MINOR 31
+#define VERSION_MINOR 32
 #define VERSION_PATCH
 #define STR_HELPER(x) #x // convert to fit window title
 #define STR(x) STR_HELPER(x)
@@ -42,6 +42,7 @@ class Terrain;
 #include "Entity.h"
 #include "EntityManager.h"
 #include "Physics.h"
+#include "Player.h"
 #include "Terrain.h"
 
 class Application {
@@ -127,7 +128,6 @@ private:
   // Temporary pointers for enemy and player instantiation
   std::unique_ptr<EntityManager> entityManager = NULL;
   std::unique_ptr<Entity> player = NULL;
-  std::unique_ptr<Entity> entity = NULL;
   Enemy *enemy = NULL;
 
   // Game Variables

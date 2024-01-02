@@ -13,8 +13,14 @@ class Terrain;
 class Physics;
 
 class Entity {
+protected:
+  // Textures stored
+  std::list<std::string> tex_files;
+  std::list<std::string> tex_names;
+  std::map<std::string, SDL_Texture *> textures;
+
 public:
-  enum EntityType { Player, Enemy, Projectile };
+  enum EntityType { PLAYER_E, ENEMY_E };
   enum MovementDirection {
     Up,
     Down,
@@ -23,11 +29,10 @@ public:
     None
   };                                             // Movement Direction of
   enum LookingDirection { LookRight, LookLeft }; // Looking Direction of
-  Entity(SDL_Renderer *renderer, int x, int y, EntityType type); // Constructor
+  Entity(SDL_Renderer *renderer, int x, int y);  // Constructor
   ~Entity();
-  // Entity Factory
-  std::unique_ptr<Entity> createEntity(SDL_Renderer *renderer, int x, int y,
-                                       Entity::EntityType type);
+
+  void loadTextures(SDL_Renderer *renderer);
 
   void updateTexture(Physics *phys_eng, Terrain *terrain_eng);
 
@@ -107,15 +112,11 @@ private:
   int textureWidth, textureHeight, frameWidth, frameHeight;
 
   // Filenames
-  std::string idle_left = "textures/VGB/idle/vgb_idle-left-Sheet.png";
-  std::string idle_right = "textures/VGB/idle/vgb_idle-right-Sheet.png";
-  std::string run_left = "textures/VGB/run/vgb_run_left-Sheet.png";
-  std::string run_right = "textures/VGB/run/vgb_run_right-Sheet.png";
-  std::string sit = "textures/VGB/idle/vgb_gamer_idle-Sheet.png";
-  std::list<std::string> tex_files;
-
-  // Textures stored
-  std::map<std::string, SDL_Texture *> textures;
+  // std::string idle_left = "textures/VGB/idle/vgb_idle-left-Sheet.png";
+  // std::string idle_right = "textures/VGB/idle/vgb_idle-right-Sheet.png";
+  // std::string run_left = "textures/VGB/run/vgb_run_left-Sheet.png";
+  // std::string run_right = "textures/VGB/run/vgb_run_right-Sheet.png";
+  // std::string sit = "textures/VGB/idle/vgb_gamer_idle-Sheet.png";
 
   int frame_time;
   bool inAnimation = false; // toggle to lock animation canceling

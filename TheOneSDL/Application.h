@@ -2,7 +2,7 @@
 
 // Version Number
 #define VERSION_MAJOR 0
-#define VERSION_MINOR 30
+#define VERSION_MINOR 31
 #define VERSION_PATCH
 #define STR_HELPER(x) #x // convert to fit window title
 #define STR(x) STR_HELPER(x)
@@ -33,12 +33,14 @@
 // Forward declarations for internal classes
 class Enemy;
 class Entity;
+class EntityManager;
 class Physics;
 class Terrain;
 
 // Include internal headers after forward declarations
 #include "Enemy.h"
 #include "Entity.h"
+#include "EntityManager.h"
 #include "Physics.h"
 #include "Terrain.h"
 
@@ -123,7 +125,9 @@ private:
   SDL_Texture *fancy_text = nullptr;
 
   // Temporary pointers for enemy and player instantiation
-  Entity *entity = NULL;
+  std::unique_ptr<EntityManager> entityManager = NULL;
+  std::unique_ptr<Entity> player = NULL;
+  std::unique_ptr<Entity> entity = NULL;
   Enemy *enemy = NULL;
 
   // Game Variables

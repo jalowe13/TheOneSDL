@@ -3,7 +3,9 @@
 #include <iostream>
 #include <list>
 #include <map>
+#include <memory>
 #include <string>
+
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
@@ -12,6 +14,7 @@ class Physics;
 
 class Entity {
 public:
+  enum EntityType { Player, Enemy, Projectile };
   enum MovementDirection {
     Up,
     Down,
@@ -20,8 +23,11 @@ public:
     None
   };                                             // Movement Direction of
   enum LookingDirection { LookRight, LookLeft }; // Looking Direction of
-  Entity(SDL_Renderer *default_texture);
+  Entity(SDL_Renderer *renderer, int x, int y, EntityType type); // Constructor
   ~Entity();
+  // Entity Factory
+  std::unique_ptr<Entity> createEntity(SDL_Renderer *renderer, int x, int y,
+                                       Entity::EntityType type);
 
   void updateTexture(Physics *phys_eng, Terrain *terrain_eng);
 

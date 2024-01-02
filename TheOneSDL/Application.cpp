@@ -79,12 +79,19 @@ bool Application::init() {
       // weak ptr.lock
       // designed for shared references
 
-      // raw pointers for viewing  (careful with these!)
-
-      entity = new Entity(renderer); // make share ptr for different classes
-      if (!entity) {
+      // Start EntityManger and add an Entity
+      entityManager = std::make_unique<EntityManager>();
+      if (!entityManager) {
+        throw "EntityManager allocation failed.";
+      }
+      entity =
+          std::make_unique<Entity>(renderer, 1, 16, Entity::EntityType::Player);
+      entityManager->addEntity(std::move(entity));
+      if (entityManager->getEntityCount() == 0) {
         throw "Entity allocation failed.";
       }
+      std::cout << "There are now " << entityManager->getEntityCount()
+                << " entities\n";
       // Create Enemy
       // enemy = new Enemy(renderer);
       // if (!enemy) {
@@ -134,6 +141,9 @@ void Application::setRefreshRate() {
 }
 
 void Application::handleEvents() {
+  auto &entity =
+      entityManager->getEntities()[0]; // This needs to be changed to a specific
+                                       // ID reference to the player entity
   SDL_Event event;
   SDL_PollEvent(&event);
   ImGui_ImplSDL2_ProcessEvent(&event);
@@ -222,15 +232,20 @@ void Application::update() // Update Logic
 {
   // Logic first before rendering texture
   // Logic --> Physics --> Render Fix!!
-  entity->checkCollision(
-      phys_eng->checkRectCollision(entity->getHitboxRect(), terrain_gen),
-      phys_eng); // Check entity collision with terrain
-                 // terrain_gen->fillScreen(); // Update textures and rectangles
+  for (auto &entity : entityManager->getEntities()) {
+    entity->checkCollision(
+        phys_eng->checkRectCollision(entity->getHitboxRect(), terrain_gen),
+        phys_eng); // Check entity collision with terrain
+  }
+
+  // terrain_gen->fillScreen(); // Update textures and rectangles
 }
 
 void Application::render() {
   // This should change for updating all entities
-  entity->updateTexture(phys_eng, terrain_gen); // Update entity texture
+  // for (auto &entity : entityManager->getEntities()) {
+  // }
+
   // enemy->updateTexture(phys_eng, terrain_gen);  // Update enemy texture
   SDL_RenderClear(renderer); // Clear Screen
 
@@ -266,21 +281,23 @@ void Application::render() {
     // SDL_RenderCopy(renderer, enemy->getTexture(), enemy->getRectTex(),
     //               enemy->getRect());
     // Entity
-    SDL_RenderCopy(renderer, entity->getTexture(), entity->getRectTex(),
-                   entity->getRect());
+    for (auto &entity : entityManager->getEntities()) {
+      entity->updateTexture(phys_eng, terrain_gen); // Update entity texture
+      SDL_RenderCopy(renderer, entity->getTexture(), entity->getRectTex(),
+                     entity->getRect());
 
-    // Hitbox Rendering
-    if (entity->hitboxCheck()) {
-      SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-      SDL_RenderDrawRect(renderer, entity->getHitboxRect());
-      SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+      // Hitbox Rendering
+      if (entity->hitboxCheck()) {
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        SDL_RenderDrawRect(renderer, entity->getHitboxRect());
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+      }
     }
   }
   SDL_RenderPresent(renderer);
 }
 
 void Application::clean() {
-  delete entity; // Destroy entity memory //unique ptr would take care of this
   delete terrain_gen;
   SDL_DestroyWindow(window); // destroy the window
   SDL_Quit();                // quit and delete all SDL

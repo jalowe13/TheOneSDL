@@ -23,7 +23,7 @@ SOURCES = main.cpp
 SOURCES += $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_demo.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_tables.cpp $(IMGUI_DIR)/imgui_widgets.cpp
 SOURCES += $(IMGUI_DIR)/backends/imgui_impl_sdl2.cpp $(IMGUI_DIR)/backends/imgui_impl_sdlrenderer2.cpp
 # Game Compilation
-SOURCES += Application.cpp Entity.cpp Enemy.cpp Physics.cpp Terrain.cpp 
+SOURCES += Application.cpp Entity.cpp Player.cpp Enemy.cpp Physics.cpp Terrain.cpp EntityManager.cpp
 OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
 
 
@@ -31,7 +31,7 @@ OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
 ifeq ($(OS),Windows_NT)
     RM = del /Q
 	ECHO_MESSAGE = "MinGW"
-	CXXFLAGS = -std=c++11 -I$(MSYS2_ROOT)/$(MSYS2_TARGET_TRIPLET)/include  -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends
+	CXXFLAGS = -std=c++14 -I$(MSYS2_ROOT)/$(MSYS2_TARGET_TRIPLET)/include  -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends
 	LDFLAGS := -L$(MSYS2_ROOT)/$(MSYS2_TARGET_TRIPLET)/lib 
 	CXXFLAGS += -g -Wall -Wformat
 	LIB_LIST = -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image -ljsoncpp -static-libgcc -static-libstdc++ -lgdi32 -lopengl32 -limm32

@@ -1,12 +1,13 @@
 #include "Entity.h"
+#include "Player.h"
 #include <cmath>
 
-Entity::Entity(SDL_Renderer *renderer) {
+Entity::Entity(SDL_Renderer *renderer, int x, int y, EntityType type) {
   // Rectangles
   entityR.h = 32;
   entityR.w = 32;
-  tilemap_x = 1;
-  tilemap_y = 16;
+  tilemap_x = x;
+  tilemap_y = y;
   entityR.x = tilemap_x * 32;
   entityR.y = tilemap_y * 32;
 
@@ -62,6 +63,18 @@ Entity::Entity(SDL_Renderer *renderer) {
 }
 
 Entity::~Entity() { std::cout << "-----Entity Destroyed\n"; }
+
+// std::unique_ptr<Entity> Entity::createEntity(SDL_Renderer *renderer, int x,
+//                                              int y, Entity::EntityType type)
+//                                              {
+//   switch (type) {
+//   case Entity::EntityType::Player:
+//     return std::unique_ptr<Entity>(new Player(renderer, x, y));
+//   // Add more cases here for other entity types
+//   default:
+//     return nullptr;
+//   }
+// }
 
 // Getters
 const float Entity::getSpeed() { return movementModifier; }
@@ -212,8 +225,9 @@ void Entity::handleMovement(Physics *phys_eng, Terrain *terrain_eng) {
       exit(1);
     }
     case Down: {
-      std::cout << "Unknown call in handle movement in x direction 'Down'\n";
-      exit(1);
+      // std::cout << "Unknown call in handle movement in x direction 'Down'\n";
+      // exit(1);
+      break;
     }
     case None: {
       if (inAnimation) {
@@ -244,6 +258,7 @@ void Entity::handleMovement(Physics *phys_eng, Terrain *terrain_eng) {
         setTexture(textures["sit"]);
         inAnimation = true;
       }
+      break;
     }
     case Left: {
       std::cout << "Unknown call in handle movement in y direction 'Left'\n";

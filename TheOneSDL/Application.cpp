@@ -133,11 +133,11 @@ bool Application::init() {
 }
 
 void Application::setRefreshRate() {
-  DEVMODE dm;
-  dm.dmSize = sizeof(dm);
-  EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dm);
-  this->fps = dm.dmDisplayFrequency;
-  std::cout << "Refresh Rate: " << this->fps << std::endl;
+  // DEVMODE dm;
+  // dm.dmSize = sizeof(dm);
+  // EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dm);
+  // this->fps = dm.dmDisplayFrequency;
+  // std::cout << "Refresh Rate: " << this->fps << std::endl;
 }
 
 void Application::handleEvents() {

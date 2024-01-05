@@ -38,6 +38,9 @@ ifeq ($(OS),Windows_NT)
 else
     RM = rm -f
 	LDFLAGS= -Lusr/include
+	CXXFLAGS = -std=c++14 -I$(MSYS2_ROOT)/$(MSYS2_TARGET_TRIPLET)/include  -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends
+	LDFLAGS := -L$(MSYS2_ROOT)/$(MSYS2_TARGET_TRIPLET)/lib
+	CXXFLAGS += -g -Wall -Wformat
 	LIB_LIST = -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image -ljsoncpp
 endif
 
@@ -50,13 +53,19 @@ endif
 %.o:$(IMGUI_DIR)/backends/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
+ifeq ($(OS),Windows_NT)
 $(RES): $(RC)
 	windres -O coff -i $(RC) -o $(RES)
-
 all: $(EXE)
-	@echo Build complete for $(ECHO_MESSAGE)
+	@echo Build complete for Windows $(ECHO_MESSAGE)
 $(EXE): $(OBJS) $(RES)
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIB_LIST)
+else
+all: $(EXE)
+	@echo Build complete for Linux $(ECHO_MESSAGE)
+$(EXE): $(OBJS)
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIB_LIST)
+endif
 
 # Swap between Windows and Unix installs
 ifeq ($(OS),Windows_NT)

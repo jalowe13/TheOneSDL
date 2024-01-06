@@ -3,7 +3,7 @@
 // Version Number
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 33
-#define VERSION_PATCH
+#define VERSION_PATCH .1
 #define STR_HELPER(x) #x // convert to fit window title
 #define STR(x) STR_HELPER(x)
 
@@ -79,8 +79,6 @@ public:
   // Text Events
   void createText(const char *text, int x, int y);
   void createTexture(const char *filename, float x, float y);
-  // Refresh Rate
-  void setRefreshRate();
   // Constants for reference
 
   bool debugMode = false;

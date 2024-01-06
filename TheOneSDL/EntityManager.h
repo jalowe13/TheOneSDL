@@ -1,13 +1,17 @@
 #pragma once
 
+#include "Enemy.h"
 #include "Entity.h"
+#include "Player.h"
 #include <vector>
+
 
 class EntityManager {
 public:
   EntityManager();
   ~EntityManager();
-  //   void createEntity();
+  void createAndAddEntity(SDL_Renderer *renderer, Entity::EntityType type,
+                          int x, int y);
   void addEntity(std::unique_ptr<Entity> entity);
   //   void destroyEntity(int entityId);
   int getEntityCount();

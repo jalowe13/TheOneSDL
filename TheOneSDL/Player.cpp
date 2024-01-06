@@ -2,6 +2,7 @@
 
 Player::Player(SDL_Renderer *renderer, int x, int y) // Define the constructor
     : Entity(renderer, x, y) {
+  entityType = EntityType::PLAYER_E;
   Entity::tex_names = getTextureNames();
   Entity::tex_files = getTexturePaths();
   std::cout << "Player Created\n";

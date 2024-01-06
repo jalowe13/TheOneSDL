@@ -164,176 +164,192 @@ void Entity::updateTexture(Physics *phys_eng, Terrain *terrain_eng) {
 }
 
 void Entity::checkCollision(int i, Physics *phys_eng) {
-  switch (i) {
-  case 0:                // Falling
-    phys_eng->incTime(); // Increase time when away from ground
-    yEdit(getY() + phys_eng->getGravity() * phys_eng->getTime());
-    // std::cout << "Air Time: " << phys_eng->getTime() << "\r";
-    isColliding = false;
-    break;
-  case 1: // Colliding Ground
-    entityFalling = false;
-    phys_eng->resetTime(); // Reset time on ground
-    isColliding = false;
-    // std::cout << "~~~Collide~~~\r";
-    break;
-  case 2: // Colliding from left
-    isColliding = true;
-    xEdit(getX() + getSpeed() + 4);
-    break;
-  case 3: // Colliding from right
-    isColliding = true;
-    xEdit(getX() - getSpeed() - 4);
-    break;
-  case 4: // Colliding from below
-    isColliding = true;
-    yEdit(getY() + getSpeed() + 4);
-    break;
+  if (entityType == EntityType::PLAYER_E) {
+    switch (i) {
+    case 0:                // Falling
+      phys_eng->incTime(); // Increase time when away from ground
+      yEdit(getY() + phys_eng->getGravity() * phys_eng->getTime());
+      // std::cout << "Air Time: " << phys_eng->getTime() << "\r";
+      isColliding = false;
+      break;
+    case 1: // Colliding Ground
+      entityFalling = false;
+      phys_eng->resetTime(); // Reset time on ground
+      isColliding = false;
+      // std::cout << "~~~Collide~~~\r";
+      break;
+    case 2: // Colliding from left
+      isColliding = true;
+      xEdit(getX() + getSpeed() + 4);
+      break;
+    case 3: // Colliding from right
+      isColliding = true;
+      xEdit(getX() - getSpeed() - 4);
+      break;
+    case 4: // Colliding from below
+      isColliding = true;
+      yEdit(getY() + getSpeed() + 4);
+      break;
+    }
   }
 }
 
 void Entity::handleMovement(Physics *phys_eng, Terrain *terrain_eng) {
-  if (boundsCheck(getX(), getY())) {
-    switch (xPath()) {
-    case Left: {
-      looking = LookLeft; // Entity is looking left
-      if (!inAnimation) {
-        setTexture(textures["run_left"]);
-        inAnimation = true;
-      }
-      // std::cout << "Is colliding " << isColliding << " "  << std::endl;
-      (!isColliding) ? xEdit(getX() - getSpeed()) : xEdit(getX() + getSpeed());
-      // xEdit(getX() - getSpeed());
-      tilemap_x = round(getX() / 32);
-      tilemap_y = round(getY() / 32);
-      break;
-    }
-    case Right: {
-      looking = LookRight;
-      if (!inAnimation) {
-        setTexture(textures["run_right"]);
-        inAnimation = true;
-      }
-      (!isColliding) ? xEdit(getX() + getSpeed()) : xEdit(getX() - getSpeed());
-      tilemap_x = round(getX() / 32);
-      tilemap_y = round(getY() / 32);
-      break;
-    }
-    case Up: {
-      std::cout << "Unknown call in handle movement in x direction 'Up'\n";
-      exit(1);
-    }
-    case Down: {
-      // std::cout << "Unknown call in handle movement in x direction 'Down'\n";
-      // exit(1);
-      break;
-    }
-    case None: {
-      if (inAnimation) {
-        switch (looking) {
-        case LookLeft:
-          setTexture(textures["idle_left"]);
-          break;
-        case LookRight:
-          setTexture(textures["idle_right"]);
-          break;
+  switch (entityType) {
+  case (EntityType::PLAYER_E): {
+    if (boundsCheck(getX(), getY())) {
+      switch (xPath()) {
+      case Left: {
+        looking = LookLeft; // Entity is looking left
+        if (!inAnimation) {
+          setTexture(textures["run_left"]);
+          inAnimation = true;
         }
-        inAnimation = false;
-      }
-    }
-    }
-    switch (yPath()) {
-    case Up: {
-      if (!entityFalling) {
-        (!isColliding) ? yEdit(getY() - getSpeed())
-                       : yEdit(getY() + getSpeed());
+        // std::cout << "Is colliding " << isColliding << " "  << std::endl;
+        (!isColliding) ? xEdit(getX() - getSpeed())
+                       : xEdit(getX() + getSpeed());
+        // xEdit(getX() - getSpeed());
         tilemap_x = round(getX() / 32);
         tilemap_y = round(getY() / 32);
+        break;
       }
-      break;
-    }
-    case Down: {
-      if (!inAnimation) {
-        setTexture(textures["sit"]);
-        inAnimation = true;
+      case Right: {
+        looking = LookRight;
+        if (!inAnimation) {
+          setTexture(textures["run_right"]);
+          inAnimation = true;
+        }
+        (!isColliding) ? xEdit(getX() + getSpeed())
+                       : xEdit(getX() - getSpeed());
+        tilemap_x = round(getX() / 32);
+        tilemap_y = round(getY() / 32);
+        break;
       }
-      break;
+      case Up: {
+        std::cout << "Unknown call in handle movement in x direction 'Up'\n";
+        exit(1);
+      }
+      case Down: {
+        // std::cout << "Unknown call in handle movement in x direction
+        // 'Down'\n"; exit(1);
+        break;
+      }
+      case None: {
+        if (inAnimation) {
+          switch (looking) {
+          case LookLeft:
+            setTexture(textures["idle_left"]);
+            break;
+          case LookRight:
+            setTexture(textures["idle_right"]);
+            break;
+          }
+          inAnimation = false;
+        }
+      }
+      }
+      switch (yPath()) {
+      case Up: {
+        if (!entityFalling) {
+          (!isColliding) ? yEdit(getY() - getSpeed())
+                         : yEdit(getY() + getSpeed());
+          tilemap_x = round(getX() / 32);
+          tilemap_y = round(getY() / 32);
+        }
+        break;
+      }
+      case Down: {
+        if (!inAnimation) {
+          setTexture(textures["sit"]);
+          inAnimation = true;
+        }
+        break;
+      }
+      case Left: {
+        std::cout << "Unknown call in handle movement in y direction 'Left'\n";
+        exit(1);
+      }
+      case Right: {
+        std::cout << "Unknown call in handle movement in y direction 'Right'\n";
+        exit(1);
+      }
+      case None: // No input
+      {
+        entityFalling = true;
+      }
+      }
     }
-    case Left: {
-      std::cout << "Unknown call in handle movement in y direction 'Left'\n";
-      exit(1);
+    // If the Entity is not outside of bounds
+    if (!boundsCheck(getX(), getY())) {
+      // Movement
+      switch (xPath()) {
+      case Right: {
+        xEdit(getX() - getSpeed());
+        break;
+      }
+      case Left: {
+        xEdit(getX() - getSpeed());
+        break;
+      }
+      case Up: {
+        std::cout << "Unknown call in bounds check in x direction 'Up'\n";
+        // exit(1);
+      }
+      case Down: {
+        std::cout << "Unknown call in bounds check in x direction 'Down'\n";
+        exit(1);
+      }
+      case None: {
+        // std::cout << "Unknown call in bounds check in x direction 'None'\n";
+        // exit(1);
+      }
+      }
+      switch (yPath()) {
+      case Down: {
+        yEdit(getY() + getSpeed());
+        break;
+      }
+      case Up: {
+        yEdit(getY() - getSpeed());
+        break;
+      }
+      case Left: {
+        std::cout << "Unknown call in bounds check in y direction 'Left'\n";
+        exit(1);
+      }
+      case Right: {
+        std::cout << "Unknown call in bounds check in y direction 'Right'\n";
+        exit(1);
+      }
+      case None: {
+        // std::cout << "Unknown call in bounds check in y direction 'None'\n";
+        //  exit(1);
+      }
+      }
+      // Reset if out of bounds
+      if (getX() >= SCREEN_WIDTH) {
+        xEdit(getX() - getSpeed());
+      }
+      if (getY() >= SCREEN_HEIGHT) {
+        yEdit(getY() - getSpeed());
+      }
+      if (getX() <= 0) {
+        xEdit(getX() + getSpeed());
+      }
+      if (getY() <= 0) {
+        yEdit(getY() + getSpeed());
+      }
     }
-    case Right: {
-      std::cout << "Unknown call in handle movement in y direction 'Right'\n";
-      exit(1);
-    }
-    case None: // No input
-    {
-      entityFalling = true;
-    }
-    }
+    break;
   }
-
-  // If the Entity is not outside of bounds
-  if (!boundsCheck(getX(), getY())) {
-    // Movement
-    switch (xPath()) {
-    case Right: {
-      xEdit(getX() - getSpeed());
-      break;
-    }
-    case Left: {
-      xEdit(getX() - getSpeed());
-      break;
-    }
-    case Up: {
-      std::cout << "Unknown call in bounds check in x direction 'Up'\n";
-      // exit(1);
-    }
-    case Down: {
-      std::cout << "Unknown call in bounds check in x direction 'Down'\n";
-      exit(1);
-    }
-    case None: {
-      // std::cout << "Unknown call in bounds check in x direction 'None'\n";
-      // exit(1);
-    }
-    }
-    switch (yPath()) {
-    case Down: {
-      yEdit(getY() + getSpeed());
-      break;
-    }
-    case Up: {
-      yEdit(getY() - getSpeed());
-      break;
-    }
-    case Left: {
-      std::cout << "Unknown call in bounds check in y direction 'Left'\n";
-      exit(1);
-    }
-    case Right: {
-      std::cout << "Unknown call in bounds check in y direction 'Right'\n";
-      exit(1);
-    }
-    case None: {
-      // std::cout << "Unknown call in bounds check in y direction 'None'\n";
-      //  exit(1);
-    }
-    }
-    // Reset if out of bounds
-    if (getX() >= SCREEN_WIDTH) {
-      xEdit(getX() - getSpeed());
-    }
-    if (getY() >= SCREEN_HEIGHT) {
-      yEdit(getY() - getSpeed());
-    }
-    if (getX() <= 0) {
-      xEdit(getX() + getSpeed());
-    }
-    if (getY() <= 0) {
-      yEdit(getY() + getSpeed());
-    }
+  case (EntityType::ENEMY_E): {
+    // std::cout << "Enemy Cannot Move\n";
+    break;
+  }
+  case (EntityType::NONE): {
+    std::cout << "Unknown Entity Type\n";
+    exit(1);
+  }
   }
 }
 

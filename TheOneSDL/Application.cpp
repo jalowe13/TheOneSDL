@@ -84,24 +84,15 @@ bool Application::init() {
       if (!entityManager) {
         throw "EntityManager allocation failed.";
       }
-      std::unique_ptr<Entity> entity =
-          std::make_unique<Player>(renderer, 1, 16);
-      entityManager->addEntity(std::move(entity));
+
+      entityManager->createAndAddEntity(renderer, Entity::PLAYER_E, 1, 16);
+      entityManager->createAndAddEntity(renderer, Entity::ENEMY_E, 2, 16);
+      entityManager->createAndAddEntity(renderer, Entity::ENEMY_E, 3, 16);
       if (entityManager->getEntityCount() == 0) {
         throw "Entity allocation failed.";
       }
       std::cout << "There are now " << entityManager->getEntityCount()
                 << " entities\n";
-      // Create Enemy
-      // enemy = new Enemy(renderer);
-      // if (!enemy) {
-      //   throw "Enemy allocation failed.";
-      // }
-      // Create Texture loader
-
-      // Unique make share
-      // include memroy.h
-      //  std::make_unique
 
       std::cout << "-----Texture Loader Created" << std::endl;
 
@@ -133,11 +124,11 @@ bool Application::init() {
 }
 
 void Application::setRefreshRate() {
-  // DEVMODE dm;
-  // dm.dmSize = sizeof(dm);
-  // EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dm);
-  // this->fps = dm.dmDisplayFrequency;
-  // std::cout << "Refresh Rate: " << this->fps << std::endl;
+  DEVMODE dm;
+  dm.dmSize = sizeof(dm);
+  EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dm);
+  this->fps = dm.dmDisplayFrequency;
+  std::cout << "Refresh Rate: " << this->fps << std::endl;
 }
 
 void Application::handleEvents() {

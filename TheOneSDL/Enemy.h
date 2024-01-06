@@ -1,55 +1,27 @@
 #pragma once
 
+#include "Entity.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <fstream>
-#include <iostream>
-#include <list>
-#include <map>
-#include <string>
 
-class Terrain;
-class Physics;
-
-class Enemy {
+class Enemy : public Entity {
+  // Add Enemy-specific members and functions here
 public:
-  Enemy(SDL_Renderer *default_texture);
-  ~Enemy();
-
-  // Getters and Setters
-  SDL_Texture *getTexture();
-  SDL_Rect *getRect();
-  SDL_Rect *getRectTex();
-
-  // Collision and gravity check
-  void checkCollision(int i, Physics *phys_eng);
-
-  // Handle movement from the Physics engine
-  void handleMovement(Physics *phys_eng, Terrain *terrain_eng);
-
-  void updateTexture(Physics *phys_eng, Terrain *terrain_eng);
-
-  void setTexture(SDL_Texture *texture);
-
+  Enemy(SDL_Renderer *renderer, int x,
+        int y); // Declare the constructor // Constructor
+  ~Enemy();     // Destructor
+  std::list<std::string> getTexturePaths(); // Texture file paths
+  std::list<std::string> getTextureNames(); // Texture file names
 private:
-  // temp
-  bool left_look = true;
-
-  // Variables
-  SDL_Texture *enemy_texture = NULL;
-  SDL_Rect enemyR;
-  SDL_Rect textureR;
-  SDL_Rect playerHitboxR;
-  int tilemap_x;
-  int tilemap_y;
-  bool hitboxOn;
+  // Texture Paths
   std::string chomper_idle_left = "textures/enemy/chomper/chompter_idle.png";
   std::string chomper_move_left =
       "textures/enemy/chomper/Chomper_Move-Left.png";
   std::string chomper_move_right =
       "textures/enemy/chomper/Chomper_Move-Right.png";
-  // Textures stored
-  std::map<std::string, SDL_Texture *> textures;
-  int textureWidth, textureHeight, frameWidth, frameHeight, frame_time;
-  bool inAnimation = false; // toggle to lock animation canceling
+  // Texture Data Structures
+  std::list<std::string> tex_files = {chomper_idle_left, chomper_move_left,
+                                      chomper_move_right};
+  std::list<std::string> tex_names = {"chomper_idle_left", "chomper_move_left",
+                                      "chomper_move_right", "run_right", "sit"};
 };

@@ -20,7 +20,7 @@ protected:
   std::map<std::string, SDL_Texture *> textures;
 
 public:
-  enum EntityType { PLAYER_E, ENEMY_E };
+  enum EntityType { NONE, PLAYER_E, ENEMY_E };
   enum MovementDirection {
     Up,
     Down,
@@ -81,6 +81,10 @@ public:
 
   // Is Colliding
   bool isColliding = false;
+
+protected:
+  // Type of Entity
+  EntityType entityType = NONE; // Default to NONE
 
 private:
   // Methods

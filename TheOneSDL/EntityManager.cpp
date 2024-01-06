@@ -16,6 +16,7 @@ void EntityManager::createAndAddEntity(SDL_Renderer *renderer,
   std::unique_ptr<Entity> entity;
   switch (type) {
   case Entity::PLAYER_E:
+    std::cout << "Creating Player in Entity Manager\n";
     entity = std::make_unique<Player>(renderer, x, y);
     break;
   case Entity::ENEMY_E:
@@ -26,13 +27,18 @@ void EntityManager::createAndAddEntity(SDL_Renderer *renderer,
     exit(-1);
     break;
   }
+  size_t oldSize = entities.size();
   entities.push_back(std::move(entity));
+  if (entities.size() != oldSize + 1) {
+    throw "Entity allocation failed.";
+  }
+  std::cout << "There are now " << entities.size() << " entities\n";
 }
 
 void EntityManager::addEntity(std::unique_ptr<Entity> entity) {
   entities.push_back(std::move(entity));
 }
-const std::vector<std::unique_ptr<Entity>> &EntityManager::getEntities() const {
+std::vector<std::unique_ptr<Entity>> &EntityManager::getEntities() {
   return entities;
 }
 

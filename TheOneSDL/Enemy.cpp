@@ -10,6 +10,7 @@ Enemy::Enemy(SDL_Renderer *renderer, int x, int y) // Define the constructor
   if (textures.find("chomper_idle_left") == textures.end()) {
     throw std::runtime_error("Texture 'chomper_idle_left' does not exist.");
   }
+  xPathEdit(Entity::Left);
   setTexture(textures["chomper_idle_left"]);
 }
 

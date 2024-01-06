@@ -70,30 +70,22 @@ bool Application::init() {
       ImGui_ImplSDLRenderer2_Init(renderer);
       std::cout << "-----ImGUI Created" << std::endl;
 
-      // Create Player This needs to be changed to be added in the tilemap
-      //  renderer is passed in to load the texture
-      //  If the memory is owned by the class and not shared outside of the
-      //  class make it a unique ptr. If it is shared outside of the class weak
-      //  ptr
-
-      // weak ptr.lock
-      // designed for shared references
-
       // Start EntityManger and add an Entity
       entityManager = std::make_unique<EntityManager>();
       if (!entityManager) {
         throw "EntityManager allocation failed.";
       }
 
+      std::cout << "Attempting to create Player...\n";
       entityManager->createAndAddEntity(renderer, Entity::PLAYER_E, 1, 16);
-      entityManager->createAndAddEntity(renderer, Entity::ENEMY_E, 2, 16);
-      entityManager->createAndAddEntity(renderer, Entity::ENEMY_E, 3, 16);
+      if (entityManager->getEntityCount() != 1) {
+        throw "Player allocation failed.";
+      }
+      entityManager->createAndAddEntity(renderer, Entity::ENEMY_E, 20, 16);
+      entityManager->createAndAddEntity(renderer, Entity::ENEMY_E, 21, 16);
       if (entityManager->getEntityCount() == 0) {
         throw "Entity allocation failed.";
       }
-      std::cout << "There are now " << entityManager->getEntityCount()
-                << " entities\n";
-
       std::cout << "-----Texture Loader Created" << std::endl;
 
       // Texture Loading
@@ -132,9 +124,15 @@ bool Application::init() {
 // }
 
 void Application::handleEvents() {
-  auto &entity =
-      entityManager->getEntities()[0]; // This needs to be changed to a specific
-                                       // ID reference to the player entity
+  // auto &entity =
+  //     entityManager->getEntities()[0]; // This needs to be changed to a
+  //     specific
+  // ID reference to the player entity
+  std::unique_ptr<Entity> *entity = entityManager->getEntities().data() + 0;
+  if (debugMode) {
+    std::cout << "Player Position [" << (*entity)->getTileX() << ","
+              << (*entity)->getTileY() << "]\r";
+  }
   SDL_Event event;
   SDL_PollEvent(&event);
   ImGui_ImplSDL2_ProcessEvent(&event);
@@ -154,22 +152,22 @@ void Application::handleEvents() {
   case SDL_KEYDOWN:
     switch (event.key.keysym.sym) {
     case SDLK_w: {
-      entity->yPathEdit(Entity::Up);
-      entity->editMS(3);
+      (*entity)->yPathEdit(Entity::Up);
+      (*entity)->editMS(3);
       break;
     }
     case SDLK_a: {
-      entity->xPathEdit(Entity::Left);
-      entity->editMS(2);
+      (*entity)->xPathEdit(Entity::Left);
+      (*entity)->editMS(2);
       break;
     }
     case SDLK_s: {
-      entity->yPathEdit(Entity::Down);
+      (*entity)->yPathEdit(Entity::Down);
       break;
     }
     case SDLK_d: {
-      entity->xPathEdit(Entity::Right);
-      entity->editMS(2);
+      (*entity)->xPathEdit(Entity::Right);
+      (*entity)->editMS(2);
       break;
     }
     }
@@ -177,19 +175,19 @@ void Application::handleEvents() {
   case SDL_KEYUP:
     switch (event.key.keysym.sym) {
     case SDLK_w: {
-      entity->yPathEdit(Entity::None);
+      (*entity)->yPathEdit(Entity::None);
       break;
     }
     case SDLK_a: {
-      entity->xPathEdit(Entity::None);
+      (*entity)->xPathEdit(Entity::None);
       break;
     }
     case SDLK_s: {
-      entity->yPathEdit(Entity::None);
+      (*entity)->yPathEdit(Entity::None);
       break;
     }
     case SDLK_d: {
-      entity->xPathEdit(Entity::None);
+      (*entity)->xPathEdit(Entity::None);
       break;
     }
     // Debug Mode Toggle

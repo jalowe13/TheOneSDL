@@ -13,12 +13,6 @@ class Terrain;
 class Physics;
 
 class Entity {
-protected:
-  // Textures stored
-  std::list<std::string> tex_files;
-  std::list<std::string> tex_names;
-  std::map<std::string, SDL_Texture *> textures;
-
 public:
   enum EntityType { NONE, PLAYER_E, ENEMY_E };
   enum MovementDirection {
@@ -42,6 +36,8 @@ public:
   MovementDirection yPath();
   int getX();
   int getY();
+  int getTileX();
+  int getTileY();
   float getMS();
   SDL_Rect *getRect();
   SDL_Rect *getRectTex();
@@ -59,7 +55,7 @@ public:
   // Passing in char from Physics engine to check collision
   void checkCollision(int i, Physics *phys_eng);
   // Handle movement from the Physics engine
-  void handleMovement(Physics *phys_eng, Terrain *terrain_eng);
+  virtual void handleMovement(Physics *phys_eng, Terrain *terrain_eng);
   // Check if Entity is outside of the screen
   bool boundsCheck(int x, int y);
   // Setting Textures to the passed in texture
@@ -82,9 +78,20 @@ public:
   // Is Colliding
   bool isColliding = false;
 
-protected:
+protected: // Protected so that Player and Enemy can access
+  // Textures stored
+  std::list<std::string> tex_files;
+  std::list<std::string> tex_names;
+  std::map<std::string, SDL_Texture *> textures;
   // Type of Entity
   EntityType entityType = NONE; // Default to NONE
+                                // Looking Status
+  LookingDirection looking = LookRight;
+  bool inAnimation = false; // toggle to lock animation canceling
+  int tilemap_x;
+  int tilemap_y;
+  // Movemment Status
+  bool entityFalling;
 
 private:
   // Methods
@@ -95,17 +102,8 @@ private:
   SDL_Rect entityHitboxR;
   bool hitboxOn;
 
-  int tilemap_x;
-  int tilemap_y;
-
   // Speed
   int entitySpeed;
-
-  // Looking Status
-  LookingDirection looking = LookRight;
-
-  // Movemment Status
-  bool entityFalling;
 
   SDL_Texture *entity_texture = NULL;
 
@@ -123,5 +121,4 @@ private:
   // std::string sit = "textures/VGB/idle/vgb_gamer_idle-Sheet.png";
 
   int frame_time;
-  bool inAnimation = false; // toggle to lock animation canceling
 };

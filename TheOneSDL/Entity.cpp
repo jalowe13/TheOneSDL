@@ -38,18 +38,6 @@ Entity::Entity(SDL_Renderer *renderer, int x, int y) {
 
 Entity::~Entity() { std::cout << "-----Entity Destroyed\n"; }
 
-// std::unique_ptr<Entity> Entity::createEntity(SDL_Renderer *renderer, int x,
-//                                              int y, Entity::EntityType type)
-//                                              {
-//   switch (type) {
-//   case Entity::EntityType::Player:
-//     return std::unique_ptr<Entity>(new Player(renderer, x, y));
-//   // Add more cases here for other entity types
-//   default:
-//     return nullptr;
-//   }
-// }
-
 // Getters
 const float Entity::getSpeed() { return movementModifier; }
 
@@ -61,9 +49,13 @@ int Entity::getX() { return entityR.x; }
 
 int Entity::getTexX() { return textureR.x; }
 
+int Entity::getTileX() { return getX() / 32; }
+
 SDL_Texture *Entity::getTexture() { return entity_texture; }
 
 int Entity::getY() { return entityR.y; }
+
+int Entity::getTileY() { return getY() / 32; }
 
 float Entity::getMS() { return movementModifier; }
 
@@ -133,9 +125,9 @@ void Entity::loadTextures(SDL_Renderer *renderer) {
     texture = IMG_LoadTexture(renderer, filename);
     SDL_QueryTexture(texture, NULL, NULL, &textureWidth, &textureHeight);
     textures[name] = texture;
-    // std::cout << "Entity.cpp: Texture loaded " << name << " with path:" <<
-    // filename << " with dims " << textureWidth << " and " << textureHeight
-    // << std::endl;
+    std::cout << entityType << ": Texture loaded " << name
+              << " with path:" << filename << " with dims " << textureWidth
+              << " and " << textureHeight << std::endl;
     if (textures[name] == 0 || textureWidth == 0 || textureHeight == 0) {
       std::cout << "!!!!!" << name << " failed to load from path " << filename
                 << "!!!!!" << std::endl;
@@ -195,161 +187,77 @@ void Entity::checkCollision(int i, Physics *phys_eng) {
 }
 
 void Entity::handleMovement(Physics *phys_eng, Terrain *terrain_eng) {
-  switch (entityType) {
-  case (EntityType::PLAYER_E): {
-    if (boundsCheck(getX(), getY())) {
-      switch (xPath()) {
-      case Left: {
-        looking = LookLeft; // Entity is looking left
-        if (!inAnimation) {
-          setTexture(textures["run_left"]);
-          inAnimation = true;
-        }
-        // std::cout << "Is colliding " << isColliding << " "  << std::endl;
-        (!isColliding) ? xEdit(getX() - getSpeed())
-                       : xEdit(getX() + getSpeed());
-        // xEdit(getX() - getSpeed());
-        tilemap_x = round(getX() / 32);
-        tilemap_y = round(getY() / 32);
-        break;
-      }
-      case Right: {
-        looking = LookRight;
-        if (!inAnimation) {
-          setTexture(textures["run_right"]);
-          inAnimation = true;
-        }
-        (!isColliding) ? xEdit(getX() + getSpeed())
-                       : xEdit(getX() - getSpeed());
-        tilemap_x = round(getX() / 32);
-        tilemap_y = round(getY() / 32);
-        break;
-      }
-      case Up: {
-        std::cout << "Unknown call in handle movement in x direction 'Up'\n";
-        exit(1);
-      }
-      case Down: {
-        // std::cout << "Unknown call in handle movement in x direction
-        // 'Down'\n"; exit(1);
-        break;
-      }
-      case None: {
-        if (inAnimation) {
-          switch (looking) {
-          case LookLeft:
-            setTexture(textures["idle_left"]);
-            break;
-          case LookRight:
-            setTexture(textures["idle_right"]);
-            break;
-          }
-          inAnimation = false;
-        }
-      }
-      }
-      switch (yPath()) {
-      case Up: {
-        if (!entityFalling) {
-          (!isColliding) ? yEdit(getY() - getSpeed())
-                         : yEdit(getY() + getSpeed());
-          tilemap_x = round(getX() / 32);
-          tilemap_y = round(getY() / 32);
-        }
-        break;
-      }
-      case Down: {
-        if (!inAnimation) {
-          setTexture(textures["sit"]);
-          inAnimation = true;
-        }
-        break;
-      }
-      case Left: {
-        std::cout << "Unknown call in handle movement in y direction 'Left'\n";
-        exit(1);
-      }
-      case Right: {
-        std::cout << "Unknown call in handle movement in y direction 'Right'\n";
-        exit(1);
-      }
-      case None: // No input
-      {
-        entityFalling = true;
-      }
-      }
+  if (boundsCheck(getX(), getY())) {
+    switch (xPath()) {
+    case Left: {
+      (!isColliding) ? xEdit(getX() - getSpeed()) : xEdit(getX() + getSpeed());
+      break;
     }
-    // If the Entity is not outside of bounds
-    if (!boundsCheck(getX(), getY())) {
-      // Movement
-      switch (xPath()) {
-      case Right: {
-        xEdit(getX() - getSpeed());
-        break;
-      }
-      case Left: {
-        xEdit(getX() - getSpeed());
-        break;
-      }
-      case Up: {
-        std::cout << "Unknown call in bounds check in x direction 'Up'\n";
-        // exit(1);
-      }
-      case Down: {
-        std::cout << "Unknown call in bounds check in x direction 'Down'\n";
-        exit(1);
-      }
-      case None: {
-        // std::cout << "Unknown call in bounds check in x direction 'None'\n";
-        // exit(1);
-      }
-      }
-      switch (yPath()) {
-      case Down: {
-        yEdit(getY() + getSpeed());
-        break;
-      }
-      case Up: {
-        yEdit(getY() - getSpeed());
-        break;
-      }
-      case Left: {
-        std::cout << "Unknown call in bounds check in y direction 'Left'\n";
-        exit(1);
-      }
-      case Right: {
-        std::cout << "Unknown call in bounds check in y direction 'Right'\n";
-        exit(1);
-      }
-      case None: {
-        // std::cout << "Unknown call in bounds check in y direction 'None'\n";
-        //  exit(1);
-      }
-      }
-      // Reset if out of bounds
-      if (getX() >= SCREEN_WIDTH) {
-        xEdit(getX() - getSpeed());
-      }
-      if (getY() >= SCREEN_HEIGHT) {
-        yEdit(getY() - getSpeed());
-      }
-      if (getX() <= 0) {
-        xEdit(getX() + getSpeed());
-      }
-      if (getY() <= 0) {
-        yEdit(getY() + getSpeed());
-      }
+    case Right: {
+      (!isColliding) ? xEdit(getX() + getSpeed()) : xEdit(getX() - getSpeed());
+      break;
     }
-    break;
-  }
-  case (EntityType::ENEMY_E): {
-    // std::cout << "Enemy Cannot Move\n";
-    break;
-  }
-  case (EntityType::NONE): {
-    std::cout << "Unknown Entity Type\n";
-    exit(1);
-  }
+    default: {
+      // std::cout << "Unknown call in handle movement in x direction
+      // 'None'\n"; exit(1);
+    }
+    }
+    switch (yPath()) {
+    case Up: {
+      if (!entityFalling) {
+        (!isColliding) ? yEdit(getY() - getSpeed())
+                       : yEdit(getY() + getSpeed());
+      }
+      break;
+    }
+    case None: // No input
+    {
+      entityFalling = true;
+    }
+    default: {
+      // std::cout << "Unknown call in handle movement in y direction
+      // 'None'\n"; exit(1);
+    }
+    }
+    // Set tilemap cords
+    tilemap_x = round(getX() / 32);
+    tilemap_y = round(getY() / 32);
+  } else { // Not in bounds
+    switch (xPath()) {
+    case Right: {
+      xEdit(getX() - getSpeed());
+      break;
+    }
+    case Left: {
+      xEdit(getX() - getSpeed());
+      break;
+    }
+    default: {
+      // std::cout << "Unknown call in bounds check in x direction
+      // 'None'\n"; exit(1);
+    }
+    }
+    switch (yPath()) {
+    case Down: {
+      yEdit(getY() + getSpeed());
+      break;
+    }
+    case Up: {
+      yEdit(getY() - getSpeed());
+      break;
+    }
+    default: {
+      // std::cout << "Unknown call in bounds check in y direction
+      // 'None'\n"; exit(1);
+    }
+    }
+    // Out of bounds check and reset
+    xEdit(getX() + (getX() >= SCREEN_WIDTH ? -getSpeed()
+                    : getX() <= 0          ? getSpeed()
+                                           : 0));
+    yEdit(getY() + (getY() >= SCREEN_HEIGHT ? -getSpeed()
+                    : getY() <= 0           ? getSpeed()
+                                            : 0));
   }
 }
 

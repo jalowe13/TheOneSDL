@@ -3,7 +3,7 @@
 // Version Number
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 34
-#define VERSION_PATCH
+#define VERSION_PATCH .1
 #define STR_HELPER(x) #x // convert to fit window title
 #define STR(x) STR_HELPER(x)
 
@@ -13,12 +13,12 @@
 
 // External Libraries
 #include "imgui.h"
-#include "imgui_impl_sdl2.h"
-#include "imgui_impl_sdlrenderer2.h"
+#include "imgui_impl_sdl2.h"         // IWYU pragma: keep
+#include "imgui_impl_sdlrenderer2.h" // IWYU pragma: keep
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <fstream>
-#include <iostream>
+#include <fstream>  // IWYU pragma: keep
+#include <iostream> // IWYU pragma: keep
 #include <json/json.h>
 
 // PreProcessor Declerations
@@ -41,8 +41,7 @@ class Terrain;
 #include "Enemy.h"
 #include "Entity.h"
 #include "EntityManager.h"
-#include "Physics.h"
-#include "Player.h"
+// #include "Physics.h"
 #include "Terrain.h"
 
 class Application {

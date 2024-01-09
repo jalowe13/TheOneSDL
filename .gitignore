@@ -29,3 +29,8 @@ TheOneSDL/build
 .vscode/launch.json
 .vscode/settings.json
 TheOneSDL/.vscode/extensions.json
+TheOneSDL/compiledb.exe
+*.idx
+TheOneSDL/compile_commands.json
+*.url
+TheOneSDL/.clang-format

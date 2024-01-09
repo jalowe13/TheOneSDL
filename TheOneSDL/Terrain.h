@@ -1,12 +1,8 @@
 #pragma once
 
 #include "Application.h"
-#include <deque>
-#include <iostream>
+#include <iostream> // IWYU pragma: keep
 #include <json/json.h>
-#include <map>
-#include <regex>
-#include <tuple>
 #include <vector>
 
 // Block to be rendered by the terrain

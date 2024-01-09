@@ -1,5 +1,4 @@
 #include "Entity.h"
-#include "Player.h"
 #include <cmath>
 
 Entity::Entity(SDL_Renderer *renderer, int x, int y) {

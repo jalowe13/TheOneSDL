@@ -1,9 +1,9 @@
 #pragma once
 #include "Physics.h"
-#include <iostream>
+#include <iostream> // IWYU pragma: keep
 #include <list>
 #include <map>
-#include <memory>
+#include <memory> // IWYU pragma: keep
 #include <string>
 
 #define SCREEN_WIDTH 800

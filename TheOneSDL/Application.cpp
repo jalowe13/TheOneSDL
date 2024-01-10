@@ -77,7 +77,7 @@ bool Application::init() {
       }
 
       std::cout << "Attempting to create Player...\n";
-      entityManager->createAndAddEntity(renderer, Entity::PLAYER_E, 1, 16);
+      entityManager->createAndAddEntity(renderer, Entity::PLAYER_E, 3, 16);
       if (entityManager->getEntityCount() != 1) {
         throw "Player allocation failed.";
       }

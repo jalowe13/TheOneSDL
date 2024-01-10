@@ -2,6 +2,7 @@
 
 Player::Player(SDL_Renderer *renderer, int x, int y) // Define the constructor
     : Entity(renderer, x, y) {
+  std::cout << "Spawning Player at " << x << ", " << y << "\n";
   entityType = EntityType::PLAYER_E;
   Entity::tex_names = getTextureNames();
   Entity::tex_files = getTexturePaths();
@@ -14,6 +15,10 @@ Player::Player(SDL_Renderer *renderer, int x, int y) // Define the constructor
 }
 void Player::handleMovement(Physics *phys_eng, Terrain *terrain_eng) {
   // Handle Generics of cord movement
+  //
+  // This Entity Handle movement should actually pass in a datastructure of all
+  // specific textures to load for each instance in order
+  //
   Entity::handleMovement(phys_eng, terrain_eng);
   //  Handle player movement animations
   switch (xPath()) {

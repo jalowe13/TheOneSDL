@@ -20,6 +20,7 @@ void EntityManager::createAndAddEntity(SDL_Renderer *renderer,
     entity = std::make_unique<Player>(renderer, x, y);
     break;
   case Entity::ENEMY_E:
+    std::cout << "Creating Enemy in Entity Manager\n";
     entity = std::make_unique<Enemy>(renderer, x, y);
     break;
   default:

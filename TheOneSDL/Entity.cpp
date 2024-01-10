@@ -225,10 +225,20 @@ void Entity::handleMovement(Physics *phys_eng, Terrain *terrain_eng) {
     switch (xPath()) {
     case Right: {
       xEdit(getX() - getSpeed());
+      if (entityType == EntityType::ENEMY_E) {
+        xPathEdit(MovementDirection::Left);
+        looking = LookingDirection::LookLeft;
+        inAnimation = false;
+      }
       break;
     }
     case Left: {
-      xEdit(getX() - getSpeed());
+      xEdit(getX() + getSpeed());
+      if (entityType == EntityType::ENEMY_E) {
+        xPathEdit(MovementDirection::Right);
+        looking = LookingDirection::LookRight;
+        inAnimation = false;
+      }
       break;
     }
     default: {
@@ -261,10 +271,8 @@ void Entity::handleMovement(Physics *phys_eng, Terrain *terrain_eng) {
 }
 
 bool Entity::boundsCheck(int x, int y) {
-  if (x > 0 && y > 0) {
-    if ((x < SCREEN_WIDTH) && (y < SCREEN_HEIGHT)) {
-      return true;
-    }
+  if ((x > 0 && y > 0) && ((x < SCREEN_WIDTH) && (y < SCREEN_HEIGHT))) {
+    return true;
   }
   return false;
 }

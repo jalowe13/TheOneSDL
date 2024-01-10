@@ -1,5 +1,6 @@
 #pragma once
 #include "Physics.h"
+#include <cmath>    // IWYU pragma: keep
 #include <iostream> // IWYU pragma: keep
 #include <list>
 #include <map>
@@ -53,6 +54,8 @@ public:
   void wEdit(int w);
   void hEdit(int h);
   void editMS(float speed);
+
+  void toggleDirection(); // Toggle Direction of Entity
   // Passing in char from Physics engine to check collision
   void checkCollision(int i, Physics *phys_eng);
   // Handle movement from the Physics engine
@@ -74,7 +77,7 @@ public:
   SDL_Texture *getTexture();
 
   // Hitbox Methods
-  bool hitboxCheck();
+  virtual bool hitboxCheck();
 
   // Is Colliding
   bool isColliding = false;
@@ -93,15 +96,16 @@ protected: // Protected so that Player and Enemy can access
   int tilemap_y;
   // Movemment Status
   bool entityFalling;
+  // Rectangles and Hitbox
+  SDL_Rect entityHitboxR;
+  SDL_Rect entityR;
+  bool hitboxOn;
 
 private:
   // Methods
 
   // Variables
-  SDL_Rect entityR;
   SDL_Rect textureR;
-  SDL_Rect entityHitboxR;
-  bool hitboxOn;
 
   // Speed
   int entitySpeed;

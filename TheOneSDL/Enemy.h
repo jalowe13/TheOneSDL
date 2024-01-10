@@ -10,6 +10,7 @@ public:
   Enemy(SDL_Renderer *renderer, int x,
         int y); // Declare the constructor // Constructor
   ~Enemy();     // Destructor
+  bool hitboxCheck() override;
   void handleMovement(Physics *phys_eng, Terrain *terrain_eng) override;
   std::list<std::string> getTexturePaths(); // Texture file paths
   std::list<std::string> getTextureNames(); // Texture file names

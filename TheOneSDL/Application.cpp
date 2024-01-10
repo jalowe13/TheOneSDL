@@ -1,8 +1,4 @@
 #include "Application.h"
-#include "imgui.h"
-#include <SDL2/SDL_scancode.h>
-
-// Upgrade to C++ 11
 
 #ifdef _WIN32
 #else
@@ -83,8 +79,8 @@ bool Application::init() {
       if (entityManager->getEntityCount() != 1) {
         throw "Player allocation failed.";
       }
-      entityManager->createAndAddEntity(renderer, Entity::ENEMY_E, 20, 16);
-      entityManager->createAndAddEntity(renderer, Entity::ENEMY_E, 21, 16);
+      entityManager->createAndAddEntity(renderer, Entity::ENEMY_E, 11, 16);
+      entityManager->createAndAddEntity(renderer, Entity::ENEMY_E, 12, 16);
       if (entityManager->getEntityCount() == 0) {
         throw "Entity allocation failed.";
       }
@@ -289,6 +285,7 @@ void Application::render() {
         player.hitBoxToggle();
       }
       ImGui::Text("Mouse Position [%d,%d]", xMouse, yMouse);
+      ImGui::Text("Tilemap Position [%d,%d]", xMouse / 32, yMouse / 32);
       ImGui::Text("Mouse Down: %s", (mouseDown) ? "true" : "false");
     }
 

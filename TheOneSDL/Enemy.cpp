@@ -12,6 +12,16 @@ Enemy::Enemy(SDL_Renderer *renderer, int x, int y) // Define the constructor
   }
   xPathEdit(Entity::Left);
   setTexture(textures["chomper_idle_left"]);
+  // Hitbox for Enemy
+  entityHitboxR.w = 30;
+  hitBoxToggle();
+}
+
+bool Enemy::hitboxCheck() {
+  // Update position
+  entityHitboxR.x = entityR.x;
+  entityHitboxR.y = entityR.y + 10;
+  return hitboxOn;
 }
 
 void Enemy::handleMovement(Physics *phys_eng, Terrain *terrain_eng) {

@@ -1,5 +1,4 @@
 #include "Entity.h"
-#include <cmath>
 
 Entity::Entity(SDL_Renderer *renderer, int x, int y) {
   // Rectangles
@@ -157,6 +156,18 @@ void Entity::updateTexture(Physics *phys_eng, Terrain *terrain_eng) {
   }
 }
 
+void Entity::toggleDirection() {
+  if (currentDirectionX == MovementDirection::Left) {
+    xPathEdit(MovementDirection::Right); // Change direction
+    looking = LookingDirection::LookRight;
+    inAnimation = false;
+  } else {
+    xPathEdit(MovementDirection::Left); // Change direction
+    looking = LookingDirection::LookLeft;
+    inAnimation = false;
+  }
+}
+
 void Entity::checkCollision(int i, Physics *phys_eng) {
   if (entityType == EntityType::PLAYER_E) {
     switch (i) {
@@ -183,6 +194,26 @@ void Entity::checkCollision(int i, Physics *phys_eng) {
     case 4: // Colliding from below
       isColliding = true;
       yEdit(getY() + getSpeed() + 4);
+      break;
+    }
+  }
+  if (entityType == EntityType::ENEMY_E) {
+    switch (i) {
+    case 2: { // Colliding from left
+      isColliding = true;
+      xEdit(getX() + getSpeed() + 4);
+      toggleDirection();
+      break;
+    }
+    case 3: { // Colliding from right
+      isColliding = true;
+      xEdit(getX() - getSpeed() - 4);
+      toggleDirection();
+      break;
+    }
+    default:
+      isColliding = false; // Other collisions like sitting on top of a block
+                           // doesnt matter
       break;
     }
   }
@@ -224,7 +255,8 @@ void Entity::handleMovement(Physics *phys_eng, Terrain *terrain_eng) {
     // Set tilemap cords
     tilemap_x = round(getX() / 32);
     tilemap_y = round(getY() / 32);
-  } else { // Not in bounds
+  } else { // Not in bounds the entity is out of bounds
+    std::cout << "Not in bounds\n";
     switch (xPath()) {
     case Right: {
       xEdit(getX() - getSpeed());

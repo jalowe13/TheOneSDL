@@ -1,4 +1,5 @@
 #include "Application.h"
+#include <SDL2/SDL_scancode.h>
 
 // Upgrade to C++ 11
 
@@ -195,6 +196,19 @@ void Application::handleEvents() {
       debugMode = (debugMode) ? false : true;
       std::cout << "Debug Mode: " << debugMode << std::endl;
       break;
+    }
+    case SDLK_KP_PLUS: {
+      if (debugMode && (fps < 150)) {
+        fps += 10;
+        std::cout << "\nFps is cap is now " << fps << std::endl;
+      }
+      break;
+    }
+    case SDLK_KP_MINUS: {
+      if (debugMode && (fps > 10)) {
+        fps -= 10;
+        std::cout << "\nFps is cap is now " << fps << std::endl;
+      }
     }
     case SDLK_1: {
       if (debugMode)

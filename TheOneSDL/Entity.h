@@ -45,6 +45,7 @@ public:
   SDL_Rect *getHitboxRect();
 
   // Setters
+  bool &hitBoxToggle();
   void xPathEdit(MovementDirection path);
   void yPathEdit(MovementDirection path);
   void xEdit(int x);

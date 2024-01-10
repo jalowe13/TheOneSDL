@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "imgui.h"
 #include <SDL2/SDL_scancode.h>
 
 // Upgrade to C++ 11
@@ -262,10 +263,34 @@ void Application::render() {
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
     // Frame actions
-    static float f = 0.0f;
-    ImGui::Text("Welcome to the debug window! You can close this with ` %d",
-                123);
-    ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
+    Entity &player = *((entityManager->getEntities()
+                            .data()[0])); // This should go into a header file
+                                          // for the reference to the player
+    ImGui::Checkbox("Debug Mode", &debugMode);
+    if (ImGui::Button("Reset Player Position")) {
+      // Buttons return true when clicked (most widgets return true when
+      // edited/activated)
+      player.xEdit(111);
+      player.yEdit(500);
+    }
+    ImGui::Text("Player Position [%d,%d]",
+                (entityManager->getEntities()[0])->getTileX(),
+                (entityManager->getEntities()[0])->getTileY());
+    if (ImGui::CollapsingHeader("Performance Settings")) {
+      static int f = fps;
+      if (ImGui::SliderInt("Frame Rate Cap", &f, 10, 150)) {
+        fps = static_cast<uint64_t>(f);
+      }
+    }
+    if (ImGui::CollapsingHeader("Advanced Settings and Statistics")) {
+      ImGui::Text("Gameplay Debugging");
+      bool hitboxVisable = player.hitboxCheck();
+      if (ImGui::Checkbox("Show Player Hitbox", &hitboxVisable)) {
+        player.hitBoxToggle();
+      }
+      ImGui::Text("Mouse Position [%d,%d]", xMouse, yMouse);
+      ImGui::Text("Mouse Down: %s", (mouseDown) ? "true" : "false");
+    }
 
     // Rendering Frame
     ImGui::Render();

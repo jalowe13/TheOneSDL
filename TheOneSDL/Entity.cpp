@@ -72,7 +72,10 @@ bool Entity::hitboxCheck() {
 SDL_Rect *Entity::getHitboxRect() { return &entityHitboxR; }
 
 // Setters
-
+bool &Entity::hitBoxToggle() {
+  hitboxOn = !hitboxOn;
+  return hitboxOn;
+}
 void Entity::xPathEdit(MovementDirection path) { currentDirectionX = path; }
 
 void Entity::yPathEdit(MovementDirection path) { currentDirectionY = path; }
@@ -271,7 +274,8 @@ void Entity::handleMovement(Physics *phys_eng, Terrain *terrain_eng) {
 }
 
 bool Entity::boundsCheck(int x, int y) {
-  if ((x > 0 && y > 0) && ((x < SCREEN_WIDTH) && (y < SCREEN_HEIGHT))) {
+  if ((x > 0 && y > 0) &&
+      ((x < (SCREEN_WIDTH - 32)) && (y < (SCREEN_HEIGHT - 32)))) {
     return true;
   }
   return false;

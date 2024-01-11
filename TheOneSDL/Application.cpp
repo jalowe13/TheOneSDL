@@ -1,4 +1,6 @@
 #include "Application.h"
+#include "Entity.h"
+#include "imgui.h"
 
 #ifdef _WIN32
 #else
@@ -24,6 +26,7 @@ Application::Application() {
 #endif
   timeDifference = 0;
   frameAverage = 0;
+  mainMenu = true;
 }
 
 Application::~Application() { std::cout << "-----Application Destroyed\n"; }
@@ -67,7 +70,7 @@ bool Application::init() {
       ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
       ImGui_ImplSDLRenderer2_Init(renderer);
       std::cout << "-----ImGUI Created" << std::endl;
-
+      // Create Players and Entities
       // Start EntityManger and add an Entity
       entityManager = std::make_unique<EntityManager>();
       if (!entityManager) {
@@ -232,16 +235,32 @@ void Application::handleEvents() { // Handle all keyboard and mouse events
 
 void Application::update() // Update Logic each frame
 {
-  updateEntities(); // Loop through entities and update them
+  if (!mainMenu) {
+    updateEntities(); // Loop through entities and update them
+  }
 }
 
 void Application::render() { // Display textures on screen each frame
-  SDL_RenderClear(renderer); // Clear Screen
-  if (debugMode) {           // If in Debug Mode
-    renderDebugMenu();
+  SDL_RenderClear(renderer);
+  SDL_SetRenderDrawColor(
+      renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255),
+      (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 1));
+  ImGui_ImplSDLRenderer2_NewFrame();
+  ImGui_ImplSDL2_NewFrame();
+  ImGui::NewFrame();
+  if (!mainMenu) {
+    renderBlockEntities(); // Render all blocks and all entities  // Render the
+                           // frame
   } else {
-    renderBlockEntities(); // Render all blocks and all entities
+    renderImGuiFrame();
   }
+  if (debugMode) {
+    renderDebugMenu();
+  }
+  ImGui::Render();
+  SDL_RenderSetScale(renderer, io.DisplayFramebufferScale.x,
+                     io.DisplayFramebufferScale.y);
+  ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
   SDL_RenderPresent(renderer); // Present rendered frame
 }
 
@@ -254,19 +273,40 @@ void Application::updateEntities() {
   }
 }
 
+void Application::renderImGuiFrame() {
+  // Choose what to show on the frame
+  if (debugMode) {
+    renderDebugMenu();
+  } else if (mainMenu) {
+    ImGui::SetNextWindowSize(ImVec2(SCREEN_WIDTH, SCREEN_HEIGHT));
+    ImGui::SetNextWindowPos(ImVec2(0, 0));
+    if (ImGui::Begin("Fullscreen Window", nullptr,
+                     ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
+                         ImGuiWindowFlags_NoMove)) {
+      ImGui::SetCursorPosY((SCREEN_HEIGHT / 2) - 50);
+      ImGui::SetCursorPosX((SCREEN_WIDTH / 2) - 70);
+      ImGui::Text(Title);
+      ImGui::NewLine();
+      ImGui::SetCursorPosX((SCREEN_WIDTH / 2) - 95);
+
+      if (ImGui::Button("New Game")) {
+        mainMenu = false;
+      }
+      ImGui::SameLine();
+      if (ImGui::Button("Quit Game")) {
+        exit(1);
+      }
+      ImGui::SameLine();
+    }
+    ImGui::End();
+  }
+}
+
 void Application::renderDebugMenu() {
-  // Start the Dear ImGui frame
-  SDL_SetRenderDrawColor(
-      renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255),
-      (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 1));
-  ImGui_ImplSDLRenderer2_NewFrame();
-  ImGui_ImplSDL2_NewFrame();
-  ImGui::NewFrame();
   // Frame actions
   Entity &player = *((entityManager->getEntities()
                           .data()[0])); // This should go into a header file
                                         // for the reference to the player
-  ImGui::Checkbox("Debug Mode", &debugMode);
   if (ImGui::Button("Reset Player Position")) {
     // Buttons return true when clicked (most widgets return true when
     // edited/activated)
@@ -292,12 +332,6 @@ void Application::renderDebugMenu() {
     ImGui::Text("Tilemap Position [%d,%d]", xMouse / 32, yMouse / 32);
     ImGui::Text("Mouse Down: %s", (mouseDown) ? "true" : "false");
   }
-  // Rendering Frame
-  ImGui::Render();
-  SDL_RenderSetScale(renderer, io.DisplayFramebufferScale.x,
-                     io.DisplayFramebufferScale.y);
-  // SDL_RenderClear(renderer);
-  ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
 }
 
 void Application::renderBlockEntities() {

@@ -2,8 +2,8 @@
 
 // Version Number
 #define VERSION_MAJOR 0
-#define VERSION_MINOR 38
-#define VERSION_PATCH .2
+#define VERSION_MINOR 39
+#define VERSION_PATCH
 #define STR_HELPER(x) #x // convert to fit window title
 #define STR(x) STR_HELPER(x)
 
@@ -47,8 +47,10 @@ class Terrain;
 class Application {
 public:
   const char *windowTitle =
-      "C23 Engine: The One SDL v." STR(VERSION_MAJOR) "." STR(VERSION_MINOR)
+      "C23 Engine: The One SDL v" STR(VERSION_MAJOR) "." STR(VERSION_MINOR)
           STR(VERSION_PATCH) " FPS:";
+  const char *Title =
+      "The One v" STR(VERSION_MAJOR) "." STR(VERSION_MINOR) STR(VERSION_PATCH);
   Application();
   ~Application();
 
@@ -94,6 +96,8 @@ private:
   // Functions
   // Update the Entities
   void updateEntities();
+  // Render ImGui Single Frame
+  void renderImGuiFrame();
   // Render the ImGui Debug Menu
   void renderDebugMenu();
   // Render Blocks and Entities
@@ -135,6 +139,7 @@ private:
   Enemy *enemy = NULL;
 
   // Game Variables
+  bool mainMenu;
   bool gameRunning;
   int frameCount;
   int startTime;

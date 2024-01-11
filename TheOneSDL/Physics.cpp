@@ -69,7 +69,10 @@ void Physics::checkEntityCollision(Entity *entity, EntityManager *manager) {
         // std::cout << "Collision between " << entity->getEntityType() << " and
         // "
         //           << entity2->getEntityType() << std::endl;
-        std::cout << "Game Over\n";
+        std::cout << "\n\n\n--------------------------------\n";
+        std::cout << "            GAME OVER\n";
+        std::cout << "--------------------------------\n";
+        SDL_Delay(3000);
         exit(1);
       }
     }

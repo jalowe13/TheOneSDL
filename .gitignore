@@ -34,4 +34,6 @@ TheOneSDL/compiledb.exe
 TheOneSDL/compile_commands.json
 *.url
 TheOneSDL/.clang-format
-TheOneSDL/imgui/
+TheOneSDL/imgui/*
+TheOneSDL\imgui
+TheOneSDL/imgui

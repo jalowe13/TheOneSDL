@@ -1,51 +1,38 @@
 #include "Physics.h"
 #include "Terrain.h"
-#include <iostream>
-#include <cmath>
-
-
 const std::string Physics::floor = "Floor";
 
-Physics::Physics(){
+Physics::Physics() {
   std::cout << "-----Start Physics Engine\n";
-  
+
   std::cout << "-----Physics Engine Started\n";
 }
 
-Physics::~Physics(){
+Physics::~Physics() {
   std::cout << "-----Stopping Physics Engine" << std::endl;
 }
 
-float Physics::getGravity(){
-    return gravity;
-}
+float Physics::getGravity() { return gravity; }
 
-void Physics::incTime(){
-  time = time + (timeI*2);
-}
+void Physics::incTime() { time = time + (timeI * 2); }
 
-void Physics::resetTime(){
-  time = 0.0;
-}
+void Physics::resetTime() { time = 0.0; }
 
-float Physics::getTime(){
-  return time;
-}
+float Physics::getTime() { return time; }
 
-
-
-int Physics::checkRectCollision(SDL_Rect* A, Terrain* terrain)
-{
-  std::vector<Block>* blocks = terrain->getBlockVector();
-  for (Block block : *blocks)                     // Iterate through every block
-	{
-    if (SDL_HasIntersection(A, block.get_Rect())) // Check if its intersecting with another hitbox
+int Physics::checkRectCollision(SDL_Rect *A, Terrain *terrain) {
+  std::vector<Block> *blocks = terrain->getBlockVector();
+  for (Block block : *blocks) // Iterate through every block
+  {
+    if (SDL_HasIntersection(
+            A,
+            block.get_Rect())) // Check if its intersecting with another hitbox
     {
       // Only Check Collision not by direction
-      if(floor == block.name)                     // If on Floor return Code for on top of block
+      if (floor == block.name) // If on Floor return Code for on top of block
       {
-        //char direction = get4Points(A,block.getX(),block.getY());
-        
+        // char direction = get4Points(A,block.getX(),block.getY());
+
         if (block.getY() > A->y) // If On top of block
         {
           return 1;
@@ -57,8 +44,7 @@ int Physics::checkRectCollision(SDL_Rect* A, Terrain* terrain)
             return 4;
           }
           return 2;
-        }
-        else if (block.getX() > A->x) // If to the right of a block
+        } else if (block.getX() > A->x) // If to the right of a block
         {
           if (block.getY() < (A->y - 20)) // But under a block
           {
@@ -69,20 +55,37 @@ int Physics::checkRectCollision(SDL_Rect* A, Terrain* terrain)
         return 5; // Unknown collision error
       }
     }
-	}
+  }
   return 0;
 }
 
+void Physics::checkEntityCollision(Entity *entity, EntityManager *manager) {
+  for (auto &entity2 :
+       manager->getEntities()) { // For every entity in entity list
+    if (entity->getEntityType() !=
+        entity2->getEntityType()) { // If not the same type
+      if (SDL_HasIntersection(entity->getHitboxRect(),
+                              entity2->getHitboxRect())) { // If intersecting
+        // std::cout << "Collision between " << entity->getEntityType() << " and
+        // "
+        //           << entity2->getEntityType() << std::endl;
+        std::cout << "Game Over\n";
+        exit(1);
+      }
+    }
+  }
+}
+
 // Utility function for something? Later on
-// Try not to pass pointers when you dont need to 
-char Physics::get4Points(SDL_Rect* A, int centerX, int centerY)
-{
+// Try not to pass pointers when you dont need to
+char Physics::get4Points(SDL_Rect *A, int centerX, int centerY) {
   // A points p1
   float A_centerX, A_centerY;
   A_centerX = A->x + 16;
   A_centerY = A->y + 16;
   // std::cout << "[" << A_centerX << "," << A_centerY << "] ";
-  // std::cout << " " << A_centerX << "," << A_centerY << " " << centerX << " " << centerY << "\r";
+  // std::cout << " " << A_centerX << "," << A_centerY << " " << centerX << " "
+  // << centerY << "\r";
 
   // B Points of interest
   int B_NorthY = centerY;
@@ -91,36 +94,38 @@ char Physics::get4Points(SDL_Rect* A, int centerX, int centerY)
   int B_WestX = centerX + 32;
 
   // p2
-  std::pair<int,int> north = {centerX+16,B_NorthY};
-  std::pair<int,int> south = {centerX+16,B_SouthY};
-  std::pair<int,int> east = {B_EastX,centerY+16};
-  std::pair<int,int> west = {B_WestX,centerY+16};
+  std::pair<int, int> north = {centerX + 16, B_NorthY};
+  std::pair<int, int> south = {centerX + 16, B_SouthY};
+  std::pair<int, int> east = {B_EastX, centerY + 16};
+  std::pair<int, int> west = {B_WestX, centerY + 16};
 
   // Distance Calculations
   // p1.x p2.x , p1.y p2.y
-  float dist_N = sqrt(pow(A_centerX - north.first, 2) + pow(A_centerY - north.second, 2));
-  float dist_S = sqrt(pow(A_centerX - south.first, 2) + pow(A_centerY - south.second, 2));
-  float dist_E = sqrt(pow(A_centerX - east.first, 2) + pow(A_centerY - east.second, 2));
-  float dist_W = sqrt(pow(A_centerX - west.first, 2) + pow(A_centerY - west.second, 2));
+  float dist_N =
+      sqrt(pow(A_centerX - north.first, 2) + pow(A_centerY - north.second, 2));
+  float dist_S =
+      sqrt(pow(A_centerX - south.first, 2) + pow(A_centerY - south.second, 2));
+  float dist_E =
+      sqrt(pow(A_centerX - east.first, 2) + pow(A_centerY - east.second, 2));
+  float dist_W =
+      sqrt(pow(A_centerX - west.first, 2) + pow(A_centerY - west.second, 2));
   // std::cout << "Center[" << A_centerX << "," << A_centerY << "]\n";
-  // std::cout << "N[" << dist_N << "]S[" << dist_S << "]E[" << dist_E << "]W[" << dist_W << "] ";
+  // std::cout << "N[" << dist_N << "]S[" << dist_S << "]E[" << dist_E << "]W["
+  // << dist_W << "] ";
 
   // Finding minimum distance
   float mindist = dist_N;
   char direction = 'N';
 
-  if (dist_S < mindist)
-  {
+  if (dist_S < mindist) {
     mindist = dist_S;
     direction = 'S';
   }
-  if (dist_E < mindist)
-  {
+  if (dist_E < mindist) {
     mindist = dist_E;
     direction = 'E';
   }
-  if (dist_W < mindist)
-  {
+  if (dist_W < mindist) {
     mindist = dist_W;
     direction = 'W';
   }
@@ -134,8 +139,7 @@ char Physics::get4Points(SDL_Rect* A, int centerX, int centerY)
 
   // std::cout << " Direction is " << direction << " ";
 
-  // std::cout << "" << A_centerX << "," << A_centerY << " " << centerX << " " << centerY << "\r";
+  // std::cout << "" << A_centerX << "," << A_centerY << " " << centerX << " "
+  // << centerY << "\r";
   return direction;
-
 }
-

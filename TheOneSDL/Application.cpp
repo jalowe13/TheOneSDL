@@ -100,7 +100,9 @@ bool Application::init() {
 
       // Start Physics engine
       phys_eng = new Physics();
-
+      std::cout << "--------------------------------\n";
+      std::cout << "            GAME START\n";
+      std::cout << "--------------------------------\n";
       gameRunning = true;
     } else {
       gameRunning = false;
@@ -121,7 +123,7 @@ bool Application::init() {
 //   // std::cout << "Refresh Rate: " << this->fps << std::endl;
 // }
 
-void Application::handleEvents() {
+void Application::handleEvents() { // Handle all keyboard and mouse events
   // auto &entity =
   //     entityManager->getEntities()[0]; // This needs to be changed to a
   //     specific
@@ -228,98 +230,99 @@ void Application::handleEvents() {
   }
 }
 
-void Application::update() // Update Logic
+void Application::update() // Update Logic each frame
 {
-  // Logic first before rendering texture
-  // Logic --> Physics --> Render Fix!!
-  for (auto &entity : entityManager->getEntities()) {
+  updateEntities(); // Loop through entities and update them
+}
+
+void Application::render() { // Display textures on screen each frame
+  SDL_RenderClear(renderer); // Clear Screen
+  if (debugMode) {           // If in Debug Mode
+    renderDebugMenu();
+  } else {
+    renderBlockEntities(); // Render all blocks and all entities
+  }
+  SDL_RenderPresent(renderer); // Present rendered frame
+}
+
+void Application::updateEntities() {
+  for (std::unique_ptr<Entity> &entity : entityManager->getEntities()) {
     entity->checkCollision(
         phys_eng->checkRectCollision(entity->getHitboxRect(), terrain_gen),
         phys_eng); // Check entity collision with terrain
+    phys_eng->checkEntityCollision(entity.get(), entityManager.get());
   }
-
-  // terrain_gen->fillScreen(); // Update textures and rectangles
 }
 
-void Application::render() {
-  // This should change for updating all entities
-  // for (auto &entity : entityManager->getEntities()) {
-  // }
-
-  // enemy->updateTexture(phys_eng, terrain_gen);  // Update enemy texture
-  SDL_RenderClear(renderer); // Clear Screen
-
-  if (debugMode) {
-
-    // Start the Dear ImGui frame
-    SDL_SetRenderDrawColor(
-        renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255),
-        (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 1));
-    ImGui_ImplSDLRenderer2_NewFrame();
-    ImGui_ImplSDL2_NewFrame();
-    ImGui::NewFrame();
-    // Frame actions
-    Entity &player = *((entityManager->getEntities()
-                            .data()[0])); // This should go into a header file
-                                          // for the reference to the player
-    ImGui::Checkbox("Debug Mode", &debugMode);
-    if (ImGui::Button("Reset Player Position")) {
-      // Buttons return true when clicked (most widgets return true when
-      // edited/activated)
-      player.xEdit(111);
-      player.yEdit(500);
-    }
-    ImGui::Text("Player Position [%d,%d]",
-                (entityManager->getEntities()[0])->getTileX(),
-                (entityManager->getEntities()[0])->getTileY());
-    if (ImGui::CollapsingHeader("Performance Settings")) {
-      static int f = fps;
-      if (ImGui::SliderInt("Frame Rate Cap", &f, 10, 150)) {
-        fps = static_cast<uint64_t>(f);
-      }
-    }
-    if (ImGui::CollapsingHeader("Advanced Settings and Statistics")) {
-      ImGui::Text("Gameplay Debugging");
-      bool hitboxVisable = player.hitboxCheck();
-      if (ImGui::Checkbox("Show Player Hitbox", &hitboxVisable)) {
-        player.hitBoxToggle();
-      }
-      ImGui::Text("Mouse Position [%d,%d]", xMouse, yMouse);
-      ImGui::Text("Tilemap Position [%d,%d]", xMouse / 32, yMouse / 32);
-      ImGui::Text("Mouse Down: %s", (mouseDown) ? "true" : "false");
-    }
-
-    // Rendering Frame
-    ImGui::Render();
-    SDL_RenderSetScale(renderer, io.DisplayFramebufferScale.x,
-                       io.DisplayFramebufferScale.y);
-    // SDL_RenderClear(renderer);
-    ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
-  } else {
-    std::vector<Block> *terrain_vector = terrain_gen->getBlockVector();
-    for (Block &block : *terrain_vector) // Iterate
-    {
-      block.draw(renderer);
-    }
-
-    // Enemies
-    // SDL_RenderCopy(renderer, enemy->getTexture(), enemy->getRectTex(),
-    //               enemy->getRect());
-    // Entity
-    for (auto &entity : entityManager->getEntities()) {
-      entity->updateTexture(phys_eng, terrain_gen); // Update entity texture
-      SDL_RenderCopy(renderer, entity->getTexture(), entity->getRectTex(),
-                     entity->getRect());
-
-      // Hitbox Rendering
-      if (entity->hitboxCheck()) {
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        SDL_RenderDrawRect(renderer, entity->getHitboxRect());
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-      }
+void Application::renderDebugMenu() {
+  // Start the Dear ImGui frame
+  SDL_SetRenderDrawColor(
+      renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255),
+      (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 1));
+  ImGui_ImplSDLRenderer2_NewFrame();
+  ImGui_ImplSDL2_NewFrame();
+  ImGui::NewFrame();
+  // Frame actions
+  Entity &player = *((entityManager->getEntities()
+                          .data()[0])); // This should go into a header file
+                                        // for the reference to the player
+  ImGui::Checkbox("Debug Mode", &debugMode);
+  if (ImGui::Button("Reset Player Position")) {
+    // Buttons return true when clicked (most widgets return true when
+    // edited/activated)
+    player.xEdit(111);
+    player.yEdit(500);
+  }
+  ImGui::Text("Player Position [%d,%d]",
+              (entityManager->getEntities()[0])->getTileX(),
+              (entityManager->getEntities()[0])->getTileY());
+  if (ImGui::CollapsingHeader("Performance Settings")) {
+    static int f = fps;
+    if (ImGui::SliderInt("Frame Rate Cap", &f, 10, 150)) {
+      fps = static_cast<uint64_t>(f);
     }
   }
-  SDL_RenderPresent(renderer);
+  if (ImGui::CollapsingHeader("Advanced Settings and Statistics")) {
+    ImGui::Text("Gameplay Debugging");
+    bool hitboxVisable = player.hitboxCheck();
+    if (ImGui::Checkbox("Show Player Hitbox", &hitboxVisable)) {
+      player.hitBoxToggle();
+    }
+    ImGui::Text("Mouse Position [%d,%d]", xMouse, yMouse);
+    ImGui::Text("Tilemap Position [%d,%d]", xMouse / 32, yMouse / 32);
+    ImGui::Text("Mouse Down: %s", (mouseDown) ? "true" : "false");
+  }
+  // Rendering Frame
+  ImGui::Render();
+  SDL_RenderSetScale(renderer, io.DisplayFramebufferScale.x,
+                     io.DisplayFramebufferScale.y);
+  // SDL_RenderClear(renderer);
+  ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
+}
+
+void Application::renderBlockEntities() {
+  std::vector<Block> *terrain_vector = terrain_gen->getBlockVector();
+  for (Block &block : *terrain_vector) // Iterate
+  {
+    block.draw(renderer);
+  }
+
+  // Enemies
+  // SDL_RenderCopy(renderer, enemy->getTexture(), enemy->getRectTex(),
+  //               enemy->getRect());
+  // Entity
+  for (auto &entity : entityManager->getEntities()) {
+    entity->updateTexture(phys_eng, terrain_gen); // Update entity texture
+    SDL_RenderCopy(renderer, entity->getTexture(), entity->getRectTex(),
+                   entity->getRect());
+
+    // Hitbox Rendering
+    if (entity->hitboxCheck()) {
+      SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+      SDL_RenderDrawRect(renderer, entity->getHitboxRect());
+      SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+    }
+  }
 }
 
 void Application::clean() {

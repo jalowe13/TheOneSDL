@@ -1,11 +1,17 @@
 #pragma once
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_rect.h>
+#include <cmath>
+#include <iostream>
+#include <memory>
 #include <string>
 
 // Forward declare
 class Terrain;
 class Player;
+class Entity;
+class EntityManager;
 
 class Physics {
 public:
@@ -35,7 +41,15 @@ public:
   0 -
   */
   int checkRectCollision(SDL_Rect *A, Terrain *terrain);
+  /*
+   * Check if Entity is colliding with any Entity on the tilemap in the
+   * EntityList
+   * Return true if true false if not
+   * Entity* entity - Entity A (Player or entity)
+   * EntityManager* manager - Reference to the running EntityManager
+   */
 
+  void checkEntityCollision(Entity *entity, EntityManager *manager);
   /*
   Given two rectangles find distances from
   Rectangle A to all 4 points on Rectangle B

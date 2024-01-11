@@ -32,6 +32,7 @@ public:
   void updateTexture(Physics *phys_eng, Terrain *terrain_eng);
 
   // Getters
+  const EntityType getEntityType() { return entityType; };
   const float getSpeed();
   MovementDirection xPath();
   MovementDirection yPath();

@@ -2,7 +2,7 @@
 
 // Version Number
 #define VERSION_MAJOR 0
-#define VERSION_MINOR 37
+#define VERSION_MINOR 38
 #define VERSION_PATCH
 #define STR_HELPER(x) #x // convert to fit window title
 #define STR(x) STR_HELPER(x)
@@ -41,7 +41,7 @@ class Terrain;
 #include "Enemy.h"
 #include "Entity.h"
 #include "EntityManager.h"
-// #include "Physics.h"
+#include "Physics.h"
 #include "Terrain.h"
 
 class Application {
@@ -91,6 +91,13 @@ public:
   Uint64 frame_time = 0;
 
 private:
+  // Functions
+  // Update the Entities
+  void updateEntities();
+  // Render the ImGui Debug Menu
+  void renderDebugMenu();
+  // Render Blocks and Entities
+  void renderBlockEntities();
   // Pointers
   SDL_Window *window = NULL;         // Pointer to Window
   SDL_Renderer *renderer = NULL;     // Render graphics

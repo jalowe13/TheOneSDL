@@ -14,7 +14,6 @@ Enemy::Enemy(SDL_Renderer *renderer, int x, int y) // Define the constructor
   setTexture(textures["chomper_idle_left"]);
   // Hitbox for Enemy
   entityHitboxR.w = 30;
-  hitBoxToggle();
 }
 
 bool Enemy::hitboxCheck() {
@@ -31,14 +30,11 @@ void Enemy::handleMovement(Physics *phys_eng, Terrain *terrain_eng) {
   } else {
     idle_timer = rand() % 500 + 1;
     if (xPath() == Left || xPath() == Right) {
-      inAnimation = false;
       xPathEdit(None);
-      // setTexture(textures["chomper_idle_left"]);
     } else if (xPath() == None) {
-      inAnimation = false;
       xPathEdit(Left);
-      // setTexture(textures["chomper_move_left"]);
     }
+    inAnimation = false;
   }
   //  Handle player movement animations
   // Handle Generics of cord movement

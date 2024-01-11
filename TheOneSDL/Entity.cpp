@@ -126,9 +126,9 @@ void Entity::loadTextures(SDL_Renderer *renderer) {
     texture = IMG_LoadTexture(renderer, filename);
     SDL_QueryTexture(texture, NULL, NULL, &textureWidth, &textureHeight);
     textures[name] = texture;
-    std::cout << entityType << ": Texture loaded " << name
-              << " with path:" << filename << " with dims " << textureWidth
-              << " and " << textureHeight << std::endl;
+    // std::cout << entityType << ": Texture loaded " << name
+    //           << " with path:" << filename << " with dims " << textureWidth
+    //           << " and " << textureHeight << std::endl;
     if (textures[name] == 0 || textureWidth == 0 || textureHeight == 0) {
       std::cout << "!!!!!" << name << " failed to load from path " << filename
                 << "!!!!!" << std::endl;
@@ -213,7 +213,6 @@ void Entity::checkCollision(int i, Physics *phys_eng) {
     }
     default:
       isColliding = false; // Other collisions like sitting on top of a block
-                           // doesnt matter
       break;
     }
   }

@@ -37,3 +37,4 @@ TheOneSDL/.clang-format
 TheOneSDL/imgui/*
 TheOneSDL\imgui
 TheOneSDL/imgui
+TheOneSDL/old_builds/

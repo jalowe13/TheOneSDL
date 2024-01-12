@@ -1,3 +1,20 @@
+/*
+* Application.cpp
+* Copyright (C) [2024] [Jacob Lowe]
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>
+*/
 #include "Application.h"
 #include "Entity.h"
 #include "imgui.h"
@@ -284,7 +301,7 @@ void Application::renderImGuiFrame() {
                      ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
                          ImGuiWindowFlags_NoMove)) {
       ImGui::SetCursorPosY((SCREEN_HEIGHT / 2) - 50);
-      ImGui::SetCursorPosX((SCREEN_WIDTH / 2) - 70);
+      ImGui::SetCursorPosX((SCREEN_WIDTH / 2) - 80);
       ImGui::Text(Title);
       ImGui::NewLine();
       ImGui::SetCursorPosX((SCREEN_WIDTH / 2) - 95);
@@ -297,6 +314,37 @@ void Application::renderImGuiFrame() {
         exit(1);
       }
       ImGui::SameLine();
+      ImGui::SetCursorPosY((SCREEN_HEIGHT)-30);
+      ImGui::SetCursorPosX(0);
+      if (ImGui::Button("About")) {
+        ImGui::OpenPopup("License Info");
+      }
+      if (ImGui::BeginPopupModal("License Info", NULL,
+                                 ImGuiWindowFlags_AlwaysAutoResize)) {
+        ImGui::Text(
+            "Copyright (C) [2024] [Jacob Lowe]\n"
+            "\n"
+            "This program is free software: you can redistribute it and/or "
+            "modify\n"
+            "it under the terms of the GNU Affero General Public License as\n"
+            "published by the Free Software Foundation, either version 3 of "
+            "the\n"
+            "License, or (at your option) any later version.\n"
+            "\n"
+            "This program is distributed in the hope that it will be useful,\n"
+            "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+            "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+            "GNU Affero General Public License for more details.\n"
+            "\n"
+            "You should have received a copy of the GNU Affero General Public "
+            "License\n"
+            "along with this program.  If not, see "
+            "<https://www.gnu.org/licenses/>");
+        if (ImGui::Button("Close")) {
+          ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+      }
     }
     ImGui::End();
   }

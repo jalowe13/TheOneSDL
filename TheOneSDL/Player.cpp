@@ -31,13 +31,14 @@ Player::Player(SDL_Renderer *renderer, int x, int y) // Define the constructor
   }
   setTexture(textures["idle_right"]);
 }
-void Player::handleMovement(Physics *phys_eng, Terrain *terrain_eng) {
+void Player::handleMovement(Physics *phys_eng, Terrain *terrain_eng,
+                            SDL_Window *window) {
   // Handle Generics of cord movement
   //
   // This Entity Handle movement should actually pass in a datastructure of all
   // specific textures to load for each instance in order
   //
-  Entity::handleMovement(phys_eng, terrain_eng);
+  Entity::handleMovement(phys_eng, terrain_eng, window);
   //  Handle player movement animations
   switch (xPath()) {
   case Left: {

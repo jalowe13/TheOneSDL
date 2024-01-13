@@ -360,6 +360,7 @@ void Application::renderDebugMenu() {
     // edited/activated)
     player.xEdit(111);
     player.yEdit(500);
+    player.entityFalling = false;
   }
   ImGui::Text("Player Position [%d,%d]",
               (entityManager->getEntities()[0])->getTileX(),
@@ -379,8 +380,9 @@ void Application::renderDebugMenu() {
     if (ImGui::Checkbox("Show Player Hitbox", &hitboxVisable)) {
       player.hitBoxToggle();
     }
-    if (ImGui::Button("Recompile Terrain")) {
+    if (ImGui::Button("Recompile Texture Scaling")) {
       terrain_gen->fillScreen(getWindow());
+      entityManager->scaleEntities(window);
     }
     int current_width, current_height;
     SDL_GetWindowSize(window, &current_width, &current_height);
@@ -403,7 +405,8 @@ void Application::renderBlockEntities() {
   //               enemy->getRect());
   // Entity
   for (auto &entity : entityManager->getEntities()) {
-    entity->updateTexture(phys_eng, terrain_gen); // Update entity texture
+    entity->updateTexture(phys_eng, terrain_gen,
+                          window); // Update entity texture
     SDL_RenderCopy(renderer, entity->getTexture(), entity->getRectTex(),
                    entity->getRect());
 

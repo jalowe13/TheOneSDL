@@ -53,6 +53,12 @@ void EntityManager::createAndAddEntity(SDL_Renderer *renderer,
   std::cout << "There are now " << entities.size() << " entities\n";
 }
 
+void EntityManager::scaleEntities(SDL_Window *window) {
+  for (auto &entity : entities) {
+    entity->scaleTextures(window);
+  }
+}
+
 void EntityManager::addEntity(std::unique_ptr<Entity> entity) {
   entities.push_back(std::move(entity));
 }

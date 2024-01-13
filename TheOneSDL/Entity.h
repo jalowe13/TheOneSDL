@@ -44,7 +44,10 @@ public:
 
   void loadTextures(SDL_Renderer *renderer);
 
-  void updateTexture(Physics *phys_eng, Terrain *terrain_eng);
+  void scaleTextures(SDL_Window *window);
+
+  void updateTexture(Physics *phys_eng, Terrain *terrain_eng,
+                     SDL_Window *window);
 
   // Getters
   const EntityType getEntityType() { return entityType; };
@@ -75,9 +78,10 @@ public:
   // Passing in char from Physics engine to check collision
   void checkCollision(int i, Physics *phys_eng);
   // Handle movement from the Physics engine
-  virtual void handleMovement(Physics *phys_eng, Terrain *terrain_eng);
+  virtual void handleMovement(Physics *phys_eng, Terrain *terrain_eng,
+                              SDL_Window *window);
   // Check if Entity is outside of the screen
-  bool boundsCheck(int x, int y);
+  bool boundsCheck(int x, int y, SDL_Window *window);
   // Setting Textures to the passed in texture
   void setTexture(SDL_Texture *texture);
   void set_tilemap_pos(int x, int y);
@@ -95,8 +99,9 @@ public:
   // Hitbox Methods
   virtual bool hitboxCheck();
 
-  // Is Colliding
+  // Is Colliding or falling
   bool isColliding = false;
+  bool entityFalling;
 
 protected: // Protected so that Player and Enemy can access
   // Textures stored
@@ -111,7 +116,6 @@ protected: // Protected so that Player and Enemy can access
   int tilemap_x;
   int tilemap_y;
   // Movemment Status
-  bool entityFalling;
   // Rectangles and Hitbox
   SDL_Rect entityHitboxR;
   SDL_Rect entityR;

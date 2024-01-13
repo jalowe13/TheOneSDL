@@ -28,7 +28,8 @@ public:
   Player(SDL_Renderer *renderer, int x,
          int y); // Declare the constructor // Constructor
   ~Player();     // Destructor
-  void handleMovement(Physics *phys_eng, Terrain *terrain_eng) override;
+  void handleMovement(Physics *phys_eng, Terrain *terrain_eng,
+                      SDL_Window *window) override;
   std::list<std::string> getTexturePaths(); // Texture file paths
   std::list<std::string> getTextureNames(); // Texture file names
 private:

@@ -157,7 +157,8 @@ void Entity::loadTextures(SDL_Renderer *renderer) {
 
 // Updating Texture per frame time
 
-void Entity::updateTexture(Physics *phys_eng, Terrain *terrain_eng) {
+void Entity::updateTexture(Physics *phys_eng, Terrain *terrain_eng,
+                           SDL_Window *window) {
   xTexEdit(getTexX() + frameWidth);
   if (getTexX() >= textureWidth) // Reset back to the end of the texture
   {
@@ -168,9 +169,20 @@ void Entity::updateTexture(Physics *phys_eng, Terrain *terrain_eng) {
   {
     frame_time = 0;
   } else {
-    handleMovement(phys_eng, terrain_eng);
+    handleMovement(phys_eng, terrain_eng, window);
     frame_time++;
   }
+}
+void Entity::scaleTextures(SDL_Window *window) {
+  std::cout << "Scale Textures for " << entityType << std::endl;
+  int current_width, current_height;
+  SDL_GetWindowSize(window, &current_width, &current_height);
+  float scalex = current_width / 800.f;
+  float scaley = current_height / 600.f;
+  entityR.w = static_cast<int>(round(32 * scalex));
+  entityR.h = static_cast<int>(round(32 * scaley));
+  entityHitboxR.w = static_cast<int>(round(20 * scalex));
+  entityHitboxR.h = static_cast<int>(round(20 * scaley));
 }
 
 void Entity::toggleDirection() {
@@ -198,7 +210,7 @@ void Entity::checkCollision(int i, Physics *phys_eng) {
       entityFalling = false;
       phys_eng->resetTime(); // Reset time on ground
       isColliding = false;
-      // std::cout << "~~~Collide~~~\r";
+      std::cout << "~~~Collide~~~\r";
       break;
     case 2: // Colliding from left
       isColliding = true;
@@ -235,8 +247,9 @@ void Entity::checkCollision(int i, Physics *phys_eng) {
   }
 }
 
-void Entity::handleMovement(Physics *phys_eng, Terrain *terrain_eng) {
-  if (boundsCheck(getX(), getY())) {
+void Entity::handleMovement(Physics *phys_eng, Terrain *terrain_eng,
+                            SDL_Window *window) {
+  if (boundsCheck(getX(), getY(), window)) {
     switch (xPath()) {
     case Left: {
       (!isColliding) ? xEdit(getX() - getSpeed()) : xEdit(getX() + getSpeed());
@@ -312,18 +325,22 @@ void Entity::handleMovement(Physics *phys_eng, Terrain *terrain_eng) {
     }
     }
     // Out of bounds check and reset
-    xEdit(getX() + (getX() >= SCREEN_WIDTH ? -getSpeed()
-                    : getX() <= 0          ? getSpeed()
-                                           : 0));
-    yEdit(getY() + (getY() >= SCREEN_HEIGHT ? -getSpeed()
-                    : getY() <= 0           ? getSpeed()
+    int current_width, current_height;
+    SDL_GetWindowSize(window, &current_width, &current_height);
+    xEdit(getX() + (getX() >= current_width ? -getSpeed()
+                    : getX() <= 0           ? getSpeed()
                                             : 0));
+    yEdit(getY() + (getY() >= current_height ? -getSpeed()
+                    : getY() <= 0            ? getSpeed()
+                                             : 0));
   }
 }
 
-bool Entity::boundsCheck(int x, int y) {
+bool Entity::boundsCheck(int x, int y, SDL_Window *window) {
+  int current_width, current_height;
+  SDL_GetWindowSize(window, &current_width, &current_height);
   if ((x > 0 && y > 0) &&
-      ((x < (SCREEN_WIDTH - 32)) && (y < (SCREEN_HEIGHT - 32)))) {
+      ((x < (current_width - 32)) && (y < (current_height - 32)))) {
     return true;
   }
   return false;

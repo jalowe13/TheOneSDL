@@ -28,6 +28,7 @@ public:
   ~EntityManager();
   void createAndAddEntity(SDL_Renderer *renderer, Entity::EntityType type,
                           int x, int y);
+  void scaleEntities(SDL_Window *window);
   void addEntity(std::unique_ptr<Entity> entity);
   //   void destroyEntity(int entityId);
   int getEntityCount();

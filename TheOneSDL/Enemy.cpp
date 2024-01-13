@@ -41,8 +41,9 @@ bool Enemy::hitboxCheck() {
   return hitboxOn;
 }
 
-void Enemy::handleMovement(Physics *phys_eng, Terrain *terrain_eng) {
-  Entity::handleMovement(phys_eng, terrain_eng);
+void Enemy::handleMovement(Physics *phys_eng, Terrain *terrain_eng,
+                           SDL_Window *window) {
+  Entity::handleMovement(phys_eng, terrain_eng, window);
   if (idle_timer > 0) {
     idle_timer--;
   } else {

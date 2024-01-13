@@ -19,14 +19,12 @@
 
 // Version Number
 #define VERSION_MAJOR 0
-#define VERSION_MINOR 39
-#define VERSION_PATCH .2
+#define VERSION_MINOR 40
+#define VERSION_PATCH
 #define STR_HELPER(x) #x // convert to fit window title
 #define STR(x) STR_HELPER(x)
 
 // Screen Definitions
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
 
 // External Libraries
 #include "imgui.h"
@@ -55,6 +53,7 @@ class Physics;
 class Terrain;
 
 // Include internal headers after forward declarations
+#include "Constants.h"
 #include "Enemy.h"
 #include "Entity.h"
 #include "EntityManager.h"

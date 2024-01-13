@@ -115,7 +115,7 @@ bool Application::init() {
       std::cout << "-----Terrain Generator Created" << std::endl;
       std::cout << "-----Starting Terrain Generation" << std::endl;
       // terrain_gen->loadLevel("Room");
-      terrain_gen->fillScreen();
+      terrain_gen->fillScreen(this->getWindow());
       std::cout << "-----Terrain Generation Complete" << std::endl;
 
       // Start Physics engine
@@ -231,17 +231,17 @@ void Application::handleEvents() { // Handle all keyboard and mouse events
     }
     case SDLK_1: {
       if (debugMode)
-        terrain_gen->loadLevel("DefaultLoad");
+        terrain_gen->loadLevel("DefaultLoad", getWindow());
       break;
     }
     case SDLK_2: {
       if (debugMode)
-        terrain_gen->loadLevel("Room");
+        terrain_gen->loadLevel("Room", getWindow());
       break;
     }
     case SDLK_3: {
       if (debugMode)
-        terrain_gen->loadLevel("EmptyFloor");
+        terrain_gen->loadLevel("EmptyFloor", getWindow());
     }
     }
     break;
@@ -364,6 +364,9 @@ void Application::renderDebugMenu() {
   ImGui::Text("Player Position [%d,%d]",
               (entityManager->getEntities()[0])->getTileX(),
               (entityManager->getEntities()[0])->getTileY());
+  if (ImGui::Button("Quit")) {
+    exit(1);
+  }
   if (ImGui::CollapsingHeader("Performance Settings")) {
     static int f = fps;
     if (ImGui::SliderInt("Frame Rate Cap", &f, 10, 150)) {
@@ -376,6 +379,12 @@ void Application::renderDebugMenu() {
     if (ImGui::Checkbox("Show Player Hitbox", &hitboxVisable)) {
       player.hitBoxToggle();
     }
+    if (ImGui::Button("Recompile Terrain")) {
+      terrain_gen->fillScreen(getWindow());
+    }
+    int current_width, current_height;
+    SDL_GetWindowSize(window, &current_width, &current_height);
+    ImGui::Text("Window Resolution [%d,%d]", current_width, current_height);
     ImGui::Text("Mouse Position [%d,%d]", xMouse, yMouse);
     ImGui::Text("Tilemap Position [%d,%d]", xMouse / 32, yMouse / 32);
     ImGui::Text("Mouse Down: %s", (mouseDown) ? "true" : "false");

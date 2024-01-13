@@ -31,7 +31,8 @@ public:
   // Block placement with cord params
   Block(int x_i, int y_i);
   // Block placement with cord and texture
-  Block(std::string name, int x_i, int y_i, SDL_Texture *texture_i);
+  Block(std::string name, int x_i, int y_i, float scale_x, float scale_y,
+        SDL_Texture *texture_i);
   // Draw the current block in the renderer
   void draw(SDL_Renderer *renderer);
 
@@ -69,7 +70,7 @@ public:
   // Iterates through all tilemaps, and loads textures into a texture array
   // Texture arrays are updated
   // Rectangle arrays are updated
-  bool fillScreen();
+  bool fillScreen(SDL_Window *window);
 
   // Print all contents of all blocks
   void print_allBlockInfo();
@@ -84,7 +85,7 @@ public:
   const static int texBounds = 32;
 
   // Load level from JSON
-  void loadLevel(std::string level);
+  void loadLevel(std::string level, SDL_Window *window);
 
   // Load Tilemap
   void loadTilemap(Json::Value json_tilemap, int map_type);

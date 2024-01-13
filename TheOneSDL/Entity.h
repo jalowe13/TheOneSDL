@@ -16,6 +16,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>
 */
 #pragma once
+#include "Constants.h"
 #include "Physics.h"
 #include <cmath>    // IWYU pragma: keep
 #include <iostream> // IWYU pragma: keep
@@ -23,9 +24,6 @@
 #include <map>
 #include <memory> // IWYU pragma: keep
 #include <string>
-
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
 
 class Terrain;
 class Physics;

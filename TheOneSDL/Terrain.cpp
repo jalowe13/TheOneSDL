@@ -37,11 +37,12 @@ Block::Block(int x_i, int y_i) {
   centerY = y + h / 2;
 }
 
-Block::Block(std::string name_i, int x_i, int y_i, SDL_Texture *texture_i) {
-  x = x_i;
-  y = y_i;
-  w = 32;
-  h = 32;
+Block::Block(std::string name_i, int x_i, int y_i, float scale_x, float scale_y,
+             SDL_Texture *texture_i) {
+  x = static_cast<int>(round(x_i));
+  y = static_cast<int>(round(y_i));
+  w = static_cast<int>(round(32 * scale_x));
+  h = static_cast<int>(round(32 * scale_y));
   centerX = x + w / 2;
   centerY = y + h / 2;
   name = name_i;
@@ -116,11 +117,16 @@ void Terrain::generateText(const char *text, int x, int y, int scale) {
   // surface); //Returns texture 	textListSize++;
 }
 
-bool Terrain::fillScreen() {
+bool Terrain::fillScreen(SDL_Window *window) {
   char tile = '~';
   SDL_Texture *texture = NULL;
   std::string name;
+  int current_width, current_height;
+  SDL_GetWindowSize(window, &current_width, &current_height);
+  float scalex = current_width / 800.f;
+  float scaley = current_height / 600.f;
   blocks.clear(); // Reset block collisions
+
   // 26 max blocks in X Direction for a Y in 800*600 26 20
   for (int layer = 0; layer < 2; layer++) {
     int x = 0;
@@ -178,10 +184,11 @@ bool Terrain::fillScreen() {
         }
         if (texture != NULL && x < SCREEN_WIDTH && y < SCREEN_HEIGHT) {
           // std::cout << x << "," << y << std::endl;
-          Block block(name, x, y, texture);
+          float scaled_x = x * scalex;
+          float scaled_y = y * scaley;
+          Block block(name, scaled_x, scaled_y, scalex, scaley, texture);
           blocks.push_back(block);
           // std::cout << "Size:" << blocks.size() << std::endl;
-          // generateTerrain(texture, x, y, layer);
         }
         if (x < SCREEN_WIDTH) {
           x = x + 32;
@@ -195,7 +202,7 @@ bool Terrain::fillScreen() {
   return true;
 }
 
-void Terrain::loadLevel(std::string level) {
+void Terrain::loadLevel(std::string level, SDL_Window *window) {
   std::ifstream ifs("levels.json"); // JSON file to open
   Json::Value lvl_data; // Map of other JSON values can returna value type,
                         // null, int etc...
@@ -237,8 +244,8 @@ void Terrain::loadLevel(std::string level) {
     }
   }
 
-  fillScreen();
-  // print_allBlockInfo();
+  fillScreen(window);
+  //  print_allBlockInfo();
 }
 
 void Terrain::loadTilemap(Json::Value json_tilemap, int map_type) {

@@ -169,16 +169,22 @@ void Application::handleEvents() { // Handle all keyboard and mouse events
   case SDL_QUIT:
     gameRunning = false;
     break;
-  case SDL_KEYDOWN:
+  case SDL_KEYDOWN: {
+    int current_res_width, current_res_height;
+    SDL_GetWindowSize(window, &current_res_width, &current_res_height);
+    float scaleX = current_res_width / SCREEN_WIDTH;
+    float scaleY = current_res_height / SCREEN_HEIGHT;
+    float scaleAvg = (scaleX + scaleY) / 2.0f;
     switch (event.key.keysym.sym) {
     case SDLK_w: {
       (*entity)->yPathEdit(Entity::Up);
-      (*entity)->editMS(3);
+
+      (*entity)->editMS(3 * scaleAvg);
       break;
     }
     case SDLK_a: {
       (*entity)->xPathEdit(Entity::Left);
-      (*entity)->editMS(2);
+      (*entity)->editMS(2 * scaleAvg);
       break;
     }
     case SDLK_s: {
@@ -187,11 +193,12 @@ void Application::handleEvents() { // Handle all keyboard and mouse events
     }
     case SDLK_d: {
       (*entity)->xPathEdit(Entity::Right);
-      (*entity)->editMS(2);
+      (*entity)->editMS(2 * scaleAvg);
       break;
     }
     }
     break;
+  }
   case SDL_KEYUP:
     switch (event.key.keysym.sym) {
     case SDLK_w: {

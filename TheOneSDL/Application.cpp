@@ -362,12 +362,23 @@ void Application::renderDebugMenu() {
   Entity &player = *((entityManager->getEntities()
                           .data()[0])); // This should go into a header file
                                         // for the reference to the player
-  if (ImGui::Button("Reset Player Position")) {
+  Entity &enemy1 = *((entityManager->getEntities().data()[1]));
+  Entity &enemy2 = *((entityManager->getEntities().data()[2]));
+  if (ImGui::Button("Reset Player Position and Entities")) {
     // Buttons return true when clicked (most widgets return true when
     // edited/activated)
+    // Reset values for 1080p these need to change based on tilemap and scale
     player.xEdit(111);
     player.yEdit(500);
+    enemy1.xEdit(950);
+    enemy1.yEdit(865);
+    enemy2.xEdit(830);
+    enemy2.yEdit(865);
     player.entityFalling = false;
+  }
+  if (ImGui::Button("Recompile Texture Scaling")) {
+    terrain_gen->fillScreen(getWindow());
+    entityManager->scaleEntities(window);
   }
   ImGui::Text("Player Position [%d,%d]",
               (entityManager->getEntities()[0])->getTileX(),
@@ -387,10 +398,7 @@ void Application::renderDebugMenu() {
     if (ImGui::Checkbox("Show Player Hitbox", &hitboxVisable)) {
       player.hitBoxToggle();
     }
-    if (ImGui::Button("Recompile Texture Scaling")) {
-      terrain_gen->fillScreen(getWindow());
-      entityManager->scaleEntities(window);
-    }
+
     int current_width, current_height;
     SDL_GetWindowSize(window, &current_width, &current_height);
     ImGui::Text("Window Resolution [%d,%d]", current_width, current_height);

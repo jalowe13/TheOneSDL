@@ -32,6 +32,7 @@ Enemy::Enemy(SDL_Renderer *renderer, int x, int y) // Define the constructor
   setTexture(textures["chomper_idle_left"]);
   // Hitbox for Enemy
   entityHitboxR.w = 30;
+  setSpeed(1);
 }
 
 bool Enemy::hitboxCheck() {

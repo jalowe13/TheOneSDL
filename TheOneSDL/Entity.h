@@ -104,6 +104,7 @@ public:
   bool entityFalling;
 
 protected: // Protected so that Player and Enemy can access
+  void setSpeed(float speed) { entitySpeed = speed; }
   // Textures stored
   std::list<std::string> tex_files;
   std::list<std::string> tex_names;

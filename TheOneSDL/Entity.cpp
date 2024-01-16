@@ -92,6 +92,7 @@ bool &Entity::hitBoxToggle() {
   hitboxOn = !hitboxOn;
   return hitboxOn;
 }
+
 void Entity::xPathEdit(MovementDirection path) { currentDirectionX = path; }
 
 void Entity::yPathEdit(MovementDirection path) { currentDirectionY = path; }

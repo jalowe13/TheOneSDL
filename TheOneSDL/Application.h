@@ -20,7 +20,7 @@
 // Version Number
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 41
-#define VERSION_PATCH .3
+#define VERSION_PATCH .4
 #define STR_HELPER(x) #x // convert to fit window title
 #define STR(x) STR_HELPER(x)
 
@@ -112,12 +112,21 @@ private:
   // Functions
   // Update the Entities
   void updateEntities();
+  // Check if the window needs to be resized
+  void checkResize();
+  // Recompile Textures based on new window size
+  void recompileTextures();
   // Render ImGui Single Frame
   void renderImGuiFrame();
   // Render the ImGui Debug Menu
   void renderDebugMenu();
   // Render Blocks and Entities
   void renderBlockEntities();
+
+  // Window and Surface
+  int current_width, current_height;
+  int past_width, past_height;
+  // Render
   // Pointers
   SDL_Window *window = NULL;         // Pointer to Window
   SDL_Renderer *renderer = NULL;     // Render graphics

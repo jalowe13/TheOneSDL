@@ -262,6 +262,7 @@ void Application::update() // Update Logic each frame
   if (!mainMenu) {
     updateEntities(); // Loop through entities and update them
   }
+  checkResize();
 }
 
 void Application::render() { // Display textures on screen each frame
@@ -357,6 +358,21 @@ void Application::renderImGuiFrame() {
   }
 }
 
+void Application::recompileTextures() {
+  terrain_gen->fillScreen(getWindow());
+  entityManager->scaleEntities(window);
+}
+void Application::checkResize() {
+  SDL_GetWindowSize(window, &current_width, &current_height);
+  if ((current_width != past_width) || (current_height != past_height)) {
+    recompileTextures();
+    past_width = current_width;
+    past_height = current_height;
+    std::cout << "Window Resized to " << current_width << "x" << current_height
+              << std::endl;
+  }
+}
+
 void Application::renderDebugMenu() {
   // Frame actions
   Entity &player = *((entityManager->getEntities()
@@ -377,8 +393,7 @@ void Application::renderDebugMenu() {
     player.entityFalling = false;
   }
   if (ImGui::Button("Recompile Texture Scaling")) {
-    terrain_gen->fillScreen(getWindow());
-    entityManager->scaleEntities(window);
+    recompileTextures();
   }
   ImGui::Text("Player Position [%d,%d]",
               (entityManager->getEntities()[0])->getTileX(),

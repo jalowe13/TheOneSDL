@@ -20,7 +20,7 @@
 // Version Number
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 41
-#define VERSION_PATCH .4
+#define VERSION_PATCH .5
 #define STR_HELPER(x) #x // convert to fit window title
 #define STR(x) STR_HELPER(x)
 
@@ -103,6 +103,11 @@ public:
   int textureWidth = 1920;
   int textureHeight = 32;
   int frameWidth, frameHeight;
+
+  // Screen Dimensions in terms of scaling
+  float scaleFactorX = 1;
+  float scaleFactorY = 1;
+  float scaleFactorAvg = 1;
 
   Uint64 fps = 60;
   Uint64 current_fps = 0;

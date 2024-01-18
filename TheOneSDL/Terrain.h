@@ -58,7 +58,7 @@ private:
 
   SDL_Rect rect;
   // Debugging
-  bool hitboxRender = false;
+  bool hitboxRender = true;
 };
 
 class Terrain {

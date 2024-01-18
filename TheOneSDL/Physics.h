@@ -47,6 +47,8 @@ public:
   void resetTime();
   // Get the amount of time
   float getTime();
+  // Edit Gravity
+  void setGravity(float newGravity) { gravity = newGravity; }
 
   /*
   Check Rectangle Collision, extension of SDL2
@@ -82,7 +84,7 @@ public:
   char get4Points(SDL_Rect *A, int centerX, int centerY);
 
 private:
-  const float gravity = 0.98; // Would be .98 but cannot reach above 2 blocks
+  float gravity = 0.98; // Would be .98 but cannot reach above 2 blocks
   const float timeI = .05;
   const float jumpForgiveness =
       0; // Skew for landing on top of a tile: Higher will forgive more

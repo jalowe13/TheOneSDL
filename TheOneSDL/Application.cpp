@@ -139,7 +139,7 @@ bool Application::init() {
 //   // DEVMODE dm;
 //   // dm.dmSize = sizeof(dm);
 //   // EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dm);
-//   // this->fps = dm.dmDisplayFrequency;
+//   // this->fps = dm.dmDisplayFreequency;
 //   // std::cout << "Refresh Rate: " << this->fps << std::endl;
 // }
 
@@ -170,21 +170,17 @@ void Application::handleEvents() { // Handle all keyboard and mouse events
     gameRunning = false;
     break;
   case SDL_KEYDOWN: {
-    int current_res_width, current_res_height;
-    SDL_GetWindowSize(window, &current_res_width, &current_res_height);
-    float scaleX = current_res_width / SCREEN_WIDTH;
-    float scaleY = current_res_height / SCREEN_HEIGHT;
-    float scaleAvg = (scaleX + scaleY) / 2.0f;
+    float scaleFactorAvg = (scaleFactorX + scaleFactorY) / 2.0f;
     switch (event.key.keysym.sym) {
     case SDLK_w: {
       (*entity)->yPathEdit(Entity::Up);
-
-      (*entity)->editMS(3 * scaleAvg);
+      // std::cout << scaleFactorAvg << std::endl;
+      (*entity)->editMS(3 + scaleFactorAvg - .5);
       break;
     }
     case SDLK_a: {
       (*entity)->xPathEdit(Entity::Left);
-      (*entity)->editMS(2 * scaleAvg);
+      (*entity)->editMS(2 + scaleFactorAvg - .5);
       break;
     }
     case SDLK_s: {
@@ -193,7 +189,7 @@ void Application::handleEvents() { // Handle all keyboard and mouse events
     }
     case SDLK_d: {
       (*entity)->xPathEdit(Entity::Right);
-      (*entity)->editMS(2 * scaleAvg);
+      (*entity)->editMS(2 + scaleFactorAvg - .5);
       break;
     }
     }
@@ -361,6 +357,8 @@ void Application::renderImGuiFrame() {
 void Application::recompileTextures() {
   terrain_gen->fillScreen(getWindow());
   entityManager->scaleEntities(window);
+  phys_eng->setGravity(.98 / (scaleFactorAvg));
+  std::cout << "Gravity is now " << phys_eng->getGravity() << std::endl;
 }
 void Application::checkResize() {
   SDL_GetWindowSize(window, &current_width, &current_height);
@@ -368,6 +366,10 @@ void Application::checkResize() {
     recompileTextures();
     past_width = current_width;
     past_height = current_height;
+    scaleFactorX = (float)current_width / SCREEN_WIDTH;
+    scaleFactorY = (float)current_height / SCREEN_HEIGHT;
+    std::cout << "The Scale factor is now " << scaleFactorX << "x"
+              << scaleFactorY << std::endl;
     std::cout << "Window Resized to " << current_width << "x" << current_height
               << std::endl;
   }
@@ -378,22 +380,9 @@ void Application::renderDebugMenu() {
   Entity &player = *((entityManager->getEntities()
                           .data()[0])); // This should go into a header file
                                         // for the reference to the player
-  Entity &enemy1 = *((entityManager->getEntities().data()[1]));
-  Entity &enemy2 = *((entityManager->getEntities().data()[2]));
-  if (ImGui::Button("Reset Player Position and Entities")) {
-    // Buttons return true when clicked (most widgets return true when
-    // edited/activated)
-    // Reset values for 1080p these need to change based on tilemap and scale
-    player.xEdit(111);
-    player.yEdit(500);
-    enemy1.xEdit(950);
-    enemy1.yEdit(865);
-    enemy2.xEdit(830);
-    enemy2.yEdit(865);
-    player.entityFalling = false;
-  }
-  if (ImGui::Button("Recompile Texture Scaling")) {
+  if (ImGui::Button("Recompile Textures and Entity Positions")) {
     recompileTextures();
+    player.entityFalling = false;
   }
   ImGui::Text("Player Position [%d,%d]",
               (entityManager->getEntities()[0])->getTileX(),

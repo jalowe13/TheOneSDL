@@ -25,7 +25,7 @@ Entity::Entity(SDL_Renderer *renderer, int x, int y) {
   tilemap_y = y;
   entityR.x = tilemap_x * 32;
   entityR.y = tilemap_y * 32;
-
+  std::cout << "Entity Spawned at " << entityR.x << "," << entityR.y << "\n";
   // Hitbox
   hitboxOn = false;
   entityHitboxR.h = 20;
@@ -64,13 +64,12 @@ int Entity::getX() { return entityR.x; }
 
 int Entity::getTexX() { return textureR.x; }
 
-int Entity::getTileX() { return getX() / 32; }
-
 SDL_Texture *Entity::getTexture() { return entity_texture; }
 
 int Entity::getY() { return entityR.y; }
 
-int Entity::getTileY() { return getY() / 32; }
+int Entity::getTileX() { return getX() / tileSizeX; }
+int Entity::getTileY() { return getY() / tileSizeY; }
 
 float Entity::getMS() { return movementModifier; }
 
@@ -180,12 +179,17 @@ void Entity::scaleTextures(SDL_Window *window) {
   SDL_GetWindowSize(window, &current_width, &current_height);
   float scalex = current_width / 800.f;
   float scaley = current_height / 600.f;
-  entityR.w = static_cast<int>(round(32 * scalex));
-  entityR.h = static_cast<int>(round(32 * scaley));
-  entityHitboxR.w = static_cast<int>(round(20 * scalex));
+  tileSizeX = static_cast<int>(round(32 * scalex));
+  tileSizeY = static_cast<int>(round(32 * scaley));
+  entityR.x = tilemap_x * tileSizeX;
+  entityR.y = tilemap_y * tileSizeY;
+  entityR.w = tileSizeX;
+  entityR.h = tileSizeY;
+  entityHitboxR.x = entityR.x + static_cast<int>(round(10 * scalex));
+  entityHitboxR.y = entityR.y + static_cast<int>(round(8 * scaley));
+  entityHitboxR.w = static_cast<int>(round(12 * scalex));
   entityHitboxR.h = static_cast<int>(round(20 * scaley));
 }
-
 void Entity::toggleDirection() {
   if (currentDirectionX == MovementDirection::Left) {
     xPathEdit(MovementDirection::Right); // Change direction

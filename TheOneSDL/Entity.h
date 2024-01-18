@@ -116,6 +116,8 @@ protected: // Protected so that Player and Enemy can access
   bool inAnimation = false; // toggle to lock animation canceling
   int tilemap_x;
   int tilemap_y;
+  int tileSizeX = 32; // Default to 32
+  int tileSizeY = 32;
   // Movemment Status
   // Rectangles and Hitbox
   SDL_Rect entityHitboxR;

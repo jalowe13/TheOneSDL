@@ -51,6 +51,7 @@ public:
 
   // Getters
   const EntityType getEntityType() { return entityType; };
+  const bool getHitboxOn() { return hitboxOn; };
   const float getSpeed();
   MovementDirection xPath();
   MovementDirection yPath();

@@ -37,6 +37,15 @@ void Physics::resetTime() { time = 0.0; }
 
 float Physics::getTime() { return time; }
 
+// Static collision handling
+// SDL_Rect *A is the hitbox of the object
+// Terrain *terrain is the terrain object
+// Returns 0 if no collision
+// Returns 1 if on top of block
+// Returns 2 if to the left of block
+// Returns 3 if to the right of block
+// Returns 4 if under a block
+// Returns 5 if unknown collision error
 int Physics::checkRectCollision(SDL_Rect *A, Terrain *terrain) {
   std::vector<Block> *blocks = terrain->getBlockVector();
   for (Block block : *blocks) // Iterate through every block
@@ -75,7 +84,11 @@ int Physics::checkRectCollision(SDL_Rect *A, Terrain *terrain) {
   }
   return 0;
 }
-
+// Dynamic Collision Detection for entities
+// Checks for collision between entities
+// If collision detected, end game
+// Entity *entity is the entity to check for collision
+// EntityManager *manager is the manager that holds all entities
 void Physics::checkEntityCollision(Entity *entity, EntityManager *manager) {
   for (auto &entity2 :
        manager->getEntities()) { // For every entity in entity list
@@ -96,6 +109,7 @@ void Physics::checkEntityCollision(Entity *entity, EntityManager *manager) {
   }
 }
 
+// Note: Not used
 // Utility function for something? Later on
 // Try not to pass pointers when you dont need to
 char Physics::get4Points(SDL_Rect *A, int centerX, int centerY) {

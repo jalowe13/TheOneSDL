@@ -52,13 +52,20 @@ public:
 
   std::string name;
 
+  //Debug
+  const bool toggleHitboxRender() { 
+    hitboxRender = !hitboxRender;
+    return hitboxRender;
+  }
+
+
 private:
   int x, y, w, h, centerX, centerY;
   SDL_Texture *texture = NULL;
 
   SDL_Rect rect;
   // Debugging
-  bool hitboxRender = true;
+  bool hitboxRender = false;
 };
 
 class Terrain {
@@ -220,6 +227,7 @@ public:
 
   SDL_Texture *getTextObj(int i) { return textObjList[i]; }
   int getTerrainObjSize() { return terrainObjListSize; }
+
 
 private:
   // insertMap(int x, int y);

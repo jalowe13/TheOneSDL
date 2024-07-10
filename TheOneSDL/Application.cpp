@@ -48,6 +48,7 @@ Application::Application() {
 
 Application::~Application() { std::cout << "-----Application Destroyed\n"; }
 
+// Initialize Game
 bool Application::init() {
   try {
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
@@ -134,7 +135,7 @@ bool Application::init() {
     return false;
   }
 }
-
+// Future refresh rate settings
 // void Application::setRefreshRate() {
 //   // DEVMODE dm;
 //   // dm.dmSize = sizeof(dm);
@@ -143,7 +144,8 @@ bool Application::init() {
 //   // std::cout << "Refresh Rate: " << this->fps << std::endl;
 // }
 
-void Application::handleEvents() { // Handle all keyboard and mouse events
+// Handling all keyboard and mouse events for player
+void Application::handleEvents() { 
   // auto &entity =
   //     entityManager->getEntities()[0]; // This needs to be changed to a
   //     specific
@@ -252,16 +254,15 @@ void Application::handleEvents() { // Handle all keyboard and mouse events
     break;
   }
 }
-
-void Application::update() // Update Logic each frame
-{
-  if (!mainMenu) {
+// Update Logic each frame
+void Application::update() {
+  if (!mainMenu) { // Not in main menu
     updateEntities(); // Loop through entities and update them
   }
-  checkResize();
+  checkResize(); // Check if resize needs to happen if the window changes
 }
-
-void Application::render() { // Display textures on screen each frame
+// Display textures on screen each frame
+void Application::render() { 
   SDL_RenderClear(renderer);
   SDL_SetRenderDrawColor(
       renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255),
@@ -269,12 +270,14 @@ void Application::render() { // Display textures on screen each frame
   ImGui_ImplSDLRenderer2_NewFrame();
   ImGui_ImplSDL2_NewFrame();
   ImGui::NewFrame();
+  // Rendering for different screens (Main menu and game)
   if (!mainMenu) {
     renderBlockEntities(); // Render all blocks and all entities  // Render the
                            // frame
   } else {
     renderImGuiFrame();
   }
+  // Debug mode rendering
   if (debugMode) {
     renderDebugMenu();
   }
@@ -284,16 +287,17 @@ void Application::render() { // Display textures on screen each frame
   ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
   SDL_RenderPresent(renderer); // Present rendered frame
 }
-
+// Update logic for Entities for checking collisions 
 void Application::updateEntities() {
   for (std::unique_ptr<Entity> &entity : entityManager->getEntities()) {
-    entity->checkCollision(
+    entity->checkCollision( 
         phys_eng->checkRectCollision(entity->getHitboxRect(), terrain_gen),
         phys_eng); // Check entity collision with terrain
     phys_eng->checkEntityCollision(entity.get(), entityManager.get());
   }
 }
 
+// GUI handling menu rendering and debug menu
 void Application::renderImGuiFrame() {
   // Choose what to show on the frame
   if (debugMode) {
@@ -354,12 +358,16 @@ void Application::renderImGuiFrame() {
   }
 }
 
+// Recompile textures based on screen size
+// Effects fill screen and the entity manager
+// Effect gravity in the same way
 void Application::recompileTextures() {
   terrain_gen->fillScreen(getWindow());
   entityManager->scaleEntities(window);
   phys_eng->setGravity(.98 / (scaleFactorAvg));
   std::cout << "Gravity is now " << phys_eng->getGravity() << std::endl;
 }
+// Check the resize and recompile the textures based on the new window
 void Application::checkResize() {
   SDL_GetWindowSize(window, &current_width, &current_height);
   if ((current_width != past_width) || (current_height != past_height)) {
@@ -375,11 +383,14 @@ void Application::checkResize() {
   }
 }
 
+// Debug menu rendering
 void Application::renderDebugMenu() {
   // Frame actions
   Entity &player = *((entityManager->getEntities()
                           .data()[0])); // This should go into a header file
                                         // for the reference to the player
+
+  
   if (ImGui::Button("Recompile Textures and Entity Positions")) {
     recompileTextures();
     player.entityFalling = false;
@@ -398,10 +409,26 @@ void Application::renderDebugMenu() {
   }
   if (ImGui::CollapsingHeader("Advanced Settings and Statistics")) {
     ImGui::Text("Gameplay Debugging");
-    bool hitboxVisable = player.hitboxCheck();
-    if (ImGui::Checkbox("Show Player Hitbox", &hitboxVisable)) {
+    if (ImGui::Checkbox("Show Player Hitbox", &debugPlayerHitbox)) {
       player.hitBoxToggle();
     }
+    if (ImGui::Checkbox("Show Enemy Hitbox", &debugEnemyHitbox)){
+      // TODO: Enemy hitbox toggle here
+        for (size_t i = 1; i < entityManager->getEntities().size(); i++){
+          Entity &entity = *((entityManager->getEntities().data()[i]));
+              int e_type = entity.getEntityType();
+              if (e_type == 2){
+                entity.hitBoxToggle();
+              } 
+        }
+      }    
+    if (ImGui::Checkbox("Show Block Hitboxes", &debugBlockHitbox)) {
+      std::vector<Block> *blocks = terrain_gen->getBlockVector();
+      for (Block &b : *blocks){
+        b.toggleHitboxRender();
+      }
+    }
+
 
     int current_width, current_height;
     SDL_GetWindowSize(window, &current_width, &current_height);
@@ -412,6 +439,7 @@ void Application::renderDebugMenu() {
   }
 }
 
+// Called in render to render all Blocks and entities
 void Application::renderBlockEntities() {
   std::vector<Block> *terrain_vector = terrain_gen->getBlockVector();
   for (Block &block : *terrain_vector) // Iterate
@@ -438,6 +466,7 @@ void Application::renderBlockEntities() {
   }
 }
 
+// Destroy window when application is closed
 void Application::clean() {
   delete terrain_gen;
   SDL_DestroyWindow(window); // destroy the window

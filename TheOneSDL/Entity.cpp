@@ -201,14 +201,15 @@ void Entity::toggleDirection() {
     inAnimation = false;
   }
 }
-
+// Check Collision and return isColliding if colliding with an object
+// Also adjusts impact need be to teleport back entity if in object
 void Entity::checkCollision(int i, Physics *phys_eng) {
   if (entityType == EntityType::PLAYER_E) {
     switch (i) {
     case 0:                // Falling
       phys_eng->incTime(); // Increase time when away from ground
       yEdit(getY() + phys_eng->getGravity() * phys_eng->getTime());
-      // std::cout << "Air Time: " << phys_eng->getTime() << "\r";
+      std::cout << "Air Time: " << phys_eng->getTime() << "\r";
       isColliding = false;
       break;
     case 1: // Colliding Ground
@@ -219,29 +220,30 @@ void Entity::checkCollision(int i, Physics *phys_eng) {
       break;
     case 2: // Colliding from left
       isColliding = true;
-      xEdit(getX() + getSpeed() + 4);
+      xEdit(getX() + getSpeed());
       break;
     case 3: // Colliding from right
       isColliding = true;
-      xEdit(getX() - getSpeed() - 4);
+      xEdit(getX() - getSpeed());
       break;
     case 4: // Colliding from below
       isColliding = true;
-      yEdit(getY() + getSpeed() + 4);
+      yEdit(getY() + getSpeed());
       break;
     }
   }
   if (entityType == EntityType::ENEMY_E) {
+    const int bounceback_val = 4; // How far to set back the entity if colliding
     switch (i) {
     case 2: { // Colliding from left
       isColliding = true;
-      xEdit(getX() + getSpeed() + 4);
+      xEdit(getX() + getSpeed() + bounceback_val);
       toggleDirection();
       break;
     }
     case 3: { // Colliding from right
       isColliding = true;
-      xEdit(getX() - getSpeed() - 4);
+      xEdit(getX() - getSpeed() - bounceback_val);
       toggleDirection();
       break;
     }

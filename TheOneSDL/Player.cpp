@@ -22,7 +22,6 @@ Player::Player(SDL_Renderer *renderer, int x, int y) // Define the constructor
     : Entity(renderer, x, y) {
   std::cout << "Spawning Player at " << x << ", " << y << "\n";
   entityType = EntityType::PLAYER_E;
-  setSpeed(5);
   Entity::tex_names = getTextureNames();
   Entity::tex_files = getTexturePaths();
   std::cout << "Player Created\n";

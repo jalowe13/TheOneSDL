@@ -31,14 +31,17 @@ Enemy::Enemy(SDL_Renderer *renderer, int x, int y) // Define the constructor
   xPathEdit(Entity::Left);
   setTexture(textures["chomper_idle_left"]);
   // Hitbox for Enemy
+  entityHitboxR.x = 120;
   entityHitboxR.w = 30;
-  setSpeed(1);
+  setSpeed(5);
 }
 
 bool Enemy::hitboxCheck() {
   // Update position
-  entityHitboxR.x = entityR.x;
+  // Hitbox sizes
+  entityHitboxR.x = entityR.x + 5.6;
   entityHitboxR.y = entityR.y + 10;
+  entityHitboxR.w = entityR.w - 10;
   return hitboxOn;
 }
 

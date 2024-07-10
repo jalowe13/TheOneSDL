@@ -20,7 +20,7 @@
 // Version Number
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 41
-#define VERSION_PATCH .5
+#define VERSION_PATCH .6
 #define STR_HELPER(x) #x // convert to fit window title
 #define STR(x) STR_HELPER(x)
 
@@ -98,8 +98,8 @@ public:
   void createTexture(const char *filename, float x, float y);
   // Constants for reference
 
+  // Debug
   bool debugMode = false;
-
   int textureWidth = 1920;
   int textureHeight = 32;
   int frameWidth, frameHeight;
@@ -167,7 +167,10 @@ private:
   std::unique_ptr<EntityManager> entityManager = NULL;
   std::unique_ptr<Entity> player = NULL;
   Enemy *enemy = NULL;
-
+  // Debug state variables
+  bool debugPlayerHitbox = false;
+  bool debugEnemyHitbox = false;
+  bool debugBlockHitbox = false;
   // Game Variables
   bool mainMenu;
   bool gameRunning;

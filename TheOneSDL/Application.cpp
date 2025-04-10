@@ -145,7 +145,7 @@ bool Application::init() {
 // }
 
 // Handling all keyboard and mouse events for player
-void Application::handleEvents() { 
+void Application::handleEvents() {
   // auto &entity =
   //     entityManager->getEntities()[0]; // This needs to be changed to a
   //     specific
@@ -256,13 +256,13 @@ void Application::handleEvents() {
 }
 // Update Logic each frame
 void Application::update() {
-  if (!mainMenu) { // Not in main menu
+  if (!mainMenu) {    // Not in main menu
     updateEntities(); // Loop through entities and update them
   }
   checkResize(); // Check if resize needs to happen if the window changes
 }
 // Display textures on screen each frame
-void Application::render() { 
+void Application::render() {
   SDL_RenderClear(renderer);
   SDL_SetRenderDrawColor(
       renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255),
@@ -287,10 +287,10 @@ void Application::render() {
   ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
   SDL_RenderPresent(renderer); // Present rendered frame
 }
-// Update logic for Entities for checking collisions 
+// Update logic for Entities for checking collisions
 void Application::updateEntities() {
   for (std::unique_ptr<Entity> &entity : entityManager->getEntities()) {
-    entity->checkCollision( 
+    entity->checkCollision(
         phys_eng->checkRectCollision(entity->getHitboxRect(), terrain_gen),
         phys_eng); // Check entity collision with terrain
     phys_eng->checkEntityCollision(entity.get(), entityManager.get());
@@ -312,10 +312,20 @@ void Application::renderImGuiFrame() {
       ImGui::SetCursorPosX((SCREEN_WIDTH / 2) - 80);
       ImGui::Text(Title);
       ImGui::NewLine();
-      ImGui::SetCursorPosX((SCREEN_WIDTH / 2) - 95);
+      ImGui::SetCursorPosX((SCREEN_WIDTH / 3) - 25);
 
       if (ImGui::Button("New Game")) {
         mainMenu = false;
+      }
+      ImGui::SameLine();
+      if (ImGui::Button("Level Editor (WIP)")) {
+        // Open web editor in default browser
+        const char *editorUrl = "http://localhost:5173/?";
+#ifdef _WIN32
+        ShellExecuteA(NULL, "open", editorUrl, NULL, NULL, SW_SHOWNORMAL);
+// TODO: Linux Web editor execution
+#endif
+        std::cout << "Opening web editor..." << std::endl;
       }
       ImGui::SameLine();
       if (ImGui::Button("Quit Game")) {
@@ -330,7 +340,7 @@ void Application::renderImGuiFrame() {
       if (ImGui::BeginPopupModal("License Info", NULL,
                                  ImGuiWindowFlags_AlwaysAutoResize)) {
         ImGui::Text(
-            "Copyright (C) [2024] [Jacob Lowe]\n"
+            "Copyright (C) [2025] [Jacob Lowe]\n"
             "\n"
             "This program is free software: you can redistribute it and/or "
             "modify\n"
@@ -390,7 +400,6 @@ void Application::renderDebugMenu() {
                           .data()[0])); // This should go into a header file
                                         // for the reference to the player
 
-  
   if (ImGui::Button("Recompile Textures and Entity Positions")) {
     recompileTextures();
     player.entityFalling = false;
@@ -412,23 +421,22 @@ void Application::renderDebugMenu() {
     if (ImGui::Checkbox("Show Player Hitbox", &debugPlayerHitbox)) {
       player.hitBoxToggle();
     }
-    if (ImGui::Checkbox("Show Enemy Hitbox", &debugEnemyHitbox)){
+    if (ImGui::Checkbox("Show Enemy Hitbox", &debugEnemyHitbox)) {
       // TODO: Enemy hitbox toggle here
-        for (size_t i = 1; i < entityManager->getEntities().size(); i++){
-          Entity &entity = *((entityManager->getEntities().data()[i]));
-              int e_type = entity.getEntityType();
-              if (e_type == 2){
-                entity.hitBoxToggle();
-              } 
+      for (size_t i = 1; i < entityManager->getEntities().size(); i++) {
+        Entity &entity = *((entityManager->getEntities().data()[i]));
+        int e_type = entity.getEntityType();
+        if (e_type == 2) {
+          entity.hitBoxToggle();
         }
-      }    
+      }
+    }
     if (ImGui::Checkbox("Show Block Hitboxes", &debugBlockHitbox)) {
       std::vector<Block> *blocks = terrain_gen->getBlockVector();
-      for (Block &b : *blocks){
+      for (Block &b : *blocks) {
         b.toggleHitboxRender();
       }
     }
-
 
     int current_width, current_height;
     SDL_GetWindowSize(window, &current_width, &current_height);

@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 
+import { Menu, MenuItem, Button, Box, styled, Grid } from "@mui/material";
+
 import "./App.css";
 
 function App() {
   // Constants
   const defaultLevelText = "No Level Selected";
   const inputType = "text";
+
   // Calls
   const mockSaveApi = (levelData: {
     name: string;
@@ -36,6 +39,8 @@ function App() {
   // States
   const [LevelName, setLevelName] = useState(defaultLevelText);
   const [InputText, setInputText] = useState("");
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
   // Handlers
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(e.target.value);
@@ -54,16 +59,33 @@ function App() {
   return (
     <div>
       <h1>Level Editor</h1>
-      <h2>Status: {LevelName}</h2>
-      <form onSubmit={handleSaveLevelName}>
-        Level to Edit
-        <input
-          type={inputType}
-          value={InputText}
-          onChange={handleInputChange}
-        />
-        <button>Save</button>
-      </form>
+      <Box
+        sx={{
+          width: "803px",
+          height: "610px",
+          border: "1px dashed grey",
+          overflowX: "auto",
+        }}
+      >
+        <Grid
+          container
+          border={"1px dashed blue"} // Changed container border color for distinction
+        >
+          {Array.from({ length: 475 }).map((_, index) => (
+            <Grid
+              key={index}
+              xs={1 / 12}
+              border={"1px dashed grey"}
+              sx={{
+                height: "32px",
+                minWidth: "32px",
+              }}
+            >
+              <div>T</div>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
     </div>
   );
 }

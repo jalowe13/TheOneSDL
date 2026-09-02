@@ -31,12 +31,6 @@ Physics::~Physics() {
 
 float Physics::getGravity() { return gravity; }
 
-void Physics::incTime() { time = time + (timeI * 2); }
-
-void Physics::resetTime() { time = 0.0; }
-
-float Physics::getTime() { return time; }
-
 // Static collision handling
 // SDL_Rect *A is the hitbox of the object
 // Terrain *terrain is the terrain object
@@ -48,7 +42,10 @@ float Physics::getTime() { return time; }
 // Returns 5 if unknown collision error
 int Physics::checkRectCollision(SDL_Rect *A, Terrain *terrain) {
   std::vector<Block> *blocks = terrain->getBlockVector();
-  for (Block block : *blocks) // Iterate through every block
+  // Reference, not copy: Block holds a std::string, so copying every block
+  // heap-allocates once per iteration. With the fixed-step accumulator this
+  // sweep can run 8x per frame per entity.
+  for (Block &block : *blocks) // Iterate through every block
   {
     if (SDL_HasIntersection(
             A,
@@ -63,16 +60,20 @@ int Physics::checkRectCollision(SDL_Rect *A, Terrain *terrain) {
         {
           return 1;
         }
+        // Use the block's own current (already-scaled) height rather than a
+        // pixel constant tuned for 32px tiles, so this threshold scales with
+        // the active tile size at any resolution.
+        int tileHeight = block.get_Rect()->h;
         if (block.getX() < A->x) // If to the left of a block
         {
-          if (block.getY() < (A->y - 20)) // But under another one
+          if (block.getY() < (A->y - tileHeight)) // But under another one
           {
             return 4;
           }
           return 2;
         } else if (block.getX() > A->x) // If to the right of a block
         {
-          if (block.getY() < (A->y - 20)) // But under a block
+          if (block.getY() < (A->y - tileHeight)) // But under a block
           {
             return 4;
           }

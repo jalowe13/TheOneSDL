@@ -19,8 +19,8 @@
 
 // Version Number
 #define VERSION_MAJOR 0
-#define VERSION_MINOR 42
-#define VERSION_PATCH .1
+#define VERSION_MINOR 43
+#define VERSION_PATCH .0
 #define STR_HELPER(x) #x // convert to fit window title
 #define STR(x) STR_HELPER(x)
 
@@ -107,7 +107,6 @@ public:
   // Screen Dimensions in terms of scaling
   float scaleFactorX = 1;
   float scaleFactorY = 1;
-  float scaleFactorAvg = 1;
 
   Uint64 fps = 60;
   Uint64 current_fps = 0;
@@ -115,8 +114,11 @@ public:
 
 private:
   // Functions
-  // Update the Entities
-  void updateEntities();
+  // Run one fixed-timestep physics update (integrate, sync hitboxes, detect
+  // and resolve collisions) for every entity. dt is always FIXED_DT: called
+  // zero or more times per render frame depending on elapsed real time, so
+  // simulation speed never depends on render/FPS-cap rate.
+  void updateEntities(float dt);
   // Check if the window needs to be resized
   void checkResize();
   // Recompile Textures based on new window size
@@ -179,4 +181,14 @@ private:
   int endTime;
   int timeDifference;
   float frameAverage;
+
+  // Fixed-timestep simulation state. Movement is integrated at a constant
+  // FIXED_DT regardless of render rate; physicsAccumulator banks real
+  // elapsed time between update() calls until there is enough of it to run
+  // one (or more, to catch up) fixed steps. This is what makes the FPS cap
+  // slider not change how fast anything moves.
+  const double FIXED_DT = 1.0 / 60.0;
+  double physicsAccumulator = 0.0;
+  double lastFrameSeconds = 0.0; // real elapsed time of the last update(), for animation
+  Uint64 lastUpdateTicks = 0;
 };

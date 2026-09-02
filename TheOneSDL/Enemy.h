@@ -30,7 +30,7 @@ public:
   ~Enemy();     // Destructor
   bool hitboxCheck() override;
   void handleMovement(Physics *phys_eng, Terrain *terrain_eng,
-                      SDL_Window *window) override;
+                      float dt) override;
   std::list<std::string> getTexturePaths(); // Texture file paths
   std::list<std::string> getTextureNames(); // Texture file names
 private:

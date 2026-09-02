@@ -38,3 +38,9 @@ TheOneSDL/imgui/*
 TheOneSDL\imgui
 TheOneSDL/imgui
 TheOneSDL/old_builds/
+
+# ImGui per-user window layout, written at runtime
+TheOneSDL/imgui.ini
+
+# Compiled headless kinematics test
+TheOneSDL/test_kinematics

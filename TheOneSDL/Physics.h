@@ -41,13 +41,7 @@ public:
   // Block Types
   static const std::string floor;
 
-  // Start a float timer
-  void incTime();
-  // End and reset float timer
-  void resetTime();
-  // Get the amount of time
-  float getTime();
-  // Edit Gravity
+  // Edit Gravity (tiles / second^2)
   void setGravity(float newGravity) { gravity = newGravity; }
 
   /*
@@ -84,9 +78,10 @@ public:
   char get4Points(SDL_Rect *A, int centerX, int centerY);
 
 private:
-  float gravity = 0.98; // Would be .98 but cannot reach above 2 blocks
-  const float timeI = .05;
+  // Tile-space gravity, in tiles / second^2. This no longer depends on
+  // window resolution: tile units are the unit of truth, so gravity feels
+  // the same at any scale without needing to be re-derived on resize.
+  float gravity = 20.f;
   const float jumpForgiveness =
       0; // Skew for landing on top of a tile: Higher will forgive more
-  float time = 0.0;
 };

@@ -156,9 +156,13 @@ void Application::handleEvents() {
               << (*entity)->getTileY() << "]\r";
   }
   SDL_Event event;
-  SDL_PollEvent(&event);
-  ImGui_ImplSDL2_ProcessEvent(&event);
-  switch (event.type) {
+  // Drain the whole queue every frame. Polling a single event per frame lets
+  // the queue grow without bound (mouse motion alone outpaces the frame rate),
+  // which reads to the window manager as an unresponsive application and
+  // starves ImGui of the clicks it needs.
+  while (SDL_PollEvent(&event)) {
+    ImGui_ImplSDL2_ProcessEvent(&event);
+    switch (event.type) {
   case SDL_MOUSEMOTION:
     SDL_GetMouseState(&xMouse, &yMouse);
     break;
@@ -172,17 +176,16 @@ void Application::handleEvents() {
     gameRunning = false;
     break;
   case SDL_KEYDOWN: {
-    float scaleFactorAvg = (scaleFactorX + scaleFactorY) / 2.0f;
+    // Input sets intent only (a direction) -- never a speed. Movement speed
+    // lives on Entity in tile units and no longer needs resolution-based
+    // tuning at all now that movement is tile-space.
     switch (event.key.keysym.sym) {
     case SDLK_w: {
       (*entity)->yPathEdit(Entity::Up);
-      // std::cout << scaleFactorAvg << std::endl;
-      (*entity)->editMS(3 + scaleFactorAvg - .5);
       break;
     }
     case SDLK_a: {
       (*entity)->xPathEdit(Entity::Left);
-      (*entity)->editMS(2 + scaleFactorAvg - .5);
       break;
     }
     case SDLK_s: {
@@ -191,7 +194,6 @@ void Application::handleEvents() {
     }
     case SDLK_d: {
       (*entity)->xPathEdit(Entity::Right);
-      (*entity)->editMS(2 + scaleFactorAvg - .5);
       break;
     }
     }
@@ -249,15 +251,37 @@ void Application::handleEvents() {
         terrain_gen->loadLevel("EmptyFloor", getWindow());
     }
     }
-    break;
-  default:
-    break;
+      break;
+    default:
+      break;
+    }
   }
 }
 // Update Logic each frame
+// Runs zero or more fixed-timestep physics steps based on real elapsed time,
+// decoupled from render/FPS-cap rate: rendering may run at any rate, but the
+// simulation always advances in FIXED_DT increments.
 void Application::update() {
-  if (!mainMenu) {    // Not in main menu
-    updateEntities(); // Loop through entities and update them
+  Uint64 now = SDL_GetTicks64();
+  if (lastUpdateTicks == 0) {
+    lastUpdateTicks = now; // bootstrap on the very first call
+  }
+  double frameSeconds = (now - lastUpdateTicks) / 1000.0;
+  lastUpdateTicks = now;
+  // Guard against a spiral of death after a long stall (window drag, a
+  // breakpoint, etc.) by capping how much time a single call can catch up.
+  const double maxFrameSeconds = FIXED_DT * 8.0;
+  if (frameSeconds > maxFrameSeconds) {
+    frameSeconds = maxFrameSeconds;
+  }
+  lastFrameSeconds = frameSeconds;
+
+  if (!mainMenu) { // Not in main menu
+    physicsAccumulator += frameSeconds;
+    while (physicsAccumulator >= FIXED_DT) {
+      updateEntities(static_cast<float>(FIXED_DT));
+      physicsAccumulator -= FIXED_DT;
+    }
   }
   checkResize(); // Check if resize needs to happen if the window changes
 }
@@ -287,12 +311,19 @@ void Application::render() {
   ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
   SDL_RenderPresent(renderer); // Present rendered frame
 }
-// Update logic for Entities for checking collisions
-void Application::updateEntities() {
+// One fixed physics step for every entity: integrate movement from current
+// direction intent (also refreshes hitboxes), then detect and resolve
+// collisions against the terrain and against other entities. Running this
+// from update() (not render()) means collision detection always sees this
+// same step's hitbox, never last frame's.
+void Application::updateEntities(float dt) {
+  for (std::unique_ptr<Entity> &entity : entityManager->getEntities()) {
+    entity->handleMovement(phys_eng, terrain_gen, dt);
+  }
   for (std::unique_ptr<Entity> &entity : entityManager->getEntities()) {
     entity->checkCollision(
         phys_eng->checkRectCollision(entity->getHitboxRect(), terrain_gen),
-        phys_eng); // Check entity collision with terrain
+        phys_eng, dt); // Check entity collision with terrain
     phys_eng->checkEntityCollision(entity.get(), entityManager.get());
   }
 }
@@ -374,8 +405,9 @@ void Application::renderImGuiFrame() {
 void Application::recompileTextures() {
   terrain_gen->fillScreen(getWindow());
   entityManager->scaleEntities(window);
-  phys_eng->setGravity(.98 / (scaleFactorAvg));
-  std::cout << "Gravity is now " << phys_eng->getGravity() << std::endl;
+  // Gravity is expressed in tiles/second^2 (see Physics::gravity) and is no
+  // longer resolution-dependent, so there is nothing to recompute here on
+  // resize.
 }
 // Check the resize and recompile the textures based on the new window
 void Application::checkResize() {
@@ -460,8 +492,8 @@ void Application::renderBlockEntities() {
   //               enemy->getRect());
   // Entity
   for (auto &entity : entityManager->getEntities()) {
-    entity->updateTexture(phys_eng, terrain_gen,
-                          window); // Update entity texture
+    entity->updateTexture(
+        static_cast<float>(lastFrameSeconds)); // Advance sprite animation
     SDL_RenderCopy(renderer, entity->getTexture(), entity->getRectTex(),
                    entity->getRect());
 

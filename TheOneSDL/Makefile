@@ -96,3 +96,17 @@ cleanall:
 # Clean specific object file, used more if a header file is edited and not detected as a change
 clean:
 	$(RM) $(filter-out $@,$(MAKECMDGOALS:%=%.o))
+
+# Headless movement/kinematics test. Deliberately built with its own minimal
+# flags (no SDL/ImGui include paths, no engine sources) since Kinematics.h
+# and test_kinematics.cpp have no SDL dependency -- that separation is the
+# point: it proves the fixed-timestep tile-space movement can be linked and
+# tested without a window.
+TEST_EXE = test_kinematics
+
+.PHONY: test
+test: $(TEST_EXE)
+	./$(TEST_EXE)
+
+$(TEST_EXE): test_kinematics.cpp Kinematics.h
+	$(CXX) -std=c++14 -Wall -Wextra -O2 -o $@ test_kinematics.cpp

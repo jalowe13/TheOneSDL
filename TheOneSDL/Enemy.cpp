@@ -33,21 +33,23 @@ Enemy::Enemy(SDL_Renderer *renderer, int x, int y) // Define the constructor
   // Hitbox for Enemy
   entityHitboxR.x = 120;
   entityHitboxR.w = 30;
-  setSpeed(5);
 }
 
 bool Enemy::hitboxCheck() {
-  // Update position
-  // Hitbox sizes
-  entityHitboxR.x = entityR.x + 5.6;
-  entityHitboxR.y = entityR.y + 10;
-  entityHitboxR.w = entityR.w - 10;
+  // Same tile-scaled formula as Entity::hitboxCheck, just with the Enemy's
+  // own insets -- fixes the unscaled offsets stomping the scaled ones.
+  float scalex = tilePixelsX / static_cast<float>(TILE_SIZE);
+  float scaley = tilePixelsY / static_cast<float>(TILE_SIZE);
+  entityHitboxR.x = entityR.x + static_cast<int>(std::lround(5.6f * scalex));
+  entityHitboxR.y = entityR.y + static_cast<int>(std::lround(10.f * scaley));
+  entityHitboxR.w = entityR.w - static_cast<int>(std::lround(10.f * scalex));
+  entityHitboxR.h = entityR.h;
   return hitboxOn;
 }
 
 void Enemy::handleMovement(Physics *phys_eng, Terrain *terrain_eng,
-                           SDL_Window *window) {
-  Entity::handleMovement(phys_eng, terrain_eng, window);
+                           float dt) {
+  Entity::handleMovement(phys_eng, terrain_eng, dt);
   if (idle_timer > 0) {
     idle_timer--;
   } else {
